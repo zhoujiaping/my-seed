@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+						 http://www.springframework.org/schema/websocket  http://www.springframework.org/schema/websocket/spring-websocket.xsd
+						 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+						 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	">
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dynamicDataSource" />
+		<property name="configLocation" value="classpath:sql-map-config.xml" 
+			/>
+		<property name="mapperLocations">
+			<list>
+				<!-- 自动匹配Mapper映射文件 -->
+				<value>classpath*:**/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 扫描 basePackage下所有的接口，根据对应的mapper.xml为其生成代理类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage" value="cn.howso.**.mapper" />
+	</bean>
+</beans>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:cache="http://www.springframework.org/schema/cache" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd	
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/cache
+    	http://www.springframework.org/schema/cache/spring-cache.xsd
+    	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		">
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="false">
+			<bean
+				class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<!-- 避免IE返回时出现下载提示！ -->
+						<value>text/html;charset=UTF-8</value>
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	<context:component-scan base-package="cn" />
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**"/> <bean 
+		class="cn.howso.specialmp.system.interceptor.SessionInterceptor"/> </mvc:interceptor> 
+		<mvc:interceptor> <mvc:mapping path="/**"/> <bean class="cn.howso.specialmp.system.interceptor.AuthorizationInterceptor"/> 
+		</mvc:interceptor> </mvc:interceptors> -->
+	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**" /> <bean 
+		class="cn.howso.specialmp.system.interceptor.AreaInterceptor" /> </mvc:interceptor> 
+		</mvc:interceptors> -->
+	<bean id="exceptionResolver" class="cn.howso.deeplan.framework.exception.ExceptionResolver"></bean>
+	<bean name="/**//**"
+		class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="viewResolvers">
+			<list>
+				<bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+				<bean
+					class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+					<property name="prefix" value="/" />
+					<property name="suffix" value=".html" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
+		<property name="maxUploadSize" value="20000000" /> </bean> -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<description>depends on:commons-fileupload</description>
+		<!-- one of the properties available; the maximum file size in bytes -->
+		<property name="maxUploadSize" value="204800" />
+	</bean>
+</beans>

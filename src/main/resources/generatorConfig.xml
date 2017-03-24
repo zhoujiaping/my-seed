@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	<classPathEntry location="C:\Users\Administrator\.m2\repository\org\lucee\postgresql\8.3-606.jdbc4\postgresql-8.3-606.jdbc4.jar" />
+	
+	<context id="cn.howso" targetRuntime="MyBatis3">
+		<commentGenerator>
+			<property name="suppressDate" value="false" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="org.postgresql.Driver"
+			connectionURL="jdbc:postgresql://192.168.101.102:5432/seed"
+			userId="deeplan" password="deeplan" />
+
+		<javaModelGenerator targetPackage="cn.howso.deeplan.server.account.model"
+			targetProject="d:\mybatis">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="cn.howso.deeplan.server.account.mapper.xml"
+			targetProject="d:\mybatis">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator targetPackage="cn.howso.deeplan.server.account.mapper"
+			targetProject="d:\mybatis"
+			type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+		<!-- <table tableName="sys_user" domainObjectName="User"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="sys_role" domainObjectName="Role"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="sys_permission" domainObjectName="Permission"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table> -->
+		<!-- <table tableName="sys_log" domainObjectName="SysLog"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table> -->
+		<table tableName="sys_user_role" domainObjectName="SysUserRole"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="sys_role_permission" domainObjectName="SysRolePermission"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
+
+	</context>
+</generatorConfiguration>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<plugins>
+		 <plugin interceptor="cn.howso.deeplan.framework.mybatis.PagePlugin">
+			<property name="dialect" value="postgre" />
+			<property name="pageSqlId" value=".*ByPage.*" />
+		</plugin>
+	</plugins> 
+</configuration>

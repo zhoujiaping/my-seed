@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+						 http://www.springframework.org/schema/websocket  http://www.springframework.org/schema/websocket/spring-websocket.xsd
+						 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+						 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	">
+	<!-- properties start -->
+	<bean id="configProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:sys-config.${env}.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="properties" ref="configProperties"></property>
+	</bean>
+	<!-- properties end -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="url" value="${db.url}"></property>
+	</bean>
+	<!-- 配置druid监控spring jdbc -->
+	<bean id="druid-stat-interceptor"
+		class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+	</bean>
+	<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"
+		scope="prototype">
+		<property name="patterns">
+			<list>
+				<value>cn.howso.crowd.*.service.*</value>
+			</list>
+		</property>
+	</bean>
+	<aop:config>
+		<aop:advisor advice-ref="druid-stat-interceptor"
+			pointcut-ref="druid-stat-pointcut" />
+	</aop:config>
+	<bean id="dataSourceEfence"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${ef.driver}" />
+		<property name="username" value="${ef.username}" />
+		<property name="password" value="${ef.password}" />
+		<property name="url" value="${ef.url}" />
+	</bean>
+	<bean id="dynamicDataSource" class="cn.howso.deeplan.framework.datasource.DynamicDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry value-ref="dataSource" key="dataSource"></entry>
+				<entry value-ref="dataSourceEfence" key="dataSourceEfence"></entry>
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="dataSource">
+		</property>
+	</bean>
+	<bean id="dataSourceInterceptor"
+		class="cn.howso.deeplan.framework.datasource.DataSourceInterceptor" />
+	<!-- <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate"> 
+		<constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg> </bean> -->
+
+	<!-- 扫描 basePackage下所有的接口，根据对应的mapper.xml为其生成代理类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage" value="cn.howso.specialmp.dao" />
+	</bean>
+
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dynamicDataSource"></property>
+	</bean>
+	<!-- 事务配置通常方式 spring advisor(增强器)在aspectj中没有，是spring中的概念。tx:advice是它的一个实例。 -->
+	<aop:config>
+		<aop:pointcut expression="execution (* cn.howso..*.service..*.*(..))"
+			id="tx-pointcut" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="tx-pointcut"
+			order="2" />
+	</aop:config>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="save*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="insert*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="create*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="delete*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="remove*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="login*" propagation="REQUIRED"
+				rollback-for="Exception" />
+
+			<tx:method name="get*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="list*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="find*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="load*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="query*" propagation="REQUIRED" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 配置ehcache的cachemanager begin -->
+	<bean id="ehcacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+	</bean>
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcacheManager"></property>
+	</bean>
+
+	<!-- <aop:aspectj-autoproxy proxy-target-class="true" /> -->
+	<aop:config>
+		<aop:aspect id="dataSourceAspect" ref="dataSourceInterceptor"
+			order="1">
+			<aop:pointcut id="ds"
+				expression="execution(* cn.howso.*.service.*.*(..))" />
+			<aop:pointcut id="efds"
+				expression="execution(* cn.howso.*.service.*.*.*(..))" />
+			<aop:before method="setDataSource" pointcut-ref="ds" />
+			<aop:before method="setEfenceDataSource" pointcut-ref="efds" />
+		</aop:aspect>
+	</aop:config>
+	<!-- 统一异常处理exceptionHandler -->
+	<!-- <bean id="exceptionHandler" class="cn.howso.specialmp.utils.MyExceptionHandler"/> -->
+	<import resource="application-shiro.xml" />
+	<import resource="application-mybatis.xml" />
+</beans>
