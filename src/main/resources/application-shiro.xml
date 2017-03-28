@@ -17,12 +17,10 @@
 		<property name="unauthorizedUrl" value="/unauthorized.jsp" />
 		<property name="filterChainDefinitions">
 			<value>
-				/login.html = anon
 				/perm/login/login = anon
 				/perm/login/logout = authc
-				/resources/** = anon
-				/views/**= authc,roles[admin]
-				/user/create = authc,roles[manager]
+				<!-- /views/**= authc,roles[admin] -->
+				/perm/user/add = authc,perms[user:create]
 				/** = anon
 			</value>
 		</property>
@@ -55,17 +53,24 @@
 		<property name="userService" ref="userService"></property>
 		<property name="roleService" ref="roleService"></property> 
 		<property name="permissionService" ref="permissionService"></property>
-		<property name="authenticationCachingEnabled" value="true" />
+		<!-- 禁用缓存 -->
+		<property name="authenticationCachingEnabled" value="false" />
+		<property name="authenticationCacheName" value="authenCache" />
+		<property name="authorizationCachingEnabled" value="false" />
+		<property name="authorizationCacheName" value="authorCache" />
+		<!-- 启用缓存 -->
+<!-- 		<property name="authenticationCachingEnabled" value="true" />
 		<property name="authenticationCacheName" value="authenCache" />
 		<property name="authorizationCachingEnabled" value="true" />
-		<property name="authorizationCacheName" value="authorCache" />
+		<property name="authorizationCacheName" value="authorCache" /> -->
 	</bean>
 	<!-- session管理器 -->
 	<bean id="defaultWebSessionManager"
 		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
 		<property name="globalSessionTimeout" value="1800000" />
 		<property name="deleteInvalidSessions" value="true" />
-		<property name="sessionDAO" ref="mySessionDao" />
+		<!-- 注释掉代表不使用redis缓存session
+		<property name="sessionDAO" ref="mySessionDao" /> -->
 		<property name="sessionIdCookie" ref="wapsession" />
 	</bean>
 	<!-- 自定义缓存管理器 ，包括认证缓存和权限缓存 -->

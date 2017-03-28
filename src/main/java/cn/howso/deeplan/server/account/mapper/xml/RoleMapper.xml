@@ -165,7 +165,7 @@
   <select id="queryByUserName" parameterType="string" resultMap="BaseResultMap">
   	select 
   	<include refid="Base_Column_List" /> 
-  	from syso_role r where exists(
+  	from sys_role r where exists(
   		select 1 from sys_user u left join sys_user_role ur on u.id=ur.user_id where r.id=ur.role_id and u.name=#{username} 
   	);
   </select>

@@ -22,7 +22,6 @@ public class UserController {
     }
     @RequestMapping("add")
     @ResponseBody
-    @RequiresPermissions("user:create")
     public AjaxResult add(User user){
         return new AjaxResult("创建用户成功");
     }

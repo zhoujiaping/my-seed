@@ -162,7 +162,7 @@
     set pattern = #{pattern,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="queryPermissionsByUserName" parameterType="string" resultMap="BaseResultMap">
+  <select id="queryByUserName" parameterType="string" resultMap="BaseResultMap">
   	select
   	p.id,p.pattern
   	from sys_permission p
