@@ -1,5 +1,6 @@
 package cn.howso.deeplan.framework.exception;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.howso.deeplan.framework.model.AjaxResult;
 import cn.howso.deeplan.web.util.WebUtils;
 public class ExceptionResolver implements HandlerExceptionResolver {
 	
@@ -22,10 +22,13 @@ public class ExceptionResolver implements HandlerExceptionResolver {
 		if (!isAjax) {
 	            return new ModelAndView("error", model);  
 		}
-		AjaxResult res = new AjaxResult();
-		res.setCode(BussinessException.ERR_APP);
-		res.setDesc(ex.getMessage());
-		WebUtils.sendResponse(response, res.toString());
+		response.setHeader("Status-Code", "500");
+		try {
+            response.getWriter().print("服务器内部错误");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 		return null;
 	}
 }

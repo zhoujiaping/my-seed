@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
-import cn.howso.deeplan.framework.exception.BussinessException;
-import cn.howso.deeplan.framework.model.AjaxResult;
 import cn.howso.deeplan.web.util.WebUtils;
 
 public class LoginFilter extends AccessControlFilter {
@@ -25,9 +23,11 @@ public class LoginFilter extends AccessControlFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest req, ServletResponse resp) throws Exception {
-        if (WebUtils.isAjax((HttpServletRequest) req)) {
-            WebUtils.sendResponse((HttpServletResponse) resp,
-                    new AjaxResult(BussinessException.ERR_NO_LOGIN, "未登录").toString());
+        HttpServletResponse response = (HttpServletResponse) resp; 
+        HttpServletRequest request = (HttpServletRequest) req;
+        if (WebUtils.isAjax(request)) {
+            response.setHeader("Status-Code", "500");
+            response.getWriter().print("未登录");
         } else {
             this.saveRequestAndRedirectToLogin(req, resp);
         }

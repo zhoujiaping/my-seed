@@ -1,4 +1,4 @@
-package cn.howso.deeplan.server.module1.model;
+package cn.howso.deeplan.server.specialmp.model;
 public class Urban {
     private String id;
 

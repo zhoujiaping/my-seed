@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 
-import cn.howso.deeplan.framework.exception.BussinessException;
-import cn.howso.deeplan.framework.model.AjaxResult;
 import cn.howso.deeplan.web.util.WebUtils;
 
 public class PermissionFilter extends AccessControlFilter {
@@ -33,9 +31,11 @@ public class PermissionFilter extends AccessControlFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest req, ServletResponse resp) throws Exception {
+        HttpServletResponse response = (HttpServletResponse) resp; 
+        HttpServletRequest request = (HttpServletRequest) req;
         if (WebUtils.isAjax((HttpServletRequest) req)) {
-            WebUtils.sendResponse((HttpServletResponse) resp,
-                    new AjaxResult(BussinessException.ERR_PERM_DENY, "没有权限").toString());
+            response.setHeader("Status-Code", "500");
+            response.getWriter().print("未没有权限");
         } else {
             this.saveRequest(req);
             // HttpServletRequest request = (HttpServletRequest)req;

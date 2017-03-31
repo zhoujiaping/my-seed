@@ -11,7 +11,7 @@ public class Crowd{
     private String get(String key){
         return dynamicProperties.get(PREFIX+key);
     }
-    public float getRatio() {
+    public float ratio() {
         return Float.parseFloat(get("ratio"));
     }
 }

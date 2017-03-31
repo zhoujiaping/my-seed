@@ -1,4 +1,4 @@
-package cn.howso.deeplan.server.module1.model;
+package cn.howso.deeplan.server.specialmp.model;
 
 import java.util.ArrayList;
 import java.util.List;

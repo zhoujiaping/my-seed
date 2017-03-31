@@ -17,10 +17,10 @@
 		<property name="unauthorizedUrl" value="/unauthorized.jsp" />
 		<property name="filterChainDefinitions">
 			<value>
-				/perm/login/login = anon
-				/perm/login/logout = authc
+				/login = anon
+				/logout = authc
 				<!-- /views/**= authc,roles[admin] -->
-				/perm/user/add = authc,perms[user:create]
+				/users= authc,perms[user:create]
 				/** = anon
 			</value>
 		</property>

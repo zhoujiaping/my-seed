@@ -1,6 +1,7 @@
-package cn.howso.deeplan.server.module1.service;
+package cn.howso.deeplan.server.specialmp.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -8,9 +9,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.constant.Crowd;
+import cn.howso.deeplan.constant.Dict;
 import cn.howso.deeplan.framework.model.Page;
-import cn.howso.deeplan.server.module1.mapper.UrbanMapper;
-import cn.howso.deeplan.server.module1.model.Urban;
+import cn.howso.deeplan.server.specialmp.mapper.UrbanMapper;
+import cn.howso.deeplan.server.specialmp.model.Urban;
 
 @Service
 public class UrbanService {
@@ -23,7 +25,10 @@ public class UrbanService {
         Map<String, Object> condition = new HashMap<>();
         condition.put("name", "%%");
         page.setRows(urbanMapper.selectByPage(condition , page));
-        crowd.getRatio();
+        crowd.ratio();
+        List list;
+        int type = Dict.MpSpecialEciRes.Type.MINUTE;
+        int scopeShape = Dict.Scope.Shape.OPEN;
         return page;
     }
 }

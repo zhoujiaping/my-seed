@@ -1,4 +1,4 @@
-package cn.howso.deeplan.server.module1.mapper;
+package cn.howso.deeplan.server.specialmp.mapper;
 
 import java.util.List;
 import java.util.Map;
@@ -6,8 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 
 import cn.howso.deeplan.framework.model.Page;
-import cn.howso.deeplan.server.module1.model.Urban;
-import cn.howso.deeplan.server.module1.model.UrbanExample;
+import cn.howso.deeplan.server.specialmp.model.Urban;
+import cn.howso.deeplan.server.specialmp.model.UrbanExample;
 
 public interface UrbanMapper {
 

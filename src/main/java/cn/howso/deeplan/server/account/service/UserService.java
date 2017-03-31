@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import cn.howso.deeplan.server.account.mapper.UserMapper;
 import cn.howso.deeplan.server.account.model.User;
 import cn.howso.deeplan.server.account.model.UserExample;
+import cn.howso.deeplan.server.log.mapper.SysLogMapper;
 /**
  * 用户服务
  * @ClassName UserService

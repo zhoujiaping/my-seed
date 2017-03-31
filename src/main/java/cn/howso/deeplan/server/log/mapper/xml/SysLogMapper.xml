@@ -241,4 +241,7 @@
       ip = #{ip,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="nextval" resultType="integer">
+  	select nextval('sys_log_id_seq');
+  </select>
 </mapper>
