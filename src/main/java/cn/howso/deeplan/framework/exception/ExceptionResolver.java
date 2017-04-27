@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import cn.howso.deeplan.web.util.WebUtils;
+import cn.howso.deeplan.util.WebUtils;
 public class ExceptionResolver implements HandlerExceptionResolver {
 	
 	@Override

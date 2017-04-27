@@ -14,5 +14,8 @@ public class DateTest {
         Map<String,Object> map = new HashMap<>();
         map.put("date",new Date(System.currentTimeMillis()));
         System.out.println(JSON.toJSONString(map));
+        int i=1;
+        Integer j=1;
+        System.out.println(i==j);
     }
 }
