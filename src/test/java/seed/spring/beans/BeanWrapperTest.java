@@ -6,8 +6,8 @@ import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Assert;
 
-import cn.howso.deeplan.server.account.model.User;
-import cn.howso.deeplan.server.account.service.UserService;
+import cn.howso.deeplan.perm.model.User;
+import cn.howso.deeplan.perm.service.UserService;
 
 public class BeanWrapperTest {
     @Test

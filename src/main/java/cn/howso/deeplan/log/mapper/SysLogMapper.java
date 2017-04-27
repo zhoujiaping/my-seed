@@ -11,7 +11,7 @@ import cn.howso.deeplan.perm.model.SysUserRoleExample;
 public interface SysLogMapper {
     int countByExample(SysLogExample example);
 
-    int deleteByExample(SysUserRoleExample example);
+    int deleteByExample(SysLogExample example);
 
     int deleteByPrimaryKey(Integer id);
 
