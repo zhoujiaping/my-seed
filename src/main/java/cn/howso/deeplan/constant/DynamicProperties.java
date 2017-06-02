@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class DynamicProperties {
     private ClassPathResource resource;
     private Properties prop;
-    @PostConstruct
+    @PostConstruct 
     public void init(){
         refresh();
     }
