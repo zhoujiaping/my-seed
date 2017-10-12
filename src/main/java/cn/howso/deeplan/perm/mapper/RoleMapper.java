@@ -2,33 +2,15 @@ package cn.howso.deeplan.perm.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-
+import cn.howso.deeplan.perm.dto.RoleWithPerms;
 import cn.howso.deeplan.perm.model.Role;
 import cn.howso.deeplan.perm.model.RoleExample;
-
-public interface RoleMapper {
-    int countByExample(RoleExample example);
-
-    int deleteByExample(RoleExample example);
-
-    int deleteByPrimaryKey(Integer id);
-
-    int insert(Role record);
-
-    int insertSelective(Role record);
-
-    List<Role> selectByExample(RoleExample example);
-
-    Role selectByPrimaryKey(Integer id);
-
-    int updateByExampleSelective(@Param("record") Role record, @Param("example") RoleExample example);
-
-    int updateByExample(@Param("record") Role record, @Param("example") RoleExample example);
-
-    int updateByPrimaryKeySelective(Role record);
-
-    int updateByPrimaryKey(Role record);
+import cn.howso.mybatis.anno.Table;
+import cn.howso.mybatis.mapper.BaseMapper;
+@Table(name="sys_role")
+public interface RoleMapper extends BaseMapper<Role,RoleExample,Integer>{
 
     List<Role> queryByUserName(String username);
+
+    List<RoleWithPerms> queryByUserNameFetchPerms(String username);
 }

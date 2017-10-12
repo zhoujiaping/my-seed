@@ -12,12 +12,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.util.Assert;
 
 /**
+ * csv文件解析器
  * 
- * @ClassName CsvExtractor
- * @Description csv文件内容抽取器
  * @author zhoujiaping
- * @Date 2017年2月16日 下午4:37:53
- * @version 1.0.0
+ *
  */
 public class CsvExtractor extends SheetExtractor{
     private InputStream in;
@@ -26,7 +24,7 @@ public class CsvExtractor extends SheetExtractor{
     }
     @Override
     public List<List<String>> extract() throws IOException{
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in,"gbk"));
         int len = -1;
         char[] buf = new char[1024];
         StringBuilder sb = new StringBuilder();

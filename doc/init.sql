@@ -1,79 +1,51 @@
 --日志表
 CREATE TABLE sys_log
 (
-  id serial NOT NULL,
-  uri character varying,
+  id serial primary key,
+  uri varchar,
+  method varchar,
   user_id integer,
-  request_params character varying,
+  req_params varchar,
   success boolean,
-  "time" character varying,
-  ip character varying,
-  CONSTRAINT sys_log_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
+  req_time timestamp,
+  host varchar
 );
-ALTER TABLE sys_log
-  OWNER TO deeplan;
 --权限表
-CREATE TABLE sys_permission
+CREATE TABLE sys_perm
 (
-  id serial NOT NULL,
-  pattern character varying,
-  CONSTRAINT sys_perm_pkey PRIMARY KEY (id),
-  CONSTRAINT sys_perm_name_key UNIQUE (pattern)
-)
-WITH (
-  OIDS=FALSE
+  id serial primary key,
+  note varchar,
+  pattern varchar
 );
-ALTER TABLE sys_permission
-  OWNER TO deeplan;
 --角色表
 CREATE TABLE sys_role
 (
-  id serial NOT NULL,
-  name character varying(50),
-  CONSTRAINT sys_role_pkey PRIMARY KEY (id),
-  CONSTRAINT sys_role_name_key UNIQUE (name)
-)
-WITH (
-  OIDS=FALSE
+  id serial primary key,
+  name varchar
 );
-ALTER TABLE sys_role
-  OWNER TO deeplan;
 --角色权限关联表
-CREATE TABLE sys_role_permission
+CREATE TABLE sys_role_perm
 (
-  permission_id integer,
+  perm_id integer,
   role_id integer
-)
-WITH (
-  OIDS=FALSE
 );
-ALTER TABLE sys_role_permission
-  OWNER TO deeplan;
 --用户表
 CREATE TABLE sys_user
 (
-  id serial NOT NULL,
-  name character varying(50),
-  password character varying NOT NULL,
-  CONSTRAINT sys_user_pkey PRIMARY KEY (id),
-  CONSTRAINT sys_user_name_key UNIQUE (name)
-)
-WITH (
-  OIDS=FALSE
+  id serial primary key,
+  name varchar,
+  password varchar NOT NULL,
+  nick varchar,
+  create_time timestamp default now()
 );
-ALTER TABLE sys_user
-  OWNER TO deeplan;
 --用户角色关联表
   CREATE TABLE sys_user_role
 (
   user_id integer,
   role_id integer
-)
-WITH (
-  OIDS=FALSE
 );
-ALTER TABLE sys_user_role
-  OWNER TO deeplan;
+--用户权限关联表
+create table sys_user_perm(
+	user_id integer,
+	perm_id integer
+);

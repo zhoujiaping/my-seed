@@ -4,29 +4,24 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.util.Assert;
+import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.perm.mapper.UserMapper;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.model.UserExample;
-/**
- * 用户服务
- * @ClassName UserService
- * @Description TODO(这里用一句话描述这个类的作用)
- * @author Administrator
- * @Date 2017年3月9日 下午6:15:59
- * @version 1.0.0
- */
+
+@Service
 public class UserService {
-    @Resource UserMapper userMapper;
-    public User authen(User user){
-        UserExample example = new UserExample();
-        example.createCriteria().andNameEqualTo(user.getName()).andPasswordEqualTo(user.getPassword());
-        List<User> users = userMapper.selectByExample(example);
-        Assert.isTrue(users.size()<=1,"查询到多个用户");
-        if(users.size()==1){
-            return users.get(0);
-        }
-        return null;
+    @Resource
+    private UserMapper userMapper;
+    public Integer add(User user) {
+        return userMapper.insertSelective(user);
     }
+    public List<User> query() {
+        UserExample example = new UserExample();
+        List<User> users = userMapper.selectByExample(example);
+        users.forEach(u->u.setPassword(null));
+        return users;
+    }
+
 }

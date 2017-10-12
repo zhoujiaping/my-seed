@@ -25,6 +25,9 @@
 	<!-- 扫描 basePackage下所有的接口，根据对应的mapper.xml为其生成代理类 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-		<property name="basePackage" value="cn.howso.**.mapper" />
+		<property name="basePackage" value="cn.howso.*.*.mapper" />
+		<!-- 用了mybatis-mapper，这里不能用**通配符，我cao！
+		<property name="basePackage" value="cn.howso.**.mapper" /> -->
+		
 	</bean>
 </beans>

@@ -19,7 +19,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import cn.howso.deeplan.log.annotation.LogAnno;
-import cn.howso.deeplan.log.mapper.SysLogMapper;
 import cn.howso.deeplan.log.model.SysLog;
 import cn.howso.deeplan.util.JSONUtils;
 import cn.howso.deeplan.util.LogUtil;
@@ -30,7 +29,7 @@ import cn.howso.deeplan.util.WebUtils;
 @Component
 public class LoggerAspect {
 	private static Logger logger = LogUtil.getLogger();
-	@Resource SysLogMapper sysLogMapper;
+	//@Resource LogMapper logMapper;
 	/**
 	 * services层切入点
 	 */
@@ -67,7 +66,7 @@ public class LoggerAspect {
         sysLog.setTime(LocalDateTime.now().toString());
         sysLog.setUri(uri);
         sysLog.setUserId(null);//TODO
-        sysLogMapper.insertSelective(sysLog);
+        //sysLogMapper.insertSelective(sysLog);
         return ret;
 	}
 }

@@ -14,14 +14,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-/**
- * 
- * @ClassName ExcelExtractor
- * @Description excle文件内容抽取器
- * @author zhoujiaping
- * @Date 2017年2月16日 下午4:37:06
- * @version 1.0.0
- */
+
 public class ExcelExtractor extends SheetExtractor{
     private InputStream in;
     private String excelType;

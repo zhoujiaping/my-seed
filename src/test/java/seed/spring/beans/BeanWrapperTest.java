@@ -7,7 +7,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Assert;
 
 import cn.howso.deeplan.perm.model.User;
-import cn.howso.deeplan.perm.service.UserService;
+import cn.howso.deeplan.perm.service.AuthenService;
 
 public class BeanWrapperTest {
     @Test
@@ -22,7 +22,7 @@ public class BeanWrapperTest {
     @Test
     public void test2(){
         ClassPathXmlApplicationContext cxt = new ClassPathXmlApplicationContext("application-context.xml");
-        UserService userService = cxt.getBean(UserService.class);
+        AuthenService userService = cxt.getBean(AuthenService.class);
         User user = new User();
         user.setName("zhou");
         user.setPassword("123456");

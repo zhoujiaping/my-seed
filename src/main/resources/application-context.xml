@@ -11,12 +11,15 @@
 						 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 						 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
 	">
+	<context:component-scan base-package="cn">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
 	<!-- properties start -->
 	<bean id="configProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
-				<value>classpath:sys-config.${env}.properties</value>
+				<value>classpath:sys-config.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -47,18 +50,18 @@
 		<aop:advisor advice-ref="druid-stat-interceptor"
 			pointcut-ref="druid-stat-pointcut" />
 	</aop:config>
-	<bean id="dataSourceEfence"
+	<!-- <bean id="dataSourceEfence"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="${ef.driver}" />
 		<property name="username" value="${ef.username}" />
 		<property name="password" value="${ef.password}" />
 		<property name="url" value="${ef.url}" />
-	</bean>
+	</bean> -->
 	<bean id="dynamicDataSource" class="cn.howso.deeplan.framework.datasource.DynamicDataSource">
 		<property name="targetDataSources">
 			<map key-type="java.lang.String">
 				<entry value-ref="dataSource" key="dataSource"></entry>
-				<entry value-ref="dataSourceEfence" key="dataSourceEfence"></entry>
+				<!-- <entry value-ref="dataSourceEfence" key="dataSourceEfence"></entry> -->
 			</map>
 		</property>
 		<property name="defaultTargetDataSource" ref="dataSource">

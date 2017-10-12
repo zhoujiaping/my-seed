@@ -1,0 +1,13 @@
+#多环境部署
+#mybatis单表CURD
+#mybatis分页
+#统一异常处理
+#常量管理
+#http返回值设计
+	正常响应不对结果作包装，有错误时才对结果作包装。业务代码中对预期的错误要抛出BusinessException。
+#无cookie的session
+	tomcat的context.xml的context标签中添加cookies="false"，设置禁用cookie
+	将jsessionid写在url上。servlet中获取sessionid通过getRequestedSessionId。（shiro中是JSESSIONID）
+	并且要自己实现sessionContext，根据sessionid获取session。
+	前端页面需要重写url
+	如/seed/users=>/seed/users?v=1;JSESSIONID=c2ecc4da-b94e-4dba-ba4f-31e9e6640900?v=1

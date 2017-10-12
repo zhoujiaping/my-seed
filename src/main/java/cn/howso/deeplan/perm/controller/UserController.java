@@ -1,7 +1,10 @@
-package cn.howso.deeplan.perm.controller;
+ package cn.howso.deeplan.perm.controller;
+
+import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +21,9 @@ public class UserController {
     
     @RequestMapping(method=RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions(value={"users:create"})
     public Object add(User user){
-        return "创建用户成功";
+        return userService.add(user);
     }
     @RequestMapping(value="/{id}",method=RequestMethod.DELETE)
     @ResponseBody
@@ -38,8 +42,9 @@ public class UserController {
     }
     @RequestMapping(method=RequestMethod.GET)
     @ResponseBody
-    public Object get(){
-        return "查询用户列表";
+    @RequiresPermissions(value={"users:view"})
+    public List<User> query(){
+        return userService.query();
     }
     @RequestMapping(value="{id}",method=RequestMethod.GET)
     @ResponseBody

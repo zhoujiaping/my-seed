@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Objects;
 /**
  * 
- * @ClassName SheetExtracter
+ * @ClassName SpreadsheetExtracter
  * @Description 电子表格文件内容抽取器
- * demo：SheetExtractor.of(in,".xlsx").extract();
  * @author zhoujiaping
  * @Date 2017年2月16日 上午10:34:12
  * @version 1.0.0

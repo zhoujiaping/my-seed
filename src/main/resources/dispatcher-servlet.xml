@@ -26,7 +26,9 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-	<context:component-scan base-package="cn" />
+	<context:component-scan base-package="cn">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**"/> <bean 
 		class="cn.howso.specialmp.system.interceptor.SessionInterceptor"/> </mvc:interceptor> 

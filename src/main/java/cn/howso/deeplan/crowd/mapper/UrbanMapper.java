@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import cn.howso.deeplan.crowd.model.Urban;
 import cn.howso.deeplan.crowd.model.UrbanExample;
-import cn.howso.deeplan.framework.model.Page;
+import cn.howso.mybatis.model.LimitPage;
 
 public interface UrbanMapper {
 
@@ -33,5 +33,5 @@ public interface UrbanMapper {
 
     int updateByPrimaryKey(Urban record);
 
-    List<Urban> selectByPage(@Param("record")Map<String,Object> params,@Param("page")Page<Urban> page);
+    List<Urban> selectByPage(@Param("record")Map<String,Object> params,@Param("page")LimitPage page);
 }
