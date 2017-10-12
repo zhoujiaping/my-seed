@@ -23,5 +23,14 @@ public class UserService {
         users.forEach(u->u.setPassword(null));
         return users;
     }
+    public Integer delete(Integer id) {
+        return userMapper.deleteByPrimaryKey(id);
+    }
+    public Integer udpate(User user) {
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+    public User get(Integer id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
 
 }

@@ -7,13 +7,29 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.perm.mapper.RoleMapper;
-import cn.howso.deeplan.perm.mapper.UserMapper;
 import cn.howso.deeplan.perm.model.Role;
+import cn.howso.deeplan.perm.model.RoleExample;
 @Service
 public class RoleService {
     @Resource RoleMapper roleMapper;
-    @Resource UserMapper userMapper;
+    
     public List<Role> queryByUserName(String username) {
         return roleMapper.queryByUserName(username);
+    }
+    public Integer add(Role role) {
+        return roleMapper.insertSelective(role);
+    }
+    public Integer delete(Integer id) {
+        return roleMapper.deleteByPrimaryKey(id);
+    }
+    public Integer udpate(Role role) {
+        return roleMapper.updateByPrimaryKeySelective(role);
+    }
+    public List<Role> query() {
+        RoleExample example = new RoleExample();
+        return roleMapper.selectByExample(example);
+    }
+    public Role get(Integer id) {
+        return roleMapper.selectByPrimaryKey(id);
     }
 }

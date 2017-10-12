@@ -1,10 +1,13 @@
  package cn.howso.deeplan.perm.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.service.UserService;
+import cn.howso.deeplan.sys.Const;
+import cn.howso.deeplan.sys.anno.CurrentUser;
 
 @Controller
 @RequestMapping("users")
@@ -22,33 +27,36 @@ public class UserController {
     @RequestMapping(method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions(value={"users:create"})
-    public Object add(User user){
+    public Integer add(User user){
         return userService.add(user);
     }
     @RequestMapping(value="/{id}",method=RequestMethod.DELETE)
     @ResponseBody
-    public Object delete(@PathVariable String id){
-        //  .../user/1   delete 参数
-        //  .../user/2   put 参数
-        //  .../user/1   patch 参数
-        //  .../user/1?name=aaa&phone=139&   get 参数
-        //  .../user/1   post 参数
-        return "删除用户成功";
+    @RequiresPermissions(value={"users:delete"})
+    public Integer delete(@PathVariable Integer id){
+        return userService.delete(id);
     }
     @RequestMapping(value="/{id}",method=RequestMethod.POST)
     @ResponseBody
-    public Object update(@PathVariable String id,User user){
-        return "更新用户成功";
+    @RequiresPermissions(value={"users:update"})
+    public Integer update(@PathVariable String id,User user){
+        return userService.udpate(user);
     }
     @RequestMapping(method=RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions(value={"users:view"})
-    public List<User> query(){
+    public List<User> query(@CurrentUser User currentUser){
+        System.out.println(currentUser);
+        Session s = SecurityUtils.getSubject().getSession();
+        Collection<Object> keys = s.getAttributeKeys();
+        Object o = s.getAttribute(Const.SESSION_USER_KEY);
+        System.out.println(keys);
         return userService.query();
     }
     @RequestMapping(value="{id}",method=RequestMethod.GET)
     @ResponseBody
-    public Object get(@PathVariable String id){
-        return "查询用户";
+    @RequiresPermissions(value={"users:id:view"})
+    public User get(@PathVariable Integer id){
+        return userService.get(id);
     }
 }

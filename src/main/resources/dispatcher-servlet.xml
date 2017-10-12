@@ -13,6 +13,9 @@
 		">
 
 	<mvc:annotation-driven>
+		<mvc:argument-resolvers>  
+              <bean class="cn.howso.deeplan.sys.component.LoginUserArugmentResolver"/>  
+        </mvc:argument-resolvers>  
 		<mvc:message-converters register-defaults="false">
 			<bean
 				class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">

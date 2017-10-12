@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.howso.deeplan.framework.exception.BusinessException;
 import cn.howso.deeplan.perm.model.User;
+import cn.howso.deeplan.sys.Const;
 import cn.howso.deeplan.util.WebUtils;
 
 @Controller
@@ -58,6 +59,7 @@ public class AuthenController {
             for (final Object key : attributes.keySet()) {
                 session.setAttribute(key, attributes.get(key));
             }
+            session.setAttribute(Const.SESSION_USER_KEY, user);
             WebUtils.sendRedirect(request, response, "/",session.getId().toString());
         } catch (AccountException e) {
             throw new BusinessException(e.getMessage());
