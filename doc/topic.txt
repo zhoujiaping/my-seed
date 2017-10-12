@@ -11,3 +11,9 @@
 	并且要自己实现sessionContext，根据sessionid获取session。
 	前端页面需要重写url
 	如/seed/users=>/seed/users?v=1;JSESSIONID=c2ecc4da-b94e-4dba-ba4f-31e9e6640900?v=1
+	Session fixation问题
+#缓存
+	与用户相关的数据，由于url上有sessionid，所以可以缓存。但是sessionid在退出会话后会重新生成，导致缓存时间最多在会话期间。
+	与用户无关的数据，前端不要作url重写，服务端不要对其进行认证和授权的过滤。
+	静态资源，全部放在static目录下，统一不做认证和授权的过滤。
+	如果有需要做权限过滤的静态页面，则可以让其请求controller，然后转发，这样会走权限过滤。

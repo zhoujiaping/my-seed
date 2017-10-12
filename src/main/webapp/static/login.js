@@ -1,5 +1,5 @@
 $(()=>{
-	const rootpath = '/seed';
+	const rootpath = howso.contextPath();
 	$('#submit').on('click',event=>{
 		const name=$('#name').val();
 		const password=$('#password').val();

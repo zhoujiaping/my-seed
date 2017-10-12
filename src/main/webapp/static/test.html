@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>test</title>
+<script type="text/javascript" src="lib/jquery-2.1.0.js"></script>
+<script type="text/javascript" src="lib/howso.js"></script>
+<script type="text/javascript" src="test.js"></script>
+<link rel="stylesheet" type="text/css" href="test.css">
+</head>
+<body>
+	sessionid:<div id="sid" contenteditable="true"></div>
+	url:<div id="url" contenteditable="true">/</div>
+	method:<select id="method">
+		<option value="get" selected="selected">get</option>
+		<option value="post">post</option>
+		<option value="patch">patch</option>
+		<option value="put">put</option>
+		<option value="delete">delete</option>
+	</select>
+	params:<div id="params" class="params" contenteditable="true"></div>
+	<button id="submit">submit</button>
+	res:<div id="res" class="res">none</div>
+</body>
+</html>

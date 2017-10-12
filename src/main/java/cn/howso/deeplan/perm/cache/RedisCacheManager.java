@@ -1,35 +1,33 @@
 package cn.howso.deeplan.perm.cache;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
 public class RedisCacheManager implements CacheManager {
 	
 	
-	private RedisCache authenCache;
-	private RedisCache authorCache;
+    private Map<String,RedisCache> cacheMap = new HashMap<>();
 	
     public RedisCache getAuthenCache() {
-        return authenCache;
+        return cacheMap.get("authenCache");
     }
     
     public void setAuthenCache(RedisCache authenCache) {
-        this.authenCache = authenCache;
+        cacheMap.put("authenCache", authenCache);
     }
     
     public RedisCache getAuthorCache() {
-        return authorCache;
+        return cacheMap.get("authorCache");
     }
-    
     public void setAuthorCache(RedisCache authorCache) {
-        this.authorCache = authorCache;
+        cacheMap.put("authorCache", authorCache);
     }
-	@Override
+    @Override
 	public <K, V> Cache<K, V> getCache(String name) throws CacheException {
-		if("authenCache".equals(name))
-			return authenCache;
-		else
-			return authorCache;
+	    return cacheMap.get(name);
 	}
 
 }
