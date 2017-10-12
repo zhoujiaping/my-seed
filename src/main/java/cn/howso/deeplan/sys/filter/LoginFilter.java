@@ -18,7 +18,7 @@ public class LoginFilter extends AccessControlFilter {
         // 已登录或者是登录请求则允许访问
         HttpServletRequest request = (HttpServletRequest) req;
         logger.debug(request.getRequestURI());
-        //System.out.println(request.getRequestURI());
+        System.out.println(request.getRequestURI());
         if (SecurityUtils.getSubject().getPrincipal() != null || isLoginRequest(req, resp)) {
             return true;
         }

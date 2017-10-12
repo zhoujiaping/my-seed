@@ -35,19 +35,15 @@
 	<!-- spring提供的基于url的权限过滤 -->
 	<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/login.html?v=1" />
+		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/index.html" />
 		<property name="unauthorizedUrl" value="/unauthorized.html" />
 		<property name="filterChainDefinitions">
 			<value>
-				/login* = anon
-				/logout* = authc
-				/* = authc
-				/index.html* = authc
-				<!-- /views/**= authc,roles[admin] -->
-				<!-- /users= authc,perms[user:create] -->
 				/static/** = anon
 				/** = authc
+				<!-- /views/**= authc,roles[admin] -->
+				<!-- /users= authc,perms[user:create] -->
 			</value>
 		</property>
 

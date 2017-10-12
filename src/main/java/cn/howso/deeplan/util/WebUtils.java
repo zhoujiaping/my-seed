@@ -3,7 +3,6 @@ package cn.howso.deeplan.util;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -51,32 +50,49 @@ public class WebUtils{
      * 如果是ajax请求，则需要前端配合，判断自定义响应头是否包含X-Redirect-Page
      * */
     public static void sendRedirect(HttpServletRequest request,HttpServletResponse resp,String url) throws IOException{
-        addJsessionid(request,url);
+        url = addJsessionid(request,url);
         if(isAjax(request)){
             resp.addHeader("X-Redirect-Url", url);
         }else{
             resp.sendRedirect(url);
         }
     }
-    public static void sendAjaxRedirect(HttpServletRequest request,HttpServletResponse resp,String url){
-        addJsessionid(request,url);
-        resp.addHeader("X-Redirect-Url", url);
+    public static void sendRedirect(HttpServletRequest request,HttpServletResponse resp,String url,String sessionid) throws IOException{
+        url = addJsessionid(request,url,sessionid);
+        if(isAjax(request)){
+            resp.addHeader("X-Redirect-Url", url);
+        }else{
+            resp.sendRedirect(url);
+        }
     }
-    private static void addJsessionid(HttpServletRequest request,String url){
+    private static String addJsessionid(HttpServletRequest request, String url, String sessionid) {
         if(url.startsWith("/")){//如果是重定向到当前域
-            String sessionId = getUriPathSegmentParamValue(request,"JSESSIONID");
-            if(sessionId!=null){
+            //String sessionId = getUriPathSegmentParamValue(request.getRequestURI(),"JSESSIONID");
+            if(sessionid!=null){
                 int index = url.indexOf("?");
                 if(index>0){
-                    url = url.substring(0,index)+";JSESSIONID="+sessionId+url.substring(index);
+                    url = url.substring(0,index)+";JSESSIONID="+sessionid+url.substring(index);
                 }else{
-                    url = url+";JSESSIONID="+sessionId;
+                    url = url+";JSESSIONID="+sessionid;
                 }
             }
         }
+        return url;
     }
-    private static String getUriPathSegmentParamValue(HttpServletRequest request, String paramName) {
-        String uri = request.getRequestURI();
+    public static void sendAjaxRedirect(HttpServletRequest request,HttpServletResponse resp,String url){
+        url = addJsessionid(request,url);
+        resp.addHeader("X-Redirect-Url", url);
+    }
+    private static String addJsessionid(HttpServletRequest request,String url){
+        String sessionid = request.getRequestedSessionId();
+        return addJsessionid(request, url, sessionid);
+    }
+    public static void main(String[] args) {
+        String uri = "/fuck;JSESSIONID=12345;SESSIONID=6789?v=1";
+        String sessionid = getUriPathSegmentParamValue(uri,"JSESSIONID");
+        System.out.println(sessionid);
+    }
+    private static String getUriPathSegmentParamValue(String uri, String paramName) {
         int queryStartIndex = uri.indexOf('?');
         if (queryStartIndex >= 0) { //get rid of the query string
             uri = uri.substring(0, queryStartIndex);
@@ -100,12 +116,11 @@ public class WebUtils{
             //no segment param:
             return null;
         }
+        paramSegment = paramSegment.substring(tokenIndex + TOKEN.length());
         int index = paramSegment.indexOf(';');//去掉片段中的其他参数
         if(index >= 0 ){
             paramSegment = paramSegment.substring(0, index);
         }
-        String paramValue = paramSegment.substring(tokenIndex + TOKEN.length());
-
-        return paramValue; //what remains is the value
+        return paramSegment; //what remains is the value
     }
 }

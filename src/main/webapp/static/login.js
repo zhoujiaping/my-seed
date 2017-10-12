@@ -3,7 +3,8 @@ $(()=>{
 	$('#submit').on('click',event=>{
 		const name=$('#name').val();
 		const password=$('#password').val();
-		$.post('/seed/login;JSESSIONID='+howso.getSessionid(location.href),{
+		let url = howso.addSid(rootpath+'/login');
+		$.post(url,{
 			name:name,
 			password:password
 		},null,'json').done(res=>{
