@@ -10,21 +10,10 @@ import org.springframework.util.SerializationUtils;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
 /**
- * 
- * @ClassName RedisCache
- * @Description 
- * @author wzf
- * @Date 2017年2月20日 下午4:41:58
- * @version 1.0.0
- * @param <K>
- * @param <V>
- */
-public class RedisCache<K,V> implements Cache<K, V> {
-	
+ * */
+public class RedisCache implements Cache<Object,Object> {
 	private JedisPool jedisPool;
-	private String keyPrefix="redis_cache";
 	public JedisPool getJedisPool() {
 		return jedisPool;
 	}
@@ -38,70 +27,70 @@ public class RedisCache<K,V> implements Cache<K, V> {
 	}
 	@Override
 	public void clear() throws CacheException {
+	    //TODO
+	    throw new RuntimeException("this method is not implemented.");
 	}
-	private byte[] getByteKey(K key){
-		if (key instanceof String) 
-			return (this.keyPrefix+key).getBytes();
-		else
-			return SerializationUtils.serialize(key);
+	private byte[] tobytes(Object key){
+        return SerializationUtils.serialize(key);
+    }
+	private Object frombytes(byte[] bytes){
+	    return SerializationUtils.deserialize(bytes);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public V get(K key) throws CacheException {
+	public Object get(Object key) throws CacheException {
 		if(key == null) 
 			return null;
 		else{
 			Jedis redis = this.getJedis();
-			V v =null;
+			Object v =null;
 			try {
-				v= (V)(SerializationUtils.deserialize(redis.get(this.getByteKey(key))));
-				redis.expire(this.getByteKey(key), 1800);
-			} finally{
+			    byte[] k = tobytes(key);
+			    byte[] byteV = redis.get(k);
+				v= frombytes(byteV);
+				redis.expire(k, 1800);
+			}finally{
 				redis.close();
 			}
 			return v;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Set<K> keys() {
+	public Set<Object> keys() {
 		Jedis redis = this.getJedis();
-		Set<byte[]> ses = null;
-		Set<K> sets = null;
+		Set<byte[]> bytekeys = null;
+		Set<Object> keys = null;
 		try {
-			ses = redis.keys(this.keyPrefix.getBytes());
-			sets = new HashSet<>();
-			if(ses != null){
-				for(byte[] tmp : ses){
-					sets.add((K)(SerializationUtils.deserialize(tmp)));
+		    bytekeys = redis.keys("*".getBytes());//这里不能用tobytes("*")因为该方法得到的bytes不仅仅是*的字节。
+		    keys = new HashSet<>();
+			if(bytekeys != null ){
+				for(byte[] bytekey : bytekeys){
+				    keys.add(frombytes(bytekey));
 				}
 			}
 		} finally{
 			redis.close();
 		}
-				
-		return sets;
+		return keys;
 	}
 
 	@Override
-	public V put(K key, V value) throws CacheException {
+	public Object put(Object key, Object value) throws CacheException {
 		Jedis redis = this.getJedis();
 		try {
-			redis.set(this.getByteKey(key), SerializationUtils.serialize(value));
+			redis.set(tobytes(key), tobytes(value));
 		} finally{
 			redis.close();
 		}
-	
 		return value;
 	}
 
 	@Override
-	public V remove(K key) throws CacheException {
+	public Object remove(Object key) throws CacheException {
 		Jedis redis = this.getJedis();
 		try {
-			redis.del(this.getByteKey(key));
+			redis.del(tobytes(key));
 		} finally{
 			redis.close();
 		}
@@ -110,12 +99,20 @@ public class RedisCache<K,V> implements Cache<K, V> {
 
 	@Override
 	public int size() {
-		return 0;
+	    Jedis redis = this.getJedis();
+        Set<byte[]> bytekeys = null;
+        try {
+            bytekeys = redis.keys("*".getBytes());
+            return bytekeys==null?0:bytekeys.size();
+        } finally{
+            redis.close();
+        }
 	}
 
 	@Override
-	public Collection<V> values() {
-		return null;
+	public Collection<Object> values() {
+	    //TODO
+	    throw new RuntimeException("this method is not implemented.");
 	}
 	
 

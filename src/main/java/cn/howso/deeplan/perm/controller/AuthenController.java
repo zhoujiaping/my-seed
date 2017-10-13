@@ -33,7 +33,11 @@ public class AuthenController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
-        return "login";
+        return "static/login";
+    }
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String index() {
+        return "static/index";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -71,7 +75,7 @@ public class AuthenController {
     @ResponseBody
     public Object logout(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         SecurityUtils.getSubject().logout();
-        WebUtils.sendRedirect(request, response, "/login.html");
+        WebUtils.sendRedirect(request, response, "/index");
         return "注销成功";
     }
 }

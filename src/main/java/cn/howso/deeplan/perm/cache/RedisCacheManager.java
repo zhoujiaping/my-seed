@@ -3,7 +3,6 @@ package cn.howso.deeplan.perm.cache;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
 public class RedisCacheManager implements CacheManager {
@@ -25,9 +24,9 @@ public class RedisCacheManager implements CacheManager {
     public void setAuthorCache(RedisCache authorCache) {
         cacheMap.put("authorCache", authorCache);
     }
+    @SuppressWarnings("unchecked")
     @Override
-	public <K, V> Cache<K, V> getCache(String name) throws CacheException {
+	public  RedisCache getCache(String name) throws CacheException {
 	    return cacheMap.get(name);
 	}
-
 }
