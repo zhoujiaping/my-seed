@@ -10,12 +10,17 @@ CREATE TABLE sys_log
   req_time timestamp,
   host varchar
 );
+create table sys_perm_space(
+	id serial primary key,
+	name varchar
+);
 --权限表
 CREATE TABLE sys_perm
 (
   id serial primary key,
   note varchar,
-  pattern varchar
+  pattern varchar,
+  space_id int4
 );
 --角色表
 CREATE TABLE sys_role
@@ -48,4 +53,11 @@ CREATE TABLE sys_user
 create table sys_user_perm(
 	user_id integer,
 	perm_id integer
+);
+
+create table sys_uri_perm(
+	id primary key,
+	method varchar,
+	uri varchar,
+	note varchar
 );

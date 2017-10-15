@@ -1,5 +1,7 @@
 package cn.howso.deeplan.sys.realm;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,8 +58,14 @@ public class MyRealm extends AuthorizingRealm {
         info.addRoles(roleNames);
         //List<Perm> perms = permService.queryByUserName(username);
         //Set<String> permStrings = perms.stream().map(Perm::getPattern).distinct().collect(Collectors.toSet());
-        List<Perm> perms = roles.stream().map(r->r.getPerms()).flatMap(List::stream).collect(Collectors.toList());
-        Set<String> permStrings = perms.stream().map(Perm::getPattern).distinct().collect(Collectors.toSet());
+        Set<String> permStrings = new HashSet<>();
+        for(RoleWithPerms r:roles){
+        	for(Perm p:r.getPerms()){
+        		permStrings.add(p.getSpaceId()+":"+p.getPattern());
+        	}
+        }
+        //List<Perm> perms = roles.stream().map(r->r.getPerms()).flatMap(List::stream).collect(Collectors.toList());
+        //Set<String> permStrings = perms.stream().map(Perm::getPattern).distinct().collect(Collectors.toSet());
         info.addStringPermissions(permStrings);
         return info;
     }

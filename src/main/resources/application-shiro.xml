@@ -10,12 +10,12 @@
 	<!-- shiro生命周期执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 	<!-- begin 开启注解权限验证 。-->
-	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
+	<!-- <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
         <property name="proxyTargetClass" value="true" />
     </bean>
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
-    </bean>
+    </bean> -->
     <!-- <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
         <property name="exceptionMappings">
             <props>
@@ -41,7 +41,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/static/** = anon
-				/** = authc
+				/** = authc,perms
 				<!-- /views/**= authc,roles[admin] -->
 				<!-- /users= authc,perms[user:create] -->
 			</value>
@@ -57,9 +57,9 @@
 				<!-- <entry key="roles"> <bean class="cn.howso.common.system.authorization.filter.RoleFilter"></bean> 
 					</entry> -->
 				<!-- 权限过滤 -->
-				<!-- <entry key="perms">
+				<entry key="perms">
 					<bean class="cn.howso.deeplan.sys.filter.PermissionFilter"></bean>
-				</entry> -->
+				</entry>
 			</map>
 		</property>
 	</bean>

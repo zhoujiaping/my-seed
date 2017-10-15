@@ -5,9 +5,10 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="note" property="note" jdbcType="VARCHAR" />
     <result column="pattern" property="pattern" jdbcType="VARCHAR" />
+    <result column="space_id" property="spaceId" jdbcType="INTEGER"/>
   </resultMap>
   <select id="queryByUserName" parameterType="string" resultMap="BaseResultMap">
-  	select t1.id,t1.note,t1.pattern 
+  	select t1.id,t1.note,t1.pattern,t1.space_id
   	from sys_perm t1
   	left join sys_role_perm t2
   	on t1.id = t2.perm_id

@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,8 +52,11 @@ public class UserController {
     }
     @RequestMapping(method=RequestMethod.GET)
     @ResponseBody
-    @RequiresPermissions(value={"users:view"})
+    //@RequiresPermissions(value={"users:view"})
     public List<User> query(@CurrentUser User currentUser,User user){
+    	PrincipalCollection arg0 = 	SecurityUtils.getSubject().getPrincipals();
+		String arg1 = 1+":users:view";
+		SecurityUtils.getSecurityManager().checkPermission(arg0, arg1 );
         Collection<Session> sessions = sessionResp.getAllSessions();
         sessions.forEach(x->{
             System.out.println(x.getId());
