@@ -8,8 +8,8 @@
 						 http://www.springframework.org/schema/websocket  http://www.springframework.org/schema/websocket/spring-websocket.xsd
 	">
 	<!-- shiro生命周期执行 -->
-	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
-	<!-- begin 开启注解权限验证 。-->
+ 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+ 	<!-- begin 开启注解权限验证 。-->
 	<!-- <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
         <property name="proxyTargetClass" value="true" />
     </bean>
@@ -49,16 +49,16 @@
 
 		<property name="filters">
 			<map>
-				<entry key="authc">
+				<entry key="authc" value-ref="loginFilter">
 					<!-- 认证过滤 -->
-					<bean class="cn.howso.deeplan.sys.filter.LoginFilter"></bean>
+					<!-- <bean class="cn.howso.deeplan.sys.filter.LoginFilter"></bean> -->
 				</entry>
 				<!-- 角色过滤 -->
 				<!-- <entry key="roles"> <bean class="cn.howso.common.system.authorization.filter.RoleFilter"></bean> 
 					</entry> -->
 				<!-- 权限过滤 -->
-				<entry key="perms">
-					<bean class="cn.howso.deeplan.sys.filter.PermissionFilter"></bean>
+				<entry key="perms" value-ref="permFilter">
+					<!-- <bean class="cn.howso.deeplan.sys.filter.PermissionFilter"></bean> -->
 				</entry>
 			</map>
 		</property>
@@ -71,20 +71,20 @@
  		<property name="sessionManager" ref="defaultWebSessionManager" />
 	</bean>
 	<!-- 自定义域，用于认证和授权 -->
-	<bean id="myRealm" class="cn.howso.deeplan.sys.realm.MyRealm">
+	<!-- <bean id="myRealm" class="cn.howso.deeplan.sys.realm.MyRealm">
 		<property name="authenService" ref="authenService"></property>
 		<property name="authorService" ref="authorService"></property>
-		<!-- 禁用缓存 -->
-		<!-- <property name="authenticationCachingEnabled" value="false" />
+		禁用缓存
+		<property name="authenticationCachingEnabled" value="false" />
 		<property name="authenticationCacheName" value="authenCache" />
 		<property name="authorizationCachingEnabled" value="false" />
-		<property name="authorizationCacheName" value="authorCache" /> -->
-		<!-- 启用缓存 -->
+		<property name="authorizationCacheName" value="authorCache" />
+		启用缓存
 		<property name="authenticationCachingEnabled" value="true" />
 		<property name="authenticationCacheName" value="authenCache" />
 		<property name="authorizationCachingEnabled" value="true" />
 		<property name="authorizationCacheName" value="authorCache" />
-	</bean>
+	</bean> -->
 	<!-- session管理器 -->
 	<bean id="defaultWebSessionManager"
 		class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
@@ -96,16 +96,16 @@
 <!-- 		<property name="sessionIdCookie" ref="wapsession" />
  -->	</bean>
 	<!-- 自定义缓存管理器 ，包括认证缓存和权限缓存 -->
-	<bean id="redisCacheManager"
+	<!-- <bean id="redisCacheManager"
 		class="cn.howso.deeplan.perm.cache.RedisCacheManager">
 		<property name="authenCache" ref="authenCache" />
 		<property name="authorCache" ref="authorCache" />
-	</bean>
+	</bean> -->
 	<!-- shiro核心配置结束 -->
-	<bean id="mySessionDao"
+	<!-- <bean id="mySessionDao"
 		class="cn.howso.deeplan.sys.session.dao.MyShiroSessionDao">
 		<property name="shiroSessionRespository" ref="redisSessionResp" />
-	</bean>
+	</bean> -->
 	<bean id="wapsession" class="org.apache.shiro.web.servlet.SimpleCookie">
 		<property name="name" value="websessionid" />
 		<property name="path" value="/"></property>
@@ -123,16 +123,16 @@
 		<constructor-arg name="database" value="${session.redis.db}"></constructor-arg>
 	</bean>
 
-	<bean id="redisSessionResp"
+	<!-- <bean id="redisSessionResp"
 		class="cn.howso.deeplan.sys.session.dao.RedisShiroSessionRespositoryImpl">
 		<property name="jedisPool" ref="sessionJedisPool" />
-	</bean>
-	<bean id="authenCache" class="cn.howso.deeplan.perm.cache.RedisCache">
+	</bean> -->
+	<!-- <bean id="authenCache" class="cn.howso.deeplan.perm.cache.RedisCache">
 		<property name="jedisPool" ref="authenJedisPool"></property>
-	</bean>
-	<bean id="authorCache" class="cn.howso.deeplan.perm.cache.RedisCache">
+	</bean> -->
+	<!-- <bean id="authorCache" class="cn.howso.deeplan.perm.cache.RedisCache">
 		<property name="jedisPool" ref="authorJedisPool"></property>
-	</bean>
+	</bean> -->
 	<bean id="authenJedisPool" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig" ref="jedisPoolConfig" />
 		<constructor-arg name="host" value="${authen.redis.url}" />
@@ -149,11 +149,11 @@
 		<constructor-arg name="password" value="${author.redis.password}"></constructor-arg>
 		<constructor-arg name="database" value="${author.redis.db}"></constructor-arg>
 	</bean>
-	<bean id="authenService"
+	<!-- <bean id="authenService"
 		class="cn.howso.deeplan.perm.service.AuthenService">
 	</bean>
 	<bean id="authorService"
 		class="cn.howso.deeplan.perm.service.AuthorService">
-	</bean>
+	</bean> -->
 
 </beans>

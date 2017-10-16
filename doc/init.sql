@@ -56,8 +56,17 @@ create table sys_user_perm(
 );
 
 create table sys_uri_perm(
-	id primary key,
+	id serial primary key,
 	method varchar,
 	uri varchar,
-	note varchar
+	note varchar,
+	perm_id integer
+);
+create table sys_module(
+	id serial primary key,
+	name varchar
+);
+create table sys_role_module(
+	role_id integer,
+	module_id integer
 );

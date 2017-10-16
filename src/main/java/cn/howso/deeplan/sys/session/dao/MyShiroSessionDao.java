@@ -3,11 +3,13 @@ package cn.howso.deeplan.sys.session.dao;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.annotation.Resource;
+
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 public class MyShiroSessionDao extends AbstractSessionDAO {
-    
+    @Resource
 	private MyShiroSessionRespository shiroSessionRespository;
 	
     public MyShiroSessionRespository getShiroSessionRespository() {

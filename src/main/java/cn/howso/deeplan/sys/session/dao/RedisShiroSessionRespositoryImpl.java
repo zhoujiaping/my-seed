@@ -6,14 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
+
 import org.apache.shiro.session.Session;
 import org.springframework.util.SerializationUtils;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
 public class RedisShiroSessionRespositoryImpl implements MyShiroSessionRespository {
-
+    @Resource
 	private JedisPool jedisPool;
 
 	public JedisPool getJedisPool() {

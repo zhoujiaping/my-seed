@@ -40,7 +40,7 @@
 	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**" /> <bean 
 		class="cn.howso.specialmp.system.interceptor.AreaInterceptor" /> </mvc:interceptor> 
 		</mvc:interceptors> -->
-	<bean id="exceptionResolver" class="cn.howso.deeplan.framework.exception.ExceptionResolver"></bean>
+	<!-- <bean id="exceptionResolver" class="cn.howso.deeplan.framework.exception.ExceptionResolver"></bean> -->
 	<bean name="/**//**"
 		class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
 	<bean
