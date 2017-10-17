@@ -64,11 +64,13 @@ create table sys_uri_perm(
 	note varchar,
 	perm_id integer
 );
-create table sys_module(
+create table sys_menu(
 	id serial primary key,
-	name varchar
+	name varchar,
+	parent_id integer,
+	seq integer
 );
-create table sys_role_module(
+create table sys_role_menu(
 	role_id integer,
-	module_id integer
+	menu_id integer
 );

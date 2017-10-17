@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.howso.deeplan.perm.mapper.UriPermMapper" >
+  <resultMap id="BaseResultMap" type="cn.howso.deeplan.perm.model.UriPerm" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="method" property="method" jdbcType="VARCHAR" />
+    <result column="uri" property="uri" jdbcType="VARCHAR" />
+    <result column="note" property="note" jdbcType="VARCHAR" />
+    <result column="perm_id" property="permId" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap type="cn.howso.deeplan.perm.dto.UriPermWithPerm" id="UriPermWithPerm" extends="BaseResultMap">
+  	<association property="perm" columnPrefix="t2_" column="id" javaType="cn.howso.deeplan.perm.model.Perm">
+  		<id column="id" property="id" jdbcType="INTEGER" />
+	    <result column="note" property="note" jdbcType="VARCHAR" />
+	    <result column="pattern" property="pattern" jdbcType="VARCHAR" />
+	    <result column="space_id" property="spaceId" jdbcType="INTEGER"/>
+  	</association>
+  </resultMap>
+  <select id="queryFetchPerm" resultMap="UriPermWithPerm">
+  	select t1.id,t1.method,t1.uri,t1.note,t1.perm_id,
+  	t2.id t2_id,t2.note t2_node,t2.pattern t2_pattern,t2.space_id t2_space_id
+  	from sys_uri_perm t1
+  	left join sys_perm t2
+  	on t1.perm_id = t2.id
+  </select>
+</mapper>

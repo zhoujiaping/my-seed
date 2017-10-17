@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import cn.howso.deeplan.perm.mapper.UserMapper;
@@ -17,6 +18,7 @@ import cn.howso.deeplan.perm.model.UserExample;
  * @Date 2017年3月9日 下午6:15:59
  * @version 1.0.0
  */
+@Service
 public class AuthenService {
     @Resource UserMapper userMapper;
     public User authen(User user){

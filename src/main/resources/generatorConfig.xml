@@ -51,12 +51,17 @@
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
 		</table>
-		<table tableName="sys_module" domainObjectName="Module"
+		<table tableName="sys_menu" domainObjectName="Menu"
 			enableCountByExample="true" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
 		</table>
 		<table tableName="sys_log" domainObjectName="Log"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="sys_uri_perm" domainObjectName="UriPerm"
 			enableCountByExample="true" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">

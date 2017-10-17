@@ -59,9 +59,9 @@ public class ShiroConfig implements ApplicationContextAware {
     @Bean
     public MyRealm myRealm(){
         MyRealm realm = new MyRealm();
-        AuthenService authenService = authenService();
+        AuthenService authenService = app.getBean(AuthenService.class);//authenService();
         realm.setAuthenService(authenService);
-        AuthorService authorService = app.getBean(AuthorService.class);;
+        AuthorService authorService = app.getBean(AuthorService.class);
         realm.setAuthorService(authorService);
         realm.setAuthenticationCachingEnabled(true);
         realm.setAuthorizationCachingEnabled(true);
@@ -108,14 +108,14 @@ public class ShiroConfig implements ApplicationContextAware {
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new ExceptionResolver();
     }
-    @Bean
+    /*@Bean
     public AuthenService authenService(){
         return new AuthenService();
     }
     @Bean
     public AuthorService authorService(){
         return new AuthorService();
-    }
+    }*/
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         app = applicationContext;

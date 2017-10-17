@@ -49,4 +49,30 @@ public class RoleController {
     public Role get(@PathVariable Integer id){
         return roleService.get(id);
     }
+    
+    @RequestMapping(value="/{roleId}/perms-grant",method=RequestMethod.POST)
+    @ResponseBody
+    public Integer grantPerms(@PathVariable Integer roleId,List<Integer> permIdList){
+        //TODO
+        return null;
+    }
+    @RequestMapping(value="/{roleId}/perms-revoke",method=RequestMethod.POST)
+    @ResponseBody
+    public Integer revokePerms(@PathVariable Integer roleId,List<Integer> permIdList){
+        //TODO
+        return null;
+    }
+    
+    @RequestMapping(value="/{roleId}/menus-grant",method=RequestMethod.POST)
+    @ResponseBody
+    public Integer grantMenus(@PathVariable Integer roleId,List<Integer> menuIdList){
+        //TODO
+        return null;
+    }
+    @RequestMapping(value="/{roleId}/menus-revoke",method=RequestMethod.POST)
+    @ResponseBody
+    public Integer revokeMenus(@PathVariable Integer roleId,List<Integer> menuIdList){
+        //TODO
+        return null;
+    }
 }

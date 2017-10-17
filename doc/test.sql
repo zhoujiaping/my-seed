@@ -29,3 +29,7 @@ insert into sys_module(id,name)
 values
 (-1,'重点区域');
 insert into sys_role_module(role_id,module_id)values(-1,-1);
+
+insert into sys_uri_perm(id,method,uri,note,perm_id)
+values
+(-1,'get','/seed/users/{id}','根据id查询用户',-6);

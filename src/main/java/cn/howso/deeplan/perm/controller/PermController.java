@@ -20,7 +20,6 @@ public class PermController {
     
     @RequestMapping(method=RequestMethod.GET)
     @ResponseBody
-    @RequiresPermissions(value={"users:view"})
     public List<User> query(){
         //return userService.query();
         return null;
