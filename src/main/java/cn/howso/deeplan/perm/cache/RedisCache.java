@@ -92,7 +92,7 @@ public class RedisCache implements Cache<Object,Object> {
 		Set<byte[]> bytekeys = null;
 		Set<Object> keys = null;
 		try {
-		    bytekeys = redis.keys("*".getBytes());//这里不能用tobytes("*")因为该方法得到的bytes不仅仅是*的字节。
+		    bytekeys = redis.keys((prefix+"*").getBytes());//这里不能用tobytes("*")因为该方法得到的bytes不仅仅是*的字节。
 		    keys = new HashSet<>();
 			if(bytekeys != null ){
 				for(byte[] bytekey : bytekeys){
@@ -132,7 +132,7 @@ public class RedisCache implements Cache<Object,Object> {
 	    Jedis redis = this.getJedis();
         Set<byte[]> bytekeys = null;
         try {
-            bytekeys = redis.keys("*".getBytes());
+            bytekeys = redis.keys((prefix+"*").getBytes());
             return bytekeys==null?0:bytekeys.size();
         } finally{
             redis.close();

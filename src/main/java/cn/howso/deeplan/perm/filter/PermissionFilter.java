@@ -2,15 +2,12 @@ package cn.howso.deeplan.perm.filter;
 
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import cn.howso.deeplan.framework.exception.BusinessException;
@@ -21,22 +18,21 @@ import cn.howso.deeplan.util.WebUtils;
 public class PermissionFilter extends AccessControlFilter {
 
     private UriPermService uriPermService;
-    private RedisCache authorCache;
+    private RedisCache dataCache;
 
-    private Map<String, String> uriPermMap = null;
-
-    
     public void setUriPermService(UriPermService uriPermService) {
         this.uriPermService = uriPermService;
     }
     
-    public void setAuthorCache(RedisCache authorCache) {
-        this.authorCache = authorCache;
-    }
-    @PostConstruct
-    public void initUriPermMap() {
-        // 获取uri和权限的映射
-        uriPermMap = uriPermService.query();
+    private Map<String,String> getUriPermMap(){
+     // 获取uri和权限的映射
+        Map<String,String> cachedMap = (Map<String, String>) dataCache.get("uriPermMap");
+        if(cachedMap==null){
+            Map<String, String> uriPermMap = uriPermService.query();
+            dataCache.put("uriPermMap", uriPermMap);
+            return uriPermMap;
+        }
+        return cachedMap;
     }
 
     @Override
@@ -52,7 +48,7 @@ public class PermissionFilter extends AccessControlFilter {
         }
         uri = uri.replaceAll("/-?\\d+", "/{id}");
         String method = request.getMethod().toLowerCase();
-        String perm = uriPermMap.get(method + " " + uri);
+        String perm = getUriPermMap().get(method + " " + uri);
         if (perm == null) {// 某些资源不需要权限，比如get /login,post /login
             return true;
         }
@@ -86,6 +82,10 @@ public class PermissionFilter extends AccessControlFilter {
             this.saveRequestAndRedirectToLogin(req, resp);
         }
         return false;
+    }
+
+    public void setDataCache(RedisCache dataCache) {
+        this.dataCache = dataCache;
     }
 
 }

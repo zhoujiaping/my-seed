@@ -57,7 +57,7 @@ public class ShiroConfig implements ApplicationContextAware {
     public PermissionFilter permFilter() {
         PermissionFilter permFilter = new PermissionFilter();
         permFilter.setUriPermService(app.getBean(UriPermService.class));
-        permFilter.setAuthorCache(app.getBean("authorCache",RedisCache.class));
+        permFilter.setDataCache(dataCache());
         return permFilter;
     }
     @Bean
@@ -85,7 +85,7 @@ public class ShiroConfig implements ApplicationContextAware {
     public RedisCache authenCache() {
         RedisCache cache = new RedisCache();
         cache.setPrefix("authen.");
-        cache.setJedisPool(app.getBean("authenJedisPool", JedisPool.class));
+        cache.setJedisPool(app.getBean("jedisPool", JedisPool.class));
         return cache;
     }
 
@@ -93,13 +93,21 @@ public class ShiroConfig implements ApplicationContextAware {
     public RedisCache authorCache() {
         RedisCache cache = new RedisCache();
         cache.setPrefix("author.");
-        cache.setJedisPool(app.getBean("authorJedisPool", JedisPool.class));
+        cache.setJedisPool(app.getBean("jedisPool", JedisPool.class));
+        return cache;
+    }
+    @Bean
+    public RedisCache dataCache(){
+        RedisCache cache = new RedisCache();
+        cache.setPrefix("data.");
+        cache.setJedisPool(app.getBean("jedisPool", JedisPool.class));
         return cache;
     }
     @Bean
     public MyShiroSessionRespository myShiroSessionRespository() {
         RedisShiroSessionRespositoryImpl rep = new RedisShiroSessionRespositoryImpl();
-        rep.setJedisPool(app.getBean("sessionJedisPool", JedisPool.class));
+        rep.setPrefix("session.");
+        rep.setJedisPool(app.getBean("jedisPool", JedisPool.class));
         return rep;
     }
 

@@ -114,14 +114,14 @@
 	<!-- 如果不使用redis存储session的话，把 defaultWebSessionManager中的sessionDAO那一段注释了 -->
 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig" />
 
-	<bean id="sessionJedisPool" class="redis.clients.jedis.JedisPool">
+	<!-- <bean id="sessionJedisPool" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig" ref="jedisPoolConfig" />
 		<constructor-arg name="host" value="${session.redis.url}" />
 		<constructor-arg name="port" value="${session.redis.port}" />
 		<constructor-arg name="timeout" value="${session.redis.timeout}" />
 		<constructor-arg name="password" value="${session.redis.password}"></constructor-arg>
 		<constructor-arg name="database" value="${session.redis.db}"></constructor-arg>
-	</bean>
+	</bean> -->
 
 	<!-- <bean id="redisSessionResp"
 		class="cn.howso.deeplan.perm.session.dao.RedisShiroSessionRespositoryImpl">
@@ -133,22 +133,22 @@
 	<!-- <bean id="authorCache" class="cn.howso.deeplan.perm.cache.RedisCache">
 		<property name="jedisPool" ref="authorJedisPool"></property>
 	</bean> -->
-	<bean id="authenJedisPool" class="redis.clients.jedis.JedisPool">
+	<bean id="jedisPool" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig" ref="jedisPoolConfig" />
-		<constructor-arg name="host" value="${authen.redis.url}" />
-		<constructor-arg name="port" value="${authen.redis.port}" />
-		<constructor-arg name="timeout" value="${authen.redis.timeout}" />
-		<constructor-arg name="password" value="${authen.redis.password}"></constructor-arg>
-		<constructor-arg name="database" value="${authen.redis.db}"></constructor-arg>
+		<constructor-arg name="host" value="${redis.url}" />
+		<constructor-arg name="port" value="${redis.port}" />
+		<constructor-arg name="timeout" value="${redis.timeout}" />
+		<constructor-arg name="password" value="${redis.password}"></constructor-arg>
+		<constructor-arg name="database" value="${redis.db}"></constructor-arg>
 	</bean>
-	<bean id="authorJedisPool" class="redis.clients.jedis.JedisPool">
+	<!-- <bean id="authorJedisPool" class="redis.clients.jedis.JedisPool">
 		<constructor-arg name="poolConfig" ref="jedisPoolConfig" />
 		<constructor-arg name="host" value="${author.redis.url}" />
 		<constructor-arg name="port" value="${author.redis.port}" />
 		<constructor-arg name="timeout" value="${author.redis.timeout}" />
 		<constructor-arg name="password" value="${author.redis.password}"></constructor-arg>
 		<constructor-arg name="database" value="${author.redis.db}"></constructor-arg>
-	</bean>
+	</bean> -->
 	<!-- <bean id="authenService"
 		class="cn.howso.deeplan.perm.service.AuthenService">
 	</bean>

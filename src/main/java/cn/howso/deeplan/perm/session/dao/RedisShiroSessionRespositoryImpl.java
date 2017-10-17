@@ -4,16 +4,28 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.shiro.session.Session;
 import org.springframework.util.SerializationUtils;
 
+import cn.howso.deeplan.util.ArrayUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 public class RedisShiroSessionRespositoryImpl implements MyShiroSessionRespository {
 	private JedisPool jedisPool;
-
+	private String prefix;
+    private byte[] prefixBytes;
+    
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+        prefixBytes = prefix.getBytes();
+    }
+    
+    public String getPrefix() {
+        return prefix;
+    }
 	public JedisPool getJedisPool() {
 		return jedisPool;
 	}
@@ -25,10 +37,33 @@ public class RedisShiroSessionRespositoryImpl implements MyShiroSessionResposito
 	private Jedis getJedis() {
 		return this.jedisPool.getResource();
 	}
-	private byte[] tobytes(Object key){
+	/*private byte[] tobytes(Object key){
         return SerializationUtils.serialize(key);
     }
     private Object frombytes(byte[] bytes){
+        return SerializationUtils.deserialize(bytes);
+    }*/
+	private byte[] keytobytes(Object key){
+        if(key instanceof String){
+            return ArrayUtils.concat(prefixBytes, ((String) key).getBytes());
+        }
+        byte[] bytes = SerializationUtils.serialize(key);
+        return ArrayUtils.concat(prefixBytes, bytes);
+    }
+    private byte[] valuetobytes(Object key){
+        return SerializationUtils.serialize(key);
+    }
+    private Object keyfrombytes(byte[] bytes){
+        byte[] pre = new byte[prefixBytes.length];
+        System.arraycopy(bytes, 0, pre, 0, pre.length);
+        byte[] dest = new byte[bytes.length-prefixBytes.length];
+        System.arraycopy(bytes, prefixBytes.length, dest, 0, dest.length);
+        if(Objects.equals(new String(pre), prefix)){
+            return new String(dest);
+        }
+        return SerializationUtils.deserialize(bytes);
+    }
+    private Object valuefrombytes(byte[] bytes){
         return SerializationUtils.deserialize(bytes);
     }
 
@@ -37,7 +72,7 @@ public class RedisShiroSessionRespositoryImpl implements MyShiroSessionResposito
 		if(id==null) return;
 		Jedis jedis = this.getJedis();
 		try {
-			jedis.del(tobytes(id.toString()));
+			jedis.del(keytobytes(id.toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -51,11 +86,11 @@ public class RedisShiroSessionRespositoryImpl implements MyShiroSessionResposito
 		Jedis jedis = this.getJedis();
 		Set<Session> sessions = new HashSet<Session>();  
 		try {
-		    Set<byte[]> keys = jedis.keys("*".getBytes());
+		    Set<byte[]> keys = jedis.keys((prefix+"*").getBytes());
 			if(keys!=null && keys.size()>0){
 			    List<byte[]> bytevalues = jedis.mget(keys.toArray(new byte[keys.size()][]));
 				for(byte[] bytevalue:bytevalues){
-					sessions.add((Session)(frombytes(bytevalue)));
+					sessions.add((Session)(valuefrombytes(bytevalue)));
 				}
 			}
 		}finally {
@@ -69,8 +104,8 @@ public class RedisShiroSessionRespositoryImpl implements MyShiroSessionResposito
 		if(session==null) return;
 		Jedis jedis = this.getJedis();
 		try {
-			byte[] key = tobytes(session.getId().toString());
-			byte[] value = tobytes(session);
+			byte[] key = keytobytes(session.getId().toString());
+			byte[] value = valuetobytes(session);
 			jedis.set(key, value);
 			jedis.expire(key, (int)(session.getTimeout()/1000));
 		} catch (Exception e) {
@@ -86,10 +121,10 @@ public class RedisShiroSessionRespositoryImpl implements MyShiroSessionResposito
 		Jedis jedis = this.getJedis();
 		Session session = null;
 		try {
-		    byte[] bytekey = tobytes(id.toString());
+		    byte[] bytekey = keytobytes(id.toString());
 			byte[] bytevalue=jedis.get(bytekey);
 			if(bytevalue==null || bytevalue.length==0) return session;
-			session = ((Session) frombytes(bytevalue));
+			session = ((Session) valuefrombytes(bytevalue));
 			jedis.expire(bytekey, (int)(session.getTimeout()/1000));
 		} catch (Exception e) {
 			e.printStackTrace();
