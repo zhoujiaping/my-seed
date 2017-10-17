@@ -16,6 +16,7 @@ import cn.howso.deeplan.perm.filter.PermissionFilter;
 import cn.howso.deeplan.perm.realm.MyRealm;
 import cn.howso.deeplan.perm.service.AuthenService;
 import cn.howso.deeplan.perm.service.AuthorService;
+import cn.howso.deeplan.perm.service.UriPermService;
 import cn.howso.deeplan.perm.session.dao.MyShiroSessionDao;
 import cn.howso.deeplan.perm.session.dao.MyShiroSessionRespository;
 import cn.howso.deeplan.perm.session.dao.RedisShiroSessionRespositoryImpl;
@@ -54,7 +55,10 @@ public class ShiroConfig implements ApplicationContextAware {
 
     @Bean
     public PermissionFilter permFilter() {
-        return new PermissionFilter();
+        PermissionFilter permFilter = new PermissionFilter();
+        permFilter.setUriPermService(app.getBean(UriPermService.class));
+        permFilter.setAuthorCache(app.getBean("authorCache",RedisCache.class));
+        return permFilter;
     }
     @Bean
     public MyRealm myRealm(){
@@ -80,6 +84,7 @@ public class ShiroConfig implements ApplicationContextAware {
     @Bean
     public RedisCache authenCache() {
         RedisCache cache = new RedisCache();
+        cache.setPrefix("authen.");
         cache.setJedisPool(app.getBean("authenJedisPool", JedisPool.class));
         return cache;
     }
@@ -87,6 +92,7 @@ public class ShiroConfig implements ApplicationContextAware {
     @Bean
     public RedisCache authorCache() {
         RedisCache cache = new RedisCache();
+        cache.setPrefix("author.");
         cache.setJedisPool(app.getBean("authorJedisPool", JedisPool.class));
         return cache;
     }

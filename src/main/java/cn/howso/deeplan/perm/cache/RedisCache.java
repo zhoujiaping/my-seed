@@ -2,18 +2,31 @@ package cn.howso.deeplan.perm.cache;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.util.SerializationUtils;
 
+import cn.howso.deeplan.util.ArrayUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 /**
  * */
 public class RedisCache implements Cache<Object,Object> {
 	private JedisPool jedisPool;
+	private String prefix;
+	private byte[] prefixBytes;
+	
+    public String getPrefix() {
+        return prefix;
+    }
+    
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+        prefixBytes = prefix.getBytes();
+    }
 	public JedisPool getJedisPool() {
 		return jedisPool;
 	}
@@ -30,12 +43,29 @@ public class RedisCache implements Cache<Object,Object> {
 	    //TODO
 	    throw new RuntimeException("this method is not implemented.");
 	}
-	private byte[] tobytes(Object key){
-        return SerializationUtils.serialize(key);
+	private byte[] keytobytes(Object key){
+	    if(key instanceof String){
+	        return ArrayUtils.concat(prefixBytes, ((String) key).getBytes());
+	    }
+        byte[] bytes = SerializationUtils.serialize(key);
+        return ArrayUtils.concat(prefixBytes, bytes);
     }
-	private Object frombytes(byte[] bytes){
+	private byte[] valuetobytes(Object key){
+	    return SerializationUtils.serialize(key);
+	}
+	private Object keyfrombytes(byte[] bytes){
+	    byte[] pre = new byte[prefixBytes.length];
+	    System.arraycopy(bytes, 0, pre, 0, pre.length);
+	    byte[] dest = new byte[bytes.length-prefixBytes.length];
+	    System.arraycopy(bytes, prefixBytes.length, dest, 0, dest.length);
+	    if(Objects.equals(new String(pre), prefix)){
+	        return new String(dest);
+	    }
 	    return SerializationUtils.deserialize(bytes);
 	}
+	private Object valuefrombytes(byte[] bytes){
+        return SerializationUtils.deserialize(bytes);
+    }
 
 	@Override
 	public Object get(Object key) throws CacheException {
@@ -45,9 +75,9 @@ public class RedisCache implements Cache<Object,Object> {
 			Jedis redis = this.getJedis();
 			Object v =null;
 			try {
-			    byte[] k = tobytes(key);
+			    byte[] k = keytobytes(key);
 			    byte[] byteV = redis.get(k);
-				v= frombytes(byteV);
+				v= valuefrombytes(byteV);
 				redis.expire(k, 1800);
 			}finally{
 				redis.close();
@@ -66,7 +96,7 @@ public class RedisCache implements Cache<Object,Object> {
 		    keys = new HashSet<>();
 			if(bytekeys != null ){
 				for(byte[] bytekey : bytekeys){
-				    keys.add(frombytes(bytekey));
+				    keys.add(keyfrombytes(bytekey));
 				}
 			}
 		} finally{
@@ -79,7 +109,7 @@ public class RedisCache implements Cache<Object,Object> {
 	public Object put(Object key, Object value) throws CacheException {
 		Jedis redis = this.getJedis();
 		try {
-			redis.set(tobytes(key), tobytes(value));
+			redis.set(keytobytes(key), valuetobytes(value));
 		} finally{
 			redis.close();
 		}
@@ -90,7 +120,7 @@ public class RedisCache implements Cache<Object,Object> {
 	public Object remove(Object key) throws CacheException {
 		Jedis redis = this.getJedis();
 		try {
-			redis.del(tobytes(key));
+			redis.del(keytobytes(key));
 		} finally{
 			redis.close();
 		}

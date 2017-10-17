@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import cn.howso.deeplan.framework.exception.BusinessException;
@@ -19,13 +20,19 @@ import cn.howso.deeplan.util.WebUtils;
 
 public class PermissionFilter extends AccessControlFilter {
 
-    @Resource
     private UriPermService uriPermService;
-    @Resource
     private RedisCache authorCache;
 
     private Map<String, String> uriPermMap = null;
 
+    
+    public void setUriPermService(UriPermService uriPermService) {
+        this.uriPermService = uriPermService;
+    }
+    
+    public void setAuthorCache(RedisCache authorCache) {
+        this.authorCache = authorCache;
+    }
     @PostConstruct
     public void initUriPermMap() {
         // 获取uri和权限的映射
