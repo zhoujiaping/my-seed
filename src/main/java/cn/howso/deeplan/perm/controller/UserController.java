@@ -85,16 +85,16 @@ public class UserController {
     }
     @RequestMapping(value="/{userId}/roles-grant",method=RequestMethod.POST)
     @ResponseBody
-    public Integer grantRoles(@PathVariable Integer userId,List<Integer> roleIdList){
+    public Integer grantRoles(@CurrentUser User currentUser,@PathVariable Integer userId,List<Integer> roleIdList){
         //TODO
-        //清除缓存的该用户的权限数据
+        //清除缓存的该用户的权限数据，使缓存失效
         RedisCache cache = redisCacheManager.getAuthorCache();
         Set<Object> keys = cache.keys();
-        cache.remove("zhou");
-        keys = cache.keys();
-        //从数据库中查询该用户的权限数据
-        //新的权限数据放入缓存,这个步骤可以不做，shiro会在需要的自动缓存
-        return null;
+        for(Object key:keys){
+            cache.remove(key);
+        }
+        //从数据库中查询该用户的权限数据,新的权限数据放入缓存,这个步骤可以不做，shiro会在需要的自动缓存
+        return userService.grantRoles(currentUser,userId,roleIdList);
     }
     @RequestMapping(value="/{userId}/roles-revoke",method=RequestMethod.POST)
     @ResponseBody

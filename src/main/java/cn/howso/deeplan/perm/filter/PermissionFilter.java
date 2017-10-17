@@ -1,6 +1,7 @@
 package cn.howso.deeplan.perm.filter;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -24,11 +25,11 @@ public class PermissionFilter extends AccessControlFilter {
         this.uriPermService = uriPermService;
     }
     
-    private Map<String,String> getUriPermMap(){
+    private Map<String,Set<String>> getUriPermMap(){
      // 获取uri和权限的映射
-        Map<String,String> cachedMap = (Map<String, String>) dataCache.get("uriPermMap");
+        Map<String,Set<String>> cachedMap = (Map<String, Set<String>>) dataCache.get("uriPermMap");
         if(cachedMap==null){
-            Map<String, String> uriPermMap = uriPermService.query();
+            Map<String, Set<String>> uriPermMap = uriPermService.query();
             dataCache.put("uriPermMap", uriPermMap);
             return uriPermMap;
         }
@@ -48,22 +49,24 @@ public class PermissionFilter extends AccessControlFilter {
         }
         uri = uri.replaceAll("/-?\\d+", "/{id}");
         String method = request.getMethod().toLowerCase();
-        String perm = getUriPermMap().get(method + " " + uri);
-        if (perm == null) {// 某些资源不需要权限，比如get /login,post /login
+        Set<String> perms = getUriPermMap().get(method + " " + uri);
+        if (perms == null) {// 某些资源不需要权限，比如get /login,post /login
             return true;
         }
         if (!StringUtils.isEmpty(permSpaceId)) {
-            if (subject.isPermitted(permSpaceId + ":" + perm)) {
-                return true;
-            } else {
-                return false;
+            for(String perm:perms){
+                if (subject.isPermitted(permSpaceId + ":" + perm)) {
+                    return true;
+                }
             }
+            return false;
         } else {
-            if (subject.isPermitted(perm)) {
-                return true;
-            } else {
-                return false;
+            for(String perm:perms){
+                if (subject.isPermitted(perm)) {
+                    return true;
+                }
             }
+            return false;
         }
         /*
          * Subject subject = this.getSubject(req, resp); boolean isPermitted = false; if (mappedValue == null) {

@@ -12,11 +12,12 @@
 	    <result column="pattern" property="pattern" jdbcType="VARCHAR" />
 	    <result column="note" property="note" jdbcType="VARCHAR" />
 	    <result column="space_id" property="spaceId" jdbcType="INTEGER"/>
+	    <result column="uri_id" property="uriId" jdbcType="INTEGER"/>
     </collection>
   </resultMap>
   <select id="queryByUserName" parameterType="string" resultMap="BaseResultMap">
   	select t1.id,t1.name from sys_role t1
-  	left join sys_user_role t2
+  	left join sys_user_role_mid t2
   	on t1.id = t2.role_id
   	left join sys_user t3
   	on t2.user_id = t3.id
@@ -27,11 +28,11 @@
   <select id="queryByUserNameFetchPerms" parameterType="string" resultMap="RoleWithPerms">
   	select t1.id,t1.name,t3.id t3_id,t3.pattern t3_pattern,t3.note t3_note,t3.space_id as t3_space_id
   	from sys_role t1
-  	left join sys_role_perm t2
+  	left join sys_role_perm_mid t2
   	on t1.id = t2.role_id
   	left join sys_perm t3
   	on t2.perm_id = t3.id
-  	left join sys_user_role t4
+  	left join sys_user_role_mid t4
   	on t4.role_id = t1.id
   	left join sys_user t5
   	on t4.user_id = t5.id

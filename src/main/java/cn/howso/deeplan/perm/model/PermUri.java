@@ -1,6 +1,6 @@
 package cn.howso.deeplan.perm.model;
 
-public class UriPerm {
+public class PermUri {
     private Integer id;
 
     private String method;
@@ -8,8 +8,6 @@ public class UriPerm {
     private String uri;
 
     private String note;
-
-    private Integer permId;
 
     public Integer getId() {
         return id;
@@ -43,11 +41,4 @@ public class UriPerm {
         this.note = note == null ? null : note.trim();
     }
 
-    public Integer getPermId() {
-        return permId;
-    }
-
-    public void setPermId(Integer permId) {
-        this.permId = permId;
-    }
 }

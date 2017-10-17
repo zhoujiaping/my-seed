@@ -36,8 +36,8 @@
 	<bean id="shiroSecurityFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login" />
-		<property name="successUrl" value="/index.html" />
-		<property name="unauthorizedUrl" value="/unauthorized.html" />
+		<property name="successUrl" value="/" />
+		<property name="unauthorizedUrl" value="/static/unauthorized.html" />
 		<property name="filterChainDefinitions">
 			<value>
 				/static/** = anon

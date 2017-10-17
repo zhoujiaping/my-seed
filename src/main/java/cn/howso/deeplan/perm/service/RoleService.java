@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.perm.mapper.RoleMapper;
+import cn.howso.deeplan.perm.model.Example;
 import cn.howso.deeplan.perm.model.Role;
-import cn.howso.deeplan.perm.model.RoleExample;
 @Service
 public class RoleService {
     @Resource RoleMapper roleMapper;
@@ -26,7 +26,7 @@ public class RoleService {
         return roleMapper.updateByPrimaryKeySelective(role);
     }
     public List<Role> query() {
-        RoleExample example = new RoleExample();
+        Example example = new Example();
         return roleMapper.selectByExample(example);
     }
     public Role get(Integer id) {

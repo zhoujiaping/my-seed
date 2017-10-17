@@ -20,7 +20,8 @@ CREATE TABLE sys_perm
   id serial primary key,
   note varchar,
   pattern varchar,
-  space_id int4
+  space_id integer,
+  uri_id integer
 );
 --角色表
 CREATE TABLE sys_role
@@ -30,7 +31,7 @@ CREATE TABLE sys_role
   valid boolean default true
 );
 --角色权限关联表
-CREATE TABLE sys_role_perm
+CREATE TABLE sys_role_perm_mid
 (
   perm_id integer,
   role_id integer
@@ -46,23 +47,22 @@ CREATE TABLE sys_user
   valid boolean default true
 );
 --用户角色关联表
-  CREATE TABLE sys_user_role
+  CREATE TABLE sys_user_role_mid
 (
   user_id integer,
   role_id integer
 );
 --用户权限关联表
-create table sys_user_perm(
+create table sys_user_perm_mid(
 	user_id integer,
 	perm_id integer
 );
-
-create table sys_uri_perm(
+--和sys_perm是1对多关系
+create table sys_perm_uri(
 	id serial primary key,
 	method varchar,
 	uri varchar,
-	note varchar,
-	perm_id integer
+	note varchar
 );
 create table sys_menu(
 	id serial primary key,
@@ -70,7 +70,7 @@ create table sys_menu(
 	parent_id integer,
 	seq integer
 );
-create table sys_role_menu(
+create table sys_role_menu_mid(
 	role_id integer,
 	menu_id integer
 );

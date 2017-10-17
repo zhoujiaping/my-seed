@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import cn.howso.deeplan.perm.mapper.UserMapper;
+import cn.howso.deeplan.perm.model.Example;
 import cn.howso.deeplan.perm.model.User;
-import cn.howso.deeplan.perm.model.UserExample;
 /**
  * 用户服务
  * @ClassName UserService
@@ -22,8 +22,10 @@ import cn.howso.deeplan.perm.model.UserExample;
 public class AuthenService {
     @Resource UserMapper userMapper;
     public User authen(User user){
-        UserExample example = new UserExample();
-        example.createCriteria().andNameEqualTo(user.getName()).andPasswordEqualTo(user.getPassword());
+        Example example = new Example();
+        example.createCriteria()
+        .and("name").equalTo(user.getName())
+        .and("password").equalTo(user.getPassword());
         List<User> users = userMapper.selectByExample(example);
         Assert.isTrue(users.size()<=1,"查询到多个用户");
         if(users.size()==1){

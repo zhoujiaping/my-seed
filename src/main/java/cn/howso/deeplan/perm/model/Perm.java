@@ -1,6 +1,7 @@
 package cn.howso.deeplan.perm.model;
 
 public class Perm {
+
     private Integer id;
 
     private String note;
@@ -8,6 +9,15 @@ public class Perm {
     private String pattern;
 
     private Integer spaceId;
+    private Integer uriId;
+
+    public Integer getUriId() {
+        return uriId;
+    }
+
+    public void setUriId(Integer uriId) {
+        this.uriId = uriId;
+    }
 
     public Integer getId() {
         return id;

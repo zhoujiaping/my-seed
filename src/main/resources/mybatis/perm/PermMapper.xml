@@ -6,15 +6,16 @@
     <result column="note" property="note" jdbcType="VARCHAR" />
     <result column="pattern" property="pattern" jdbcType="VARCHAR" />
     <result column="space_id" property="spaceId" jdbcType="INTEGER"/>
+    <result column="uri_id" property="uriId" jdbcType="INTEGER"/>
   </resultMap>
   <select id="queryByUserName" parameterType="string" resultMap="BaseResultMap">
   	select t1.id,t1.note,t1.pattern,t1.space_id
   	from sys_perm t1
-  	left join sys_role_perm t2
+  	left join sys_role_perm_mid t2
   	on t1.id = t2.perm_id
   	left join sys_role t3
   	on t2.role_id = t3.id
-  	left join sys_user_role t4
+  	left join sys_user_role_mid t4
   	on t3.id = t4.role_id
   	left join sys_user t5
   	on t4.user_id = t5.id
