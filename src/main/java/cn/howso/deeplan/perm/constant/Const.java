@@ -1,4 +1,4 @@
-package cn.howso.deeplan.sys;
+package cn.howso.deeplan.perm.constant;
 
 
 public interface Const {

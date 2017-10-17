@@ -1,4 +1,4 @@
-package cn.howso.deeplan.sys.filter;
+package cn.howso.deeplan.perm.filter;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;

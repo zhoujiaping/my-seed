@@ -1,10 +1,8 @@
 package cn.howso.deeplan.perm.model;
 
-import java.io.Serializable;
+import java.util.Date;
 
-public class User implements Serializable{
-    private static final long serialVersionUID = 1L;
-
+public class User {
     private Integer id;
 
     private String name;
@@ -12,6 +10,10 @@ public class User implements Serializable{
     private String password;
 
     private String nick;
+
+    private Date createTime;
+
+    private Boolean valid;
 
     public Integer getId() {
         return id;
@@ -43,5 +45,21 @@ public class User implements Serializable{
 
     public void setNick(String nick) {
         this.nick = nick == null ? null : nick.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Boolean getValid() {
+        return valid;
+    }
+
+    public void setValid(Boolean valid) {
+        this.valid = valid;
     }
 }

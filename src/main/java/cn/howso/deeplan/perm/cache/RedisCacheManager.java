@@ -24,7 +24,6 @@ public class RedisCacheManager implements CacheManager {
     public void setAuthorCache(RedisCache authorCache) {
         cacheMap.put("authorCache", authorCache);
     }
-    @SuppressWarnings("unchecked")
     @Override
 	public  RedisCache getCache(String name) throws CacheException {
 	    return cacheMap.get(name);

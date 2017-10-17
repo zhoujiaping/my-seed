@@ -1,4 +1,4 @@
-package cn.howso.deeplan.sys.session.dao;
+package cn.howso.deeplan.perm.session.dao;
 
 import java.io.Serializable;
 import java.util.Collection;

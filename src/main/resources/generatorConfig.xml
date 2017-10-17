@@ -21,7 +21,7 @@
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 
-		<sqlMapGenerator targetPackage="cn.howso.deeplan.perm.mapper.xml"
+		<sqlMapGenerator targetPackage="mybatis/perm"
 			targetProject="d:\mybatis">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
@@ -44,12 +44,22 @@
 		<table tableName="sys_perm" domainObjectName="Perm"
 			enableCountByExample="true" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
-			selectByExampleQueryId="false">
+			selectByExampleQueryId="true">
 		</table>
-		<!-- <table tableName="sys_log" domainObjectName="SysLog"
+		<table tableName="sys_perm_space" domainObjectName="PermSpace"
 			enableCountByExample="true" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
-		</table> -->
+		</table>
+		<table tableName="sys_module" domainObjectName="Module"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
+		<table tableName="sys_log" domainObjectName="Log"
+			enableCountByExample="true" enableUpdateByExample="true"
+			enableDeleteByExample="true" enableSelectByExample="true"
+			selectByExampleQueryId="false">
+		</table>
 	</context>
 </generatorConfiguration>

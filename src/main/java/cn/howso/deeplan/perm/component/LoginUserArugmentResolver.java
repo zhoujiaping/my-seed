@@ -1,4 +1,4 @@
-package cn.howso.deeplan.sys.component;
+package cn.howso.deeplan.perm.component;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.core.MethodParameter;
@@ -7,8 +7,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import cn.howso.deeplan.sys.Const;
-import cn.howso.deeplan.sys.anno.CurrentUser;
+import cn.howso.deeplan.perm.anno.CurrentUser;
+import cn.howso.deeplan.perm.constant.Const;
 
 /**
  * 自动注入登录用户

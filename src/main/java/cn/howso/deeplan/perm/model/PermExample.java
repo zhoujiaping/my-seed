@@ -303,6 +303,66 @@ public class PermExample {
             addCriterion("pattern not between", value1, value2, "pattern");
             return (Criteria) this;
         }
+
+        public Criteria andSpaceIdIsNull() {
+            addCriterion("space_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdIsNotNull() {
+            addCriterion("space_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdEqualTo(Integer value) {
+            addCriterion("space_id =", value, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdNotEqualTo(Integer value) {
+            addCriterion("space_id <>", value, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdGreaterThan(Integer value) {
+            addCriterion("space_id >", value, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("space_id >=", value, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdLessThan(Integer value) {
+            addCriterion("space_id <", value, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdLessThanOrEqualTo(Integer value) {
+            addCriterion("space_id <=", value, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdIn(List<Integer> values) {
+            addCriterion("space_id in", values, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdNotIn(List<Integer> values) {
+            addCriterion("space_id not in", values, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdBetween(Integer value1, Integer value2) {
+            addCriterion("space_id between", value1, value2, "spaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSpaceIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("space_id not between", value1, value2, "spaceId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

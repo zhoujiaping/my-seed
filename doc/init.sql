@@ -26,7 +26,8 @@ CREATE TABLE sys_perm
 CREATE TABLE sys_role
 (
   id serial primary key,
-  name varchar
+  name varchar,
+  valid boolean default true
 );
 --角色权限关联表
 CREATE TABLE sys_role_perm
@@ -41,7 +42,8 @@ CREATE TABLE sys_user
   name varchar,
   password varchar NOT NULL,
   nick varchar,
-  create_time timestamp default now()
+  create_time timestamp default now(),
+  valid boolean default true
 );
 --用户角色关联表
   CREATE TABLE sys_user_role

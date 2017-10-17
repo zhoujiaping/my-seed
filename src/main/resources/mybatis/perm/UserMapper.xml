@@ -6,5 +6,6 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="nick" property="nick" jdbcType="VARCHAR" />
+    <result column="valid" property="valid" jdbcType="BIT" />
   </resultMap>
 </mapper>

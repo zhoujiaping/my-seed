@@ -1,4 +1,4 @@
-package cn.howso.deeplan.sys.anno;
+package cn.howso.deeplan.perm.anno;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

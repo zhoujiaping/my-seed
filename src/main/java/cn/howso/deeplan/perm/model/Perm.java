@@ -7,6 +7,8 @@ public class Perm {
 
     private String pattern;
 
+    private Integer spaceId;
+
     public Integer getId() {
         return id;
     }
@@ -29,5 +31,13 @@ public class Perm {
 
     public void setPattern(String pattern) {
         this.pattern = pattern == null ? null : pattern.trim();
+    }
+
+    public Integer getSpaceId() {
+        return spaceId;
+    }
+
+    public void setSpaceId(Integer spaceId) {
+        this.spaceId = spaceId;
     }
 }

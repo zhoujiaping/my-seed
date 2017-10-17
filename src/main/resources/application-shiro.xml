@@ -51,14 +51,14 @@
 			<map>
 				<entry key="authc" value-ref="loginFilter">
 					<!-- 认证过滤 -->
-					<!-- <bean class="cn.howso.deeplan.sys.filter.LoginFilter"></bean> -->
+					<!-- <bean class="cn.howso.deeplan.perm.filter.LoginFilter"></bean> -->
 				</entry>
 				<!-- 角色过滤 -->
 				<!-- <entry key="roles"> <bean class="cn.howso.common.system.authorization.filter.RoleFilter"></bean> 
 					</entry> -->
 				<!-- 权限过滤 -->
 				<entry key="perms" value-ref="permFilter">
-					<!-- <bean class="cn.howso.deeplan.sys.filter.PermissionFilter"></bean> -->
+					<!-- <bean class="cn.howso.deeplan.perm.filter.PermissionFilter"></bean> -->
 				</entry>
 			</map>
 		</property>
@@ -71,7 +71,7 @@
  		<property name="sessionManager" ref="defaultWebSessionManager" />
 	</bean>
 	<!-- 自定义域，用于认证和授权 -->
-	<!-- <bean id="myRealm" class="cn.howso.deeplan.sys.realm.MyRealm">
+	<!-- <bean id="myRealm" class="cn.howso.deeplan.perm.realm.MyRealm">
 		<property name="authenService" ref="authenService"></property>
 		<property name="authorService" ref="authorService"></property>
 		禁用缓存
@@ -103,7 +103,7 @@
 	</bean> -->
 	<!-- shiro核心配置结束 -->
 	<!-- <bean id="mySessionDao"
-		class="cn.howso.deeplan.sys.session.dao.MyShiroSessionDao">
+		class="cn.howso.deeplan.perm.session.dao.MyShiroSessionDao">
 		<property name="shiroSessionRespository" ref="redisSessionResp" />
 	</bean> -->
 	<bean id="wapsession" class="org.apache.shiro.web.servlet.SimpleCookie">
@@ -124,7 +124,7 @@
 	</bean>
 
 	<!-- <bean id="redisSessionResp"
-		class="cn.howso.deeplan.sys.session.dao.RedisShiroSessionRespositoryImpl">
+		class="cn.howso.deeplan.perm.session.dao.RedisShiroSessionRespositoryImpl">
 		<property name="jedisPool" ref="sessionJedisPool" />
 	</bean> -->
 	<!-- <bean id="authenCache" class="cn.howso.deeplan.perm.cache.RedisCache">

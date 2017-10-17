@@ -1,9 +1,6 @@
-package cn.howso.deeplan.sys.config;
-
-import javax.sql.DataSource;
+package cn.howso.deeplan.framework.config;
 
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
-import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -14,14 +11,14 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import cn.howso.deeplan.framework.exception.ExceptionResolver;
 import cn.howso.deeplan.perm.cache.RedisCache;
 import cn.howso.deeplan.perm.cache.RedisCacheManager;
+import cn.howso.deeplan.perm.filter.LoginFilter;
+import cn.howso.deeplan.perm.filter.PermissionFilter;
+import cn.howso.deeplan.perm.realm.MyRealm;
 import cn.howso.deeplan.perm.service.AuthenService;
 import cn.howso.deeplan.perm.service.AuthorService;
-import cn.howso.deeplan.sys.filter.LoginFilter;
-import cn.howso.deeplan.sys.filter.PermissionFilter;
-import cn.howso.deeplan.sys.realm.MyRealm;
-import cn.howso.deeplan.sys.session.dao.MyShiroSessionDao;
-import cn.howso.deeplan.sys.session.dao.MyShiroSessionRespository;
-import cn.howso.deeplan.sys.session.dao.RedisShiroSessionRespositoryImpl;
+import cn.howso.deeplan.perm.session.dao.MyShiroSessionDao;
+import cn.howso.deeplan.perm.session.dao.MyShiroSessionRespository;
+import cn.howso.deeplan.perm.session.dao.RedisShiroSessionRespositoryImpl;
 import redis.clients.jedis.JedisPool;
 
 /**
@@ -96,7 +93,7 @@ public class ShiroConfig implements ApplicationContextAware {
     @Bean
     public MyShiroSessionRespository myShiroSessionRespository() {
         RedisShiroSessionRespositoryImpl rep = new RedisShiroSessionRespositoryImpl();
-        rep.setJedisPool(app.getBean("jedisPool", JedisPool.class));
+        rep.setJedisPool(app.getBean("sessionJedisPool", JedisPool.class));
         return rep;
     }
 
