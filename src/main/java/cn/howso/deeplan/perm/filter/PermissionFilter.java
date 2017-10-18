@@ -1,22 +1,27 @@
 package cn.howso.deeplan.perm.filter;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.AccessControlFilter;
+import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.springframework.util.StringUtils;
 
-import cn.howso.deeplan.framework.exception.BusinessException;
+import com.alibaba.fastjson.JSONObject;
+
+import cn.howso.deeplan.framework.model.R;
+import cn.howso.deeplan.framework.model.ReturnCode;
 import cn.howso.deeplan.perm.cache.RedisCache;
 import cn.howso.deeplan.perm.service.UriPermService;
 import cn.howso.deeplan.util.WebUtils;
 
-public class PermissionFilter extends AccessControlFilter {
+public class PermissionFilter extends AuthorizationFilter {
 
     private UriPermService uriPermService;
     private RedisCache dataCache;
@@ -24,11 +29,11 @@ public class PermissionFilter extends AccessControlFilter {
     public void setUriPermService(UriPermService uriPermService) {
         this.uriPermService = uriPermService;
     }
-    
-    private Map<String,Set<String>> getUriPermMap(){
-     // 获取uri和权限的映射
-        Map<String,Set<String>> cachedMap = (Map<String, Set<String>>) dataCache.get("uriPermMap");
-        if(cachedMap==null){
+
+    private Map<String, Set<String>> getUriPermMap() {
+        // 获取uri和权限的映射
+        Map<String, Set<String>> cachedMap = (Map<String, Set<String>>) dataCache.get("uriPermMap");
+        if (cachedMap == null) {
             Map<String, Set<String>> uriPermMap = uriPermService.query();
             dataCache.put("uriPermMap", uriPermMap);
             return uriPermMap;
@@ -54,35 +59,41 @@ public class PermissionFilter extends AccessControlFilter {
             return true;
         }
         if (!StringUtils.isEmpty(permSpaceId)) {
-            for(String perm:perms){
+            for (String perm : perms) {
                 if (subject.isPermitted(permSpaceId + ":" + perm)) {
                     return true;
                 }
             }
             return false;
         } else {
-            for(String perm:perms){
+            for (String perm : perms) {
                 if (subject.isPermitted(perm)) {
                     return true;
                 }
             }
             return false;
         }
-        /*
-         * Subject subject = this.getSubject(req, resp); boolean isPermitted = false; if (mappedValue == null) {
-         * isPermitted = true; } else { for (String per : (String[]) mappedValue) { if (subject.isPermitted(per)) {
-         * isPermitted = true; break; } } } return isPermitted;
-         */ }
+    }
 
     @Override
-    protected boolean onAccessDenied(ServletRequest req, ServletResponse resp) throws Exception {
-        // HttpServletResponse response = (HttpServletResponse) resp;
-        // HttpServletRequest request = (HttpServletRequest) req;
-        if (WebUtils.isAjax((HttpServletRequest) req)) {
-            throw new BusinessException("没有权限");
+    protected boolean onAccessDenied(ServletRequest req, ServletResponse resp) throws IOException {
+        HttpServletResponse response = (HttpServletResponse) resp;
+        HttpServletRequest request = (HttpServletRequest) req;
+        Subject subject = getSubject(req, resp);
+        if (subject.getPrincipal() == null) {
+            saveRequestAndRedirectToLogin(req, resp);
         } else {
-            this.saveRequest(req);
-            this.saveRequestAndRedirectToLogin(req, resp);
+            if (WebUtils.isAjax(request)) {
+                R r = R.error(ReturnCode.NO_PERMISSION, ReturnCode.NO_PERMISSION_MSG);
+                response.getWriter().print(JSONObject.toJSON(r));
+            } else {
+                String unauthorizedUrl = getUnauthorizedUrl();
+                if (StringUtils.hasText(unauthorizedUrl)) {
+                    WebUtils.sendRedirect(request, response, unauthorizedUrl);
+                } else {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                }
+            }
         }
         return false;
     }

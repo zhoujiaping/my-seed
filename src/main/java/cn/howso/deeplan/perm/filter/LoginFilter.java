@@ -19,7 +19,11 @@ public class LoginFilter extends AccessControlFilter {
         HttpServletRequest request = (HttpServletRequest) req;
         logger.debug(request.getRequestURI());
         System.out.println(request.getRequestURI());
-        if (SecurityUtils.getSubject().getPrincipal() != null || isLoginRequest(req, resp)) {
+        if (SecurityUtils.getSubject().getPrincipal() != null) {
+            return true;
+        }
+        if(isLoginRequest(req, resp)){
+            this.saveRequest(req);//用于登录成功后跳转到登录前想访问的页面
             return true;
         }
         return false;
