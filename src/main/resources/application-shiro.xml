@@ -40,7 +40,9 @@
 		<property name="unauthorizedUrl" value="/seed/static/unauthorized.html" />
 		<property name="filterChainDefinitions">
 			<value>
+				/ = authc
 				/static/** = anon
+				/forward/** = anon
 				/** = authc,perms
 				<!-- /views/**= authc,roles[admin] -->
 				<!-- /users= authc,perms[user:create] -->

@@ -43,8 +43,11 @@ public class PermissionFilter extends AuthorizationFilter {
 
     @Override
     protected boolean isAccessAllowed(ServletRequest req, ServletResponse resp, Object mappedValue) throws Exception {
-        Subject subject = this.getSubject(req, resp);
+        if(isLoginRequest(req, resp)){
+            return true;
+        }
         HttpServletRequest request = (HttpServletRequest) req;
+        Subject subject = this.getSubject(req, resp);
         String permSpaceId = request.getParameter("_permSpaceId");
         // 根据url获取所需的权限
         String uri = request.getRequestURI();
@@ -55,9 +58,6 @@ public class PermissionFilter extends AuthorizationFilter {
         uri = uri.replaceAll("/-?\\d+", "/{id}");
         String method = request.getMethod().toLowerCase();
         Set<String> perms = getUriPermMap().get(method + " " + uri);
-        if (perms == null) {// 某些资源不需要权限，比如get /login,post /login
-            return true;
-        }
         if (!StringUtils.isEmpty(permSpaceId)) {
             for (String perm : perms) {
                 if (subject.isPermitted(permSpaceId + ":" + perm)) {

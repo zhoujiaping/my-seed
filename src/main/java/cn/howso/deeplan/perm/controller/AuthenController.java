@@ -35,10 +35,10 @@ public class AuthenController {
     public String login() {
         return "static/login";
     }
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/forward/index", method = RequestMethod.GET)
     public String index() {
         return "static/index";
-    }
+    }*/
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
