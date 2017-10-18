@@ -46,14 +46,15 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public Integer delete(@PathVariable Integer id) {
-        return userService.delete(id);
+    public Integer delete(@PathVariable Integer id,Integer _permSpaceId) {
+        return userService.delete(id,_permSpaceId);
     }
     /**
      * 修改用户名密码
      */
     @RequestMapping(value = "/{id}/authen", method = RequestMethod.PUT)
     public String updateAuthen(@CurrentUser User currentUser, @PathVariable Integer id, String name, String password,
+            Integer _permSpaceId,
             HttpServletRequest request, HttpServletResponse response) {
         User user = new User();
         user.setId(id);
@@ -75,7 +76,7 @@ public class UserController {
         if (isUpdateCurrentUser) {
             return "redirect:static/login";
         } else {
-            Integer count = userService.update(user);
+            Integer count = userService.update(user,_permSpaceId);
             WebUtils.sendResponse(response, JSONObject.toJSONString(count));
             return null;
         }
@@ -85,43 +86,43 @@ public class UserController {
      * */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Integer update(@PathVariable Integer id, User user) {
+    public Integer update(@PathVariable Integer id, User user,Integer _permSpaceId) {
         user.setName(null);
         user.setPassword(null);
-        return userService.update(user);
+        return userService.update(user,_permSpaceId);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<User> query(@CurrentUser User currentUser, User user) {
+    public List<User> query(@CurrentUser User currentUser, User user,Integer _permSpaceId) {
         return userService.query();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public User get(@PathVariable Integer id) {
+    public User get(@PathVariable Integer id,Integer _permSpaceId) {
         return userService.get(id);
     }
 
     @RequestMapping(value = "/{userId}/roles-grant", method = RequestMethod.POST)
     @ResponseBody
-    public Integer grantRoles(@CurrentUser User currentUser, @PathVariable Integer userId, List<Integer> roleIdList) {
+    public Integer grantRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
         // 清除缓存的该用户的权限数据，使缓存失效
         RedisCache cache = redisCacheManager.getAuthorCache();
         Object key = SecurityUtils.getSubject().getPrincipals();
         cache.remove(key);
         // 从数据库中查询该用户的权限数据,新的权限数据放入缓存,这个步骤可以不做，shiro会在需要的自动缓存
-        return userService.grantRoles(currentUser, userId, roleIdList);
+        return userService.grantRoles(currentUser,_permSpaceId, userId, roleIdList);
     }
 
     @RequestMapping(value = "/{userId}/roles-revoke", method = RequestMethod.POST)
     @ResponseBody
-    public Integer revokeRoles(@CurrentUser User currentUser,@PathVariable Integer userId, List<Integer> roleIdList) {
+    public Integer revokeRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
      // 清除缓存的该用户的权限数据，使缓存失效
         RedisCache cache = redisCacheManager.getAuthorCache();
         Object key = SecurityUtils.getSubject().getPrincipals();
         cache.remove(key);
-        return userService.revokeRoles(currentUser, userId, roleIdList);
+        return userService.revokeRoles(currentUser, _permSpaceId,userId, roleIdList);
     }
 
     @RequestMapping(value = "/{userId}/perms-grant", method = RequestMethod.POST)

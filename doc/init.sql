@@ -28,7 +28,8 @@ CREATE TABLE sys_role
 (
   id serial primary key,
   name varchar,
-  valid boolean default true
+  valid boolean default true,
+  space_id integer
 );
 --角色权限关联表
 CREATE TABLE sys_role_perm_mid
@@ -44,7 +45,8 @@ CREATE TABLE sys_user
   password varchar NOT NULL,
   nick varchar,
   create_time timestamp default now(),
-  valid boolean default true
+  valid boolean default true,
+  space_id integer
 );
 --用户角色关联表
   CREATE TABLE sys_user_role_mid

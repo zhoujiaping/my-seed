@@ -5,6 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
+    <result column="space_id" property="spaceId" jdbcType="INTEGER"/>
   </resultMap>
   <resultMap type="cn.howso.deeplan.perm.dto.RoleWithPerms" id="RoleWithPerms" extends="BaseResultMap">
   	<collection property="perms" ofType="cn.howso.deeplan.perm.model.Perm" column="id" columnPrefix="t3_">

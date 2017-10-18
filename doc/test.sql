@@ -1,14 +1,14 @@
 --由于id采用自增策略，为了能够指定id，指定的id必须小于1！！！
 delete from sys_user;
-insert into sys_user(id,name,password,nick)
+insert into sys_user(id,name,password,nick,space_id)
 values
-(-1,'zhou','123456','z');
+(-1,'zhou','123456','z',-1);
 
 delete from sys_role;
-insert into sys_role(id,name)
+insert into sys_role(id,name,space_id)
 values
-(-1,'admin'),
-(-2,'operator');
+(-1,'admin',-1),
+(-2,'operator',-1);
 
 delete from sys_user_role_mid;
 insert into sys_user_role_mid(user_id,role_id)

@@ -7,5 +7,6 @@
 <!--     <result column="password" property="password" jdbcType="VARCHAR" />
  屏蔽密码-->    <result column="nick" property="nick" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
+    <result column="space_id" property="spaceId" jdbcType="INTEGER"/>
   </resultMap>
 </mapper>

@@ -6,6 +6,16 @@ public class Role {
     private String name;
 
     private Boolean valid;
+    
+    private Integer spaceId;
+    
+    public Integer getSpaceId() {
+        return spaceId;
+    }
+    
+    public void setSpaceId(Integer spaceId) {
+        this.spaceId = spaceId;
+    }
 
     public Integer getId() {
         return id;

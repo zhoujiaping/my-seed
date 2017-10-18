@@ -3,7 +3,8 @@ package cn.howso.deeplan.perm.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable{
+public class User implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private Integer id;
@@ -17,6 +18,16 @@ public class User implements Serializable{
     private Date createTime;
 
     private Boolean valid;
+
+    private Integer spaceId;
+
+    public Integer getSpaceId() {
+        return spaceId;
+    }
+
+    public void setSpaceId(Integer spaceId) {
+        this.spaceId = spaceId;
+    }
 
     public Integer getId() {
         return id;
