@@ -59,7 +59,10 @@ public class PermissionFilter extends AuthorizationFilter {
         uri = uri.replaceAll("/-?\\d+", "/{id}");
         String method = request.getMethod().toLowerCase();
         if(method.equalsIgnoreCase("post")){
-            method = request.getParameter("_method");
+            String _method = request.getParameter("_method");
+            if(!StringUtils.isEmpty(_method)){
+                method = _method;
+            }
         }
         Set<String> perms = getUriPermMap().get(method + " " + uri);
         if(perms==null){
