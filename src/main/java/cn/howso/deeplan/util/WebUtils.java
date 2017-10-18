@@ -8,12 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 public class WebUtils{
 	
-	/**
-	 * 发送响应 
-	 * @author wzf
-	 * @param response
-	 * @param jso
-	 */
 	public static void sendResponse(HttpServletResponse response, String content) {
 		try {
 			PrintWriter out = response.getWriter();
@@ -21,7 +15,7 @@ public class WebUtils{
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			
+			throw new RuntimeException(e);
 		}
 	}
 	/**

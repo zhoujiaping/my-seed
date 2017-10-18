@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.howso.deeplan.framework.exception.BusinessException;
 import cn.howso.deeplan.perm.constant.Const;
 import cn.howso.deeplan.perm.model.User;
+import cn.howso.deeplan.perm.service.UserService;
 import cn.howso.deeplan.util.WebUtils;
 
 @Controller
@@ -30,6 +31,8 @@ public class AuthenController {
 
     @Resource
     private DefaultWebSessionManager sessionManager;
+    @Resource
+    private UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
@@ -62,7 +65,8 @@ public class AuthenController {
             for (final Object key : attributes.keySet()) {
                 session.setAttribute(key, attributes.get(key));
             }
-            session.setAttribute(Const.SESSION_USER_KEY, user);
+            User u = userService.queryByName(user.getName());
+            session.setAttribute(Const.SESSION_USER_KEY, u);
             WebUtils.sendRedirect(request, response, "/",session.getId().toString());
         } catch (AccountException e) {
             throw new BusinessException(e.getMessage());

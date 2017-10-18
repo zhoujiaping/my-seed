@@ -65,6 +65,10 @@ public class MyRealm extends AuthorizingRealm {
         }
         //List<Perm> perms = roles.stream().map(r->r.getPerms()).flatMap(List::stream).collect(Collectors.toList());
         //Set<String> permStrings = perms.stream().map(Perm::getPattern).distinct().collect(Collectors.toSet());
+        List<Perm> userPerms = authorService.queryUserPerms(username);
+        userPerms.forEach(p->{
+            permStrings.add(p.getSpaceId()+":"+p.getPattern());
+        });
         info.addStringPermissions(permStrings);
         return info;
     }

@@ -37,12 +37,12 @@ values
 delete from sys_role_perm_mid;
 insert into sys_role_perm_mid(role_id,perm_id)
 values
-(-2,-1),
-(-2,-2),
-(-2,-3),
-(-2,-4),
-(-2,-5),
-(-2,-6),
+(-1,-1),
+(-1,-2),
+(-1,-3),
+(-1,-4),
+(-1,-5),
+(-1,-6),
 (-1,-7);
 
 delete from sys_menu;
@@ -59,7 +59,7 @@ delete from sys_perm_uri;
 insert into sys_perm_uri(id,method,uri,note)
 values
 (-1,'get','/seed/users/{id}','根据id查询用户'),
-(-2,'post','/seed/users/roles-grant','授予角色'),
+(-2,'post','/seed/users/{id}/roles-grant','授予角色'),
 (-3,'get','/seed/users',''),
 (-4,'post','/seed/users',''),
 (-5,'delete','/seed/users',''),

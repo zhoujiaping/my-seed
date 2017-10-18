@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import cn.howso.deeplan.perm.mapper.UserMapper;
 import cn.howso.deeplan.perm.mapper.UserRoleMapper;
@@ -21,26 +22,33 @@ public class UserService {
     private UserRoleMapper userRoleMapper;
     
     public Integer add(User user) {
+        //TODO check
         return userMapper.insertSelective(user);
     }
     public List<User> query() {
         Example example = new Example();
+        example.createCriteria().and("valid").equals(true);
         List<User> users = userMapper.selectByExample(example);
-        users.forEach(u->u.setPassword(null));
         return users;
     }
     public Integer delete(Integer id) {
-        return userMapper.deleteByPrimaryKey(id);
+        User user = new User();
+        user.setId(id);
+        user.setValid(false);
+        return userMapper.updateByPrimaryKeySelective(user);
     }
-    public Integer udpate(User user) {
+    public Integer update(User user) {
         return userMapper.updateByPrimaryKeySelective(user);
     }
     public User get(Integer id) {
-        return userMapper.selectByPrimaryKey(id);
+        User user = userMapper.selectByPrimaryKey(id);
+        return user;
     }
     public Integer grantRoles(User currentUser, Integer userId, List<Integer> roleIdList) {
-        
-        //TODO 校验当前用户是否有这些权限
+        Example e1 = new Example();
+        e1.createCriteria().and("user_id").equalTo(currentUser.getId()).and("role_id").in(roleIdList);
+        int count = userRoleMapper.countByExample(e1);
+        Assert.isTrue(count==roleIdList.size(),"授予角色失败，当前用户必须关联授予的角色！");
         //去重
         Example example = new Example();
         example.createCriteria()
@@ -56,5 +64,16 @@ public class UserService {
         //插入
         return userRoleMapper.batchInsert(recordList);
     }
-
+    public User queryByName(String name) {
+        Example example = new Example();
+        example.createCriteria().and("name").equalTo(name);
+        List<User> users = userMapper.selectByExample(example);
+        if(users.isEmpty()){
+            return null;
+        }else if(users.size()>1){
+            throw new RuntimeException("存在多个用户："+name);
+        }else{
+            return users.get(0);
+        }
+    }
 }

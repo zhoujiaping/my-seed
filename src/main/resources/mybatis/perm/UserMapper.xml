@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="cn.howso.deeplan.perm.model.User" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="password" property="password" jdbcType="VARCHAR" />
-    <result column="nick" property="nick" jdbcType="VARCHAR" />
+<!--     <result column="password" property="password" jdbcType="VARCHAR" />
+ 屏蔽密码-->    <result column="nick" property="nick" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="BIT" />
   </resultMap>
 </mapper>

@@ -10,4 +10,6 @@ import cn.howso.mybatis.mapper.BaseMapper;
 public interface PermMapper extends BaseMapper<Perm,Example,Integer>{
 
     List<Perm> queryByUserName(String username);
+
+    List<Perm> queryUserPerms(String username);
 }

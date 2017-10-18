@@ -18,6 +18,10 @@ const http = {
 			arguments[1]._method='patch';
 			return $.post.apply($,arguments);
 		},
+		'put':function(){
+			arguments[1]._method='put';
+			return $.post.apply($,arguments);
+		},
 		'delete':function(){
 			arguments[1]._method='delete';
 			return $.post.apply($,arguments);
