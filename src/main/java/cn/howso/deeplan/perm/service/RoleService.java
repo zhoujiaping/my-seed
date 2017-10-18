@@ -7,8 +7,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.perm.mapper.RoleMapper;
-import cn.howso.deeplan.perm.model.Example;
 import cn.howso.deeplan.perm.model.Role;
+import cn.howso.deeplan.util.Example;
 @Service
 public class RoleService {
     @Resource RoleMapper roleMapper;

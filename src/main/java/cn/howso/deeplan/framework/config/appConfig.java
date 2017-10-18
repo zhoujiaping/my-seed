@@ -44,7 +44,7 @@ import redis.clients.jedis.JedisPool;
  * 4、在将第三方库提供的类更改为自定义类时，需要将该bean的配置方式做改变。
  */
 @Configuration
-public class ShiroConfig implements ApplicationContextAware {
+public class appConfig implements ApplicationContextAware {
 
     private ApplicationContext app;
 

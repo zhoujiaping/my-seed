@@ -1,6 +1,8 @@
  package cn.howso.deeplan.perm.controller;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -98,7 +100,7 @@ public class UserController {
     }
     @RequestMapping(value="/{userId}/roles-revoke",method=RequestMethod.POST)
     @ResponseBody
-    public Integer revokeRoles(@PathVariable Integer userId,List<Integer> roleIdList){
+    public Integer revokeRoles(@PathVariable Integer userId,ArrayList<Integer> roleIdList){
         //TODO
         return null;
     }

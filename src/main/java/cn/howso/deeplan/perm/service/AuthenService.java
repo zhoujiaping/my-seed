@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import cn.howso.deeplan.perm.mapper.UserMapper;
-import cn.howso.deeplan.perm.model.Example;
 import cn.howso.deeplan.perm.model.User;
+import cn.howso.deeplan.util.Example;
 /**
  * 用户服务
  * @ClassName UserService

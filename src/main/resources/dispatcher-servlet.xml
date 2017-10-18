@@ -14,7 +14,8 @@
 
 	<mvc:annotation-driven>
 		<mvc:argument-resolvers>  
-              <bean class="cn.howso.deeplan.perm.component.LoginUserArugmentResolver"/>  
+              <bean  class="cn.howso.deeplan.perm.component.LoginUserArugmentResolver"/>  
+              <bean  class="cn.howso.deeplan.perm.component.ListArgResolver"/>  
         </mvc:argument-resolvers>  
 		<mvc:message-converters register-defaults="false">
 			<bean

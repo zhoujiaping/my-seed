@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.perm.mapper.UserMapper;
 import cn.howso.deeplan.perm.mapper.UserRoleMapper;
-import cn.howso.deeplan.perm.model.Example;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.model.UserRole;
+import cn.howso.deeplan.util.Example;
 
 @Service
 public class UserService {
@@ -40,13 +40,13 @@ public class UserService {
     }
     public Integer grantRoles(User currentUser, Integer userId, List<Integer> roleIdList) {
         
-        //TODO 校验该用户是否有这些权限
+        //TODO 校验当前用户是否有这些权限
         //去重
         Example example = new Example();
         example.createCriteria()
         .and("user_id").equalTo(userId)
         .and("role_id").in(roleIdList);
-        userRoleMapper.deleteByExample(example );
+        userRoleMapper.deleteByExample(example);
         List<UserRole> recordList = roleIdList.stream().map(rid->{
             UserRole mid = new UserRole();
             mid.setUserId(userId);
