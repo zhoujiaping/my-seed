@@ -76,4 +76,15 @@ public class UserService {
             return users.get(0);
         }
     }
+    public Integer revokeRoles(User currentUser, Integer userId, List<Integer> roleIdList) {
+        Example e1 = new Example();
+        e1.createCriteria().and("user_id").equalTo(currentUser.getId()).and("role_id").in(roleIdList);
+        int count = userRoleMapper.countByExample(e1);
+        Assert.isTrue(count==roleIdList.size(),"收回角色失败，当前用户必须关联回收的角色！");
+        Example example = new Example();
+        example.createCriteria()
+        .and("user_id").equalTo(userId)
+        .and("role_id").in(roleIdList);
+        return userRoleMapper.deleteByExample(example);
+    }
 }

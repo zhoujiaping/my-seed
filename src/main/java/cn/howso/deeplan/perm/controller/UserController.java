@@ -1,21 +1,14 @@
 package cn.howso.deeplan.perm.controller;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +21,6 @@ import com.alibaba.fastjson.JSONObject;
 import cn.howso.deeplan.perm.anno.CurrentUser;
 import cn.howso.deeplan.perm.cache.RedisCache;
 import cn.howso.deeplan.perm.cache.RedisCacheManager;
-import cn.howso.deeplan.perm.constant.Const;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.service.UserService;
 import cn.howso.deeplan.perm.session.dao.MyShiroSessionRespository;
@@ -57,7 +49,9 @@ public class UserController {
     public Integer delete(@PathVariable Integer id) {
         return userService.delete(id);
     }
-
+    /**
+     * 修改用户名密码
+     */
     @RequestMapping(value = "/{id}/authen", method = RequestMethod.PUT)
     public String updateAuthen(@CurrentUser User currentUser, @PathVariable Integer id, String name, String password,
             HttpServletRequest request, HttpServletResponse response) {
@@ -86,16 +80,14 @@ public class UserController {
             return null;
         }
     }
-
+    /**
+     * 修改其他字段
+     * */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public Integer update(@PathVariable Integer id, User user) {
-        return userService.update(user);
-    }
-
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
-    @ResponseBody
-    public Integer update(@PathVariable String id, User user) {
+        user.setName(null);
+        user.setPassword(null);
         return userService.update(user);
     }
 
@@ -124,9 +116,12 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}/roles-revoke", method = RequestMethod.POST)
     @ResponseBody
-    public Integer revokeRoles(@PathVariable Integer userId, ArrayList<Integer> roleIdList) {
-        // TODO
-        return null;
+    public Integer revokeRoles(@CurrentUser User currentUser,@PathVariable Integer userId, List<Integer> roleIdList) {
+     // 清除缓存的该用户的权限数据，使缓存失效
+        RedisCache cache = redisCacheManager.getAuthorCache();
+        Object key = SecurityUtils.getSubject().getPrincipals();
+        cache.remove(key);
+        return userService.revokeRoles(currentUser, userId, roleIdList);
     }
 
     @RequestMapping(value = "/{userId}/perms-grant", method = RequestMethod.POST)
