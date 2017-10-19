@@ -17,7 +17,7 @@ import redis.clients.jedis.JedisPool;
 public class RedisCache implements Cache<Object,Object> {
 	private JedisPool jedisPool;
 	private String prefix;
-	private static final String INTERNAL_PREFIX = "object-";
+	private static final String OBJECT_PREFIX = "object-";
     public String getPrefix() {
         return prefix;
     }
@@ -46,7 +46,7 @@ public class RedisCache implements Cache<Object,Object> {
 	        return ArrayUtils.concat(prefix.getBytes(), ((String) key).getBytes());
 	    }
         byte[] bytes = SerializationUtils.serialize(key);
-        return ArrayUtils.concat((INTERNAL_PREFIX+prefix).getBytes(), bytes);
+        return ArrayUtils.concat((OBJECT_PREFIX+prefix).getBytes(), bytes);
     }
 	private byte[] valuetobytes(Object key){
 	    return SerializationUtils.serialize(key);
@@ -59,8 +59,8 @@ public class RedisCache implements Cache<Object,Object> {
 	        return new String(dest);
 	    }
 	    //if key is not string
-	    byte[] dest = new byte[bytes.length-(prefixBytes.length+INTERNAL_PREFIX.getBytes().length)];
-	    System.arraycopy(bytes, prefixBytes.length+INTERNAL_PREFIX.getBytes().length, dest, 0, dest.length);
+	    byte[] dest = new byte[bytes.length-(prefixBytes.length+OBJECT_PREFIX.getBytes().length)];
+	    System.arraycopy(bytes, prefixBytes.length+OBJECT_PREFIX.getBytes().length, dest, 0, dest.length);
 	    return SerializationUtils.deserialize(dest);
 	}
 	private Object valuefrombytes(byte[] bytes){
@@ -99,7 +99,7 @@ public class RedisCache implements Cache<Object,Object> {
 				    keys.add(keyfrombytes(bytekey));
 				}
 			}
-			bytekeys = redis.keys((INTERNAL_PREFIX+prefix+"*").getBytes());
+			bytekeys = redis.keys((OBJECT_PREFIX+prefix+"*").getBytes());
 			if(bytekeys != null ){
                 for(byte[] bytekey : bytekeys){
                     keys.add(keyfrombytes(bytekey));

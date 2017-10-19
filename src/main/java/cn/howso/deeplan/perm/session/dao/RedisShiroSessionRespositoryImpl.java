@@ -10,19 +10,15 @@ import java.util.Set;
 import org.apache.shiro.session.Session;
 import org.springframework.util.SerializationUtils;
 
-import cn.howso.deeplan.perm.constant.Const;
-import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.util.ArrayUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 public class RedisShiroSessionRespositoryImpl implements MyShiroSessionRespository {
 	private JedisPool jedisPool;
 	private String prefix;
-    private byte[] prefixBytes;
-    
+	private static final String OBJECT_PREFIX="object-";
     public void setPrefix(String prefix) {
         this.prefix = prefix;
-        prefixBytes = prefix.getBytes();
     }
     
     public String getPrefix() {
@@ -47,23 +43,25 @@ public class RedisShiroSessionRespositoryImpl implements MyShiroSessionResposito
     }*/
 	private byte[] keytobytes(Object key){
         if(key instanceof String){
-            return ArrayUtils.concat(prefixBytes, ((String) key).getBytes());
+            return ArrayUtils.concat(prefix.getBytes(), ((String) key).getBytes());
         }
         byte[] bytes = SerializationUtils.serialize(key);
-        return ArrayUtils.concat(prefixBytes, bytes);
+        return ArrayUtils.concat((OBJECT_PREFIX+prefix).getBytes(), bytes);
     }
     private byte[] valuetobytes(Object key){
         return SerializationUtils.serialize(key);
     }
     private Object keyfrombytes(byte[] bytes){
-        byte[] pre = new byte[prefixBytes.length];
-        System.arraycopy(bytes, 0, pre, 0, pre.length);
-        byte[] dest = new byte[bytes.length-prefixBytes.length];
-        System.arraycopy(bytes, prefixBytes.length, dest, 0, dest.length);
-        if(Objects.equals(new String(pre), prefix)){
+        byte[] prefixBytes = prefix.getBytes();
+        //if key is string
+        if(Objects.equals(new String(bytes,0,prefixBytes.length), prefix)){
+            byte[] dest = new byte[bytes.length-prefixBytes.length];
             return new String(dest);
         }
-        return SerializationUtils.deserialize(bytes);
+        //if key is not string
+        byte[] dest = new byte[bytes.length-(prefixBytes.length+OBJECT_PREFIX.getBytes().length)];
+        System.arraycopy(bytes, prefixBytes.length+OBJECT_PREFIX.getBytes().length, dest, 0, dest.length);
+        return SerializationUtils.deserialize(dest);
     }
     private Object valuefrombytes(byte[] bytes){
         return SerializationUtils.deserialize(bytes);
