@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,15 +17,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class Perm {
 
     public static void main(String[] args) {
-        // TODO Auto-generated method stub
+    	String fname = Perm.class.getResource("/").getFile();
+    	System.out.println(fname);
+    	File file = new File(fname);
+    	file = file.getParentFile().listFiles(x->{
+    		return Objects.equals(x.getName(),"classes");
+    	})[0];
+    	
         Map<String,String> uriPermMap = new HashMap<>();
-        String path = "D:/git-repo/my-seed/src/main/java";
-        File base = new File(path);
+        File base = file;
         List<String> javafiles = collectClasses(base);
-        int prefixlen = path.length()+1;
+        int prefixlen = base.getAbsolutePath().length()+1;
         List<Class<?>> clazzList = javafiles.stream().map(filename->{
             String clazzname = filename.substring(prefixlen).replaceAll("/|\\\\", ".");
-            clazzname = clazzname.substring(0, clazzname.length()-".java".length());
+            clazzname = clazzname.substring(0, clazzname.length()-".class".length());
             Class<?> clazz = null;
             try {
                 clazz = Class.forName(clazzname);
@@ -57,11 +63,13 @@ public class Perm {
                 String httpmethod = m.method()[0].name();
                 RequiresPermissions perms = method.getAnnotation(RequiresPermissions.class);
                 if(perms!=null){
-                    uriPermMap.put(httpmethod+" /seed"+baseuri+part, perms.value()[0]);
+                    uriPermMap.put(httpmethod+" "+concatPath("/seed",baseuri,part), perms.value()[0]);
                 }
-            });;
+            });
         });
-        System.out.println(uriPermMap);
+        uriPermMap.forEach((k,v)->{
+        	System.out.println(k+"  -->  "+v);
+        });
     }
     public static String concatPath(String ...paths){
         return String.join("/", paths).replaceAll("//", "/");
@@ -73,7 +81,7 @@ public class Perm {
             if(file.isDirectory()){
                 classes.addAll(collectClasses(file));
             }else{
-                if(file.getName().endsWith(".java")){
+                if(file.getName().endsWith(".class")){
                     classes.add(file.getAbsolutePath());
                 }
             }

@@ -55,6 +55,7 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
+    @RequiresPermissions("users:id:delete")
     public Integer delete(@PathVariable Integer id,Integer _permSpaceId) {
         return userService.delete(id,_permSpaceId);
     }
@@ -62,6 +63,7 @@ public class UserController {
      * 修改用户名密码
      */
     @RequestMapping(value = "/{userId}/authen", method = RequestMethod.PUT)
+    @RequiresPermissions("users:id:authen-update")
     public String updateAuthen(@CurrentUser User currentUser, @PathVariable Integer userId, String name, String password,
             Integer _permSpaceId,
             HttpServletRequest request, HttpServletResponse response) {
@@ -103,6 +105,7 @@ public class UserController {
      * */
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
+    @RequiresPermissions("users:id:update")
     public Integer update(@PathVariable Integer id, User user,Integer _permSpaceId) {
         user.setName(null);
         user.setPassword(null);
@@ -111,18 +114,21 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("users:query")
     public List<User> query(@CurrentUser User currentUser, User user,Integer _permSpaceId) {
         return userService.query(_permSpaceId);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
+    @RequiresPermissions("users:id:query")
     public User get(@PathVariable Integer id,Integer _permSpaceId,List<Role> roleList) {
         return userService.get(id,_permSpaceId);
     }
 
     @RequestMapping(value = "/{userId}/roles-grant", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("users:id:roles-grant")
     public Integer grantRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
         User user = userService.get(userId,_permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
@@ -135,6 +141,7 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}/roles-revoke", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("users:id:roles-revoke")
     public Integer revokeRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
         User user = userService.get(userId,_permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
@@ -146,6 +153,7 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}/perms-grant", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("users:id:prems-grant")
     public Integer grantPerms(@PathVariable Integer userId,Integer _permSpaceId, List<Integer> permIdList) {
         User user = userService.get(userId, _permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
@@ -156,6 +164,7 @@ public class UserController {
 
     @RequestMapping(value = "/{userId}/perms-revoke", method = RequestMethod.POST)
     @ResponseBody
+    @RequiresPermissions("users:id:perms-revoke")
     public Integer revokePerms(@PathVariable Integer userId,Integer _permSpaceId, List<Integer> permIdList) {
         User user = userService.get(userId, _permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");

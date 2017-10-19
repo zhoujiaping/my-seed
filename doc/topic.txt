@@ -31,3 +31,14 @@
 	所以必须有两项需要明确：1、操作的资源属于哪个权限空间。2、是否有该权限空间中对该资源的权限。
 #用户角色授予、用户角色回收、新增角色、删除角色、修改角色权限、用户授予权限、用户权限回收。
 	
+#perm字符串规定
+	添加xxx:create
+	批量删除xxx:delete
+	根据id删除一个xxx:id:delete
+	批量更新xxx:update
+	根据id更新一个xxx:id:update
+	查询xxx:query
+	根据id查询一个xxx:id:query
+	页面xxx:view
+	xxx用复数形式，并且对city之类的单词，后面加s即可，不需要变成cities。
+	
