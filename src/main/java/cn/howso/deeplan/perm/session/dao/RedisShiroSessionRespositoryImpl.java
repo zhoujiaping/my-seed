@@ -10,6 +10,8 @@ import java.util.Set;
 import org.apache.shiro.session.Session;
 import org.springframework.util.SerializationUtils;
 
+import cn.howso.deeplan.perm.constant.Const;
+import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.util.ArrayUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -133,5 +135,4 @@ public class RedisShiroSessionRespositoryImpl implements MyShiroSessionResposito
 		}
 		return session;
 	}
-
 }

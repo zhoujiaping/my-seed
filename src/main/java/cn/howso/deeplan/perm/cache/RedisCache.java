@@ -17,15 +17,13 @@ import redis.clients.jedis.JedisPool;
 public class RedisCache implements Cache<Object,Object> {
 	private JedisPool jedisPool;
 	private String prefix;
-	private byte[] prefixBytes;
-	
+	private static final String INTERNAL_PREFIX = "object-";
     public String getPrefix() {
         return prefix;
     }
     
     public void setPrefix(String prefix) {
         this.prefix = prefix;
-        prefixBytes = prefix.getBytes();
     }
 	public JedisPool getJedisPool() {
 		return jedisPool;
@@ -45,23 +43,25 @@ public class RedisCache implements Cache<Object,Object> {
 	}
 	private byte[] keytobytes(Object key){
 	    if(key instanceof String){
-	        return ArrayUtils.concat(prefixBytes, ((String) key).getBytes());
+	        return ArrayUtils.concat(prefix.getBytes(), ((String) key).getBytes());
 	    }
         byte[] bytes = SerializationUtils.serialize(key);
-        return ArrayUtils.concat(prefixBytes, bytes);
+        return ArrayUtils.concat((INTERNAL_PREFIX+prefix).getBytes(), bytes);
     }
 	private byte[] valuetobytes(Object key){
 	    return SerializationUtils.serialize(key);
 	}
 	private Object keyfrombytes(byte[] bytes){
-	    byte[] pre = new byte[prefixBytes.length];
-	    System.arraycopy(bytes, 0, pre, 0, pre.length);
-	    byte[] dest = new byte[bytes.length-prefixBytes.length];
-	    System.arraycopy(bytes, prefixBytes.length, dest, 0, dest.length);
-	    if(Objects.equals(new String(pre), prefix)){
+	    byte[] prefixBytes = prefix.getBytes();
+	    //if key is string
+	    if(Objects.equals(new String(bytes,0,prefixBytes.length), prefix)){
+	        byte[] dest = new byte[bytes.length-prefixBytes.length];
 	        return new String(dest);
 	    }
-	    return SerializationUtils.deserialize(bytes);
+	    //if key is not string
+	    byte[] dest = new byte[bytes.length-(prefixBytes.length+INTERNAL_PREFIX.getBytes().length)];
+	    System.arraycopy(bytes, prefixBytes.length+INTERNAL_PREFIX.getBytes().length, dest, 0, dest.length);
+	    return SerializationUtils.deserialize(dest);
 	}
 	private Object valuefrombytes(byte[] bytes){
         return SerializationUtils.deserialize(bytes);
@@ -99,6 +99,12 @@ public class RedisCache implements Cache<Object,Object> {
 				    keys.add(keyfrombytes(bytekey));
 				}
 			}
+			bytekeys = redis.keys((INTERNAL_PREFIX+prefix+"*").getBytes());
+			if(bytekeys != null ){
+                for(byte[] bytekey : bytekeys){
+                    keys.add(keyfrombytes(bytekey));
+                }
+            }
 		} finally{
 			redis.close();
 		}

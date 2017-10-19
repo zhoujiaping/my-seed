@@ -32,7 +32,6 @@ public class ListArgResolver implements HandlerMethodArgumentResolver {
         boolean support = parameter.getParameterType() == List.class;
         return support;
     }
-
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
@@ -87,5 +86,4 @@ public class ListArgResolver implements HandlerMethodArgumentResolver {
             throw new RuntimeException("do not support the type:"+typename);
         }
     }
-
 }
