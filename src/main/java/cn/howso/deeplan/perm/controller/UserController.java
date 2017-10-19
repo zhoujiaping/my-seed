@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -47,7 +48,7 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    // @RequiresPermissions(value={"users:create"})
+    @RequiresPermissions(value={"users:create"})
     public Integer add(User user,Integer _permSpaceId) {
         return userService.add(user,_permSpaceId);
     }
