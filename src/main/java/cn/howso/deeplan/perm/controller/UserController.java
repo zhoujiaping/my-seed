@@ -48,8 +48,8 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     // @RequiresPermissions(value={"users:create"})
-    public Integer add(User user) {
-        return userService.add(user);
+    public Integer add(User user,Integer _permSpaceId) {
+        return userService.add(user,_permSpaceId);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -73,17 +73,17 @@ public class UserController {
             user.setPassword(password);
         }
         // 使authen缓存失效
-        User record = userService.get(userId);
+        User record = userService.get(userId,_permSpaceId);
         Assert.isTrue(record!=null,"用户不存在");
         authenService.removeCache(record.getName());
         stopSessionByUsername(record.getName());
         // 如果修改的是当前用户的密码，则让用户重新登录
+        Integer count = userService.update(user,_permSpaceId);
         boolean isUpdateCurrentUser = Objects.equals(currentUser.getId(), userId);
         if (isUpdateCurrentUser) {
          // 使session失效
             return "redirect:static/login";
         } else {
-            Integer count = userService.update(user,_permSpaceId);
             WebUtils.sendResponse(response, JSONObject.toJSONString(count));
             return null;
         }
@@ -111,47 +111,55 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<User> query(@CurrentUser User currentUser, User user,Integer _permSpaceId) {
-        return userService.query();
+        return userService.query(_permSpaceId);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public User get(@PathVariable Integer id,Integer _permSpaceId,List<Role> roleList) {
-        return userService.get(id);
+        return userService.get(id,_permSpaceId);
     }
 
     @RequestMapping(value = "/{userId}/roles-grant", method = RequestMethod.POST)
     @ResponseBody
     public Integer grantRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
-        User user = userService.get(userId);
+        User user = userService.get(userId,_permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
+        Assert.isTrue(authorService.hasAllRoles(roleIdList),"当前用户必须拥有这些角色");
         // 清除缓存的该用户的权限数据，使缓存失效
         authorService.removeCache(user.getName());
         // 从数据库中查询该用户的权限数据,新的权限数据放入缓存,这个步骤可以不做，shiro会在需要的自动缓存
-        return userService.grantRoles(currentUser,_permSpaceId, userId, roleIdList);
+        return userService.grantRoles(userId, roleIdList);
     }
 
     @RequestMapping(value = "/{userId}/roles-revoke", method = RequestMethod.POST)
     @ResponseBody
     public Integer revokeRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
-        User user = userService.get(userId);
+        User user = userService.get(userId,_permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
         // 清除缓存的该用户的权限数据，使缓存失效
+        Assert.isTrue(authorService.hasAllRoles(roleIdList),"当前用户必须拥有这些角色");
         authorService.removeCache(user.getName());
-        return userService.revokeRoles(currentUser, _permSpaceId,userId, roleIdList);
+        return userService.revokeRoles(userId, roleIdList);
     }
 
     @RequestMapping(value = "/{userId}/perms-grant", method = RequestMethod.POST)
     @ResponseBody
-    public Integer grantPerms(@PathVariable Integer userId, List<Integer> permIdList) {
-        // TODO
-        return null;
+    public Integer grantPerms(@PathVariable Integer userId,Integer _permSpaceId, List<Integer> permIdList) {
+        User user = userService.get(userId, _permSpaceId);
+        Assert.isTrue(user!=null,"用户不存在");
+        Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
+        authorService.removeCache(user.getName());
+        return userService.grantPerms(userId,_permSpaceId,permIdList);
     }
 
     @RequestMapping(value = "/{userId}/perms-revoke", method = RequestMethod.POST)
     @ResponseBody
-    public Integer revokePerms(@PathVariable Integer userId, List<Integer> permIdList) {
-        // TODO
-        return null;
+    public Integer revokePerms(@PathVariable Integer userId,Integer _permSpaceId, List<Integer> permIdList) {
+        User user = userService.get(userId, _permSpaceId);
+        Assert.isTrue(user!=null,"用户不存在");
+        Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
+        authorService.removeCache(user.getName());
+        return userService.revokePerms(userId,_permSpaceId,permIdList);
     }
 }

@@ -8,11 +8,17 @@ import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.perm.mapper.PermMapper;
 import cn.howso.deeplan.perm.model.Perm;
+import cn.howso.deeplan.util.Example;
 
 @Service
 public class PermService {
     @Resource PermMapper permMapper;
     public List<Perm> queryByUserName(String username) {
         return permMapper.queryByUserName(username);
+    }
+    public List<Perm> query(Integer spaceId) {
+        Example example = new Example();
+        example.createCriteria().and("space_id").equalTo(spaceId);
+        return permMapper.selectByExample(example);
     }
 }

@@ -1,9 +1,6 @@
 package cn.howso.deeplan.perm.realm;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.AuthenticationException;
@@ -16,9 +13,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import cn.howso.deeplan.perm.dto.RoleWithPerms;
-import cn.howso.deeplan.perm.model.Perm;
-import cn.howso.deeplan.perm.model.Role;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.service.AuthenService;
 import cn.howso.deeplan.perm.service.AuthorService;
@@ -44,31 +38,16 @@ public class MyRealm extends AuthorizingRealm {
     public void setAuthorService(AuthorService authorService) {
         this.authorService = authorService;
     }
-    @Override
     /**
      * 获得授权信息
      */
+    @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = (String) principals.fromRealm(getName()).iterator().next();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        List<RoleWithPerms> roles = authorService.queryRoles(username);
-        //List<Role> roles = roleService.queryByUserName(username);
-        Set<String> roleNames = roles.stream().map(Role::getName).collect(Collectors.toSet());
+        Set<String> roleNames = authorService.queryRoleNames(username);
         info.addRoles(roleNames);
-        //List<Perm> perms = permService.queryByUserName(username);
-        //Set<String> permStrings = perms.stream().map(Perm::getPattern).distinct().collect(Collectors.toSet());
-        Set<String> permStrings = new HashSet<>();
-        for(RoleWithPerms r:roles){
-        	for(Perm p:r.getPerms()){
-        		permStrings.add(p.getSpaceId()+":"+p.getPattern());
-        	}
-        }
-        //List<Perm> perms = roles.stream().map(r->r.getPerms()).flatMap(List::stream).collect(Collectors.toList());
-        //Set<String> permStrings = perms.stream().map(Perm::getPattern).distinct().collect(Collectors.toSet());
-        List<Perm> userPerms = authorService.queryUserPerms(username);
-        userPerms.forEach(p->{
-            permStrings.add(p.getSpaceId()+":"+p.getPattern());
-        });
+        Set<String> permStrings = authorService.queryPermStrings(username);
         info.addStringPermissions(permStrings);
         return info;
     }

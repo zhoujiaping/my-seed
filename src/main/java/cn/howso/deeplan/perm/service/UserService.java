@@ -11,8 +11,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import cn.howso.deeplan.perm.mapper.UserMapper;
+import cn.howso.deeplan.perm.mapper.UserPermMapper;
 import cn.howso.deeplan.perm.mapper.UserRoleMapper;
 import cn.howso.deeplan.perm.model.User;
+import cn.howso.deeplan.perm.model.UserPerm;
 import cn.howso.deeplan.perm.model.UserRole;
 import cn.howso.deeplan.util.Example;
 
@@ -22,16 +24,21 @@ public class UserService {
     private UserMapper userMapper;
     @Resource 
     private UserRoleMapper userRoleMapper;
-    
-    public Integer add(User user) {
+    @Resource
+    private UserPermMapper userPermMapper;
+    @Resource
+    private AuthorService authorService;
+    public Integer add(User user, Integer spaceId) {
+        user.setSpaceId(spaceId);
         Assert.isTrue(!StringUtils.isEmpty(user.getName()),"用户名不能为空");
         Assert.isTrue(!StringUtils.isEmpty(user.getPassword()),"密码不能为空");
-        Assert.isTrue(!StringUtils.isEmpty(user.getSpaceId()),"用户名所属部门不能为空");
         return userMapper.insertSelective(user);
     }
-    public List<User> query() {
+    public List<User> query(Integer spaceId) {
         Example example = new Example();
-        example.createCriteria().and("valid").equals(true);
+        example.createCriteria()
+        .and("valid").equalTo(true)
+        .and("space_id").equalTo(spaceId);
         List<User> users = userMapper.selectByExample(example);
         return users;
     }
@@ -50,31 +57,24 @@ public class UserService {
         .and("space_id").equalTo(spaceId);
         return userMapper.updateByExampleSelective(user, example );
     }
-    public User get(Integer id) {
+    public User get(Integer id, Integer spaceId) {
         User user = userMapper.selectByPrimaryKey(id);
-        return user;
+        if(Objects.equals(spaceId, user.getSpaceId())){
+            return user;
+        }
+        return null;
     }
-    public Integer grantRoles(User currentUser, Integer spaceId, Integer userId, List<Integer> roleIdList) {
-        User user = userMapper.selectByPrimaryKey(userId);
-        Assert.isTrue(Objects.equals(user.getSpaceId(), spaceId),"用户不属于该组织");
-        Example e1 = new Example();
-        e1.createCriteria().and("user_id").equalTo(currentUser.getId()).and("role_id").in(roleIdList);
-        int count = userRoleMapper.countByExample(e1);
-        Assert.isTrue(count==roleIdList.size(),"授予角色失败，当前用户必须关联授予的角色！");
+    public Integer grantRoles(Integer userId, List<Integer> roleIdList) {
         //去重
-        Example example = new Example();
-        example.createCriteria()
-        .and("user_id").equalTo(userId)
-        .and("role_id").in(roleIdList);
-        userRoleMapper.deleteByExample(example);
-        List<UserRole> recordList = roleIdList.stream().map(rid->{
+        revokeRoles(userId, roleIdList);
+        List<UserRole> userRoleList = roleIdList.stream().map(rid->{
             UserRole mid = new UserRole();
             mid.setUserId(userId);
             mid.setRoleId(rid);
             return mid;
         }).collect(Collectors.toList());
         //插入
-        return userRoleMapper.batchInsert(recordList);
+        return userRoleMapper.batchInsert(userRoleList);
     }
     public User queryByName(String name) {
         Example example = new Example();
@@ -88,17 +88,28 @@ public class UserService {
             return users.get(0);
         }
     }
-    public Integer revokeRoles(User currentUser, Integer spaceId,Integer userId, List<Integer> roleIdList) {
-        User user = userMapper.selectByPrimaryKey(userId);
-        Assert.isTrue(Objects.equals(user.getSpaceId(), spaceId),"用户不属于该组织");
-        Example e1 = new Example();
-        e1.createCriteria().and("user_id").equalTo(currentUser.getId()).and("role_id").in(roleIdList);
-        int count = userRoleMapper.countByExample(e1);
-        Assert.isTrue(count==roleIdList.size(),"收回角色失败，当前用户必须关联回收的角色！");
+    public Integer revokeRoles(Integer userId, List<Integer> roleIdList) {
         Example example = new Example();
         example.createCriteria()
         .and("user_id").equalTo(userId)
         .and("role_id").in(roleIdList);
         return userRoleMapper.deleteByExample(example);
+    }
+    public Integer grantPerms(Integer userId, Integer spaceId, List<Integer> permIdList) {
+        //去重
+        revokePerms(userId,spaceId,permIdList);
+        List<UserPerm> recordList = permIdList.stream().map(permId->{
+            UserPerm mid = new UserPerm();
+            mid.setUserId(userId);
+            mid.setPermId(permId);
+            return mid;
+        }).collect(Collectors.toList());
+        //插入
+        return userPermMapper.batchInsertSelective(recordList);
+    }
+    public Integer revokePerms(Integer userId, Integer _permSpaceId, List<Integer> permIdList) {
+        Example example = new Example();
+        example.createCriteria().and("user_id").equalTo(userId).and("perm_id").in(permIdList);
+        return userPermMapper.deleteByExample(example);
     }
 }

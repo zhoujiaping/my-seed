@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cn.howso.deeplan.perm.model.User;
+import cn.howso.deeplan.perm.model.Perm;
 import cn.howso.deeplan.perm.service.PermService;
 
 @Controller
@@ -20,8 +19,7 @@ public class PermController {
     
     @RequestMapping(method=RequestMethod.GET)
     @ResponseBody
-    public List<User> query(){
-        //return userService.query();
-        return null;
+    public List<Perm> query(Integer _permSpaceId){
+        return permService.query(_permSpaceId);
     }
 }

@@ -50,4 +50,7 @@ public class Perm {
     public void setSpaceId(Integer spaceId) {
         this.spaceId = spaceId;
     }
+    public String getPermstring(){
+        return spaceId+":"+pattern;
+    }
 }

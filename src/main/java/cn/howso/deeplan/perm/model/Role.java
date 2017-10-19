@@ -40,4 +40,7 @@ public class Role {
     public void setValid(Boolean valid) {
         this.valid = valid;
     }
+    public String getRolename(){
+        return spaceId+":"+name;
+    }
 }
