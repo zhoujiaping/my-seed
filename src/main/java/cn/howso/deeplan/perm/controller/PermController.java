@@ -14,11 +14,11 @@ import cn.howso.deeplan.perm.model.Perm;
 import cn.howso.deeplan.perm.service.PermService;
 
 @Controller
-@RequestMapping("/perms")
+@RequestMapping("perms")
 public class PermController {
     @Resource private PermService permService;
     
-    @RequestMapping(value="/",method=RequestMethod.GET)
+    @RequestMapping(value="",method=RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("perms:query")
     public List<Perm> query(Integer _permSpaceId){

@@ -41,4 +41,5 @@
 	根据id查询一个xxx:id:query
 	页面xxx:view
 	xxx用复数形式，并且对city之类的单词，后面加s即可，不需要变成cities。
+	uri不要以/结尾
 	

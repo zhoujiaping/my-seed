@@ -29,27 +29,27 @@ public class RoleController {
     @Resource
     private MenuService menuService;
     
-    @RequestMapping(method=RequestMethod.POST)
+    @RequestMapping(value="",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:create")
     public Integer add(Role role,Integer _permSpaceId){
         return roleService.add(role,_permSpaceId);
     }
-    @RequestMapping(value="/{id}",method=RequestMethod.DELETE)
+    @RequestMapping(value="{id}",method=RequestMethod.DELETE)
     @ResponseBody
     @RequiresPermissions("roles:id:delete")
     public Integer delete(@PathVariable Integer id,Integer _permSpaceId){
         return roleService.delete(id,_permSpaceId);
     }
-    @RequestMapping(value="/{id}",method=RequestMethod.POST)
+    @RequestMapping(value="{id}",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:update")
     public Integer update(@PathVariable String id,Role role,Integer _permSpaceId){
         return roleService.udpate(role,_permSpaceId);
     }
-    @RequestMapping(method=RequestMethod.GET)
+    @RequestMapping(value="",method=RequestMethod.GET)
     @ResponseBody
-    @RequiresPermissions("roles:id:query")
+    @RequiresPermissions("roles:query")
     public List<Role> query(Integer _permSpaceId){
         return roleService.query(_permSpaceId);
     }
@@ -60,7 +60,7 @@ public class RoleController {
         return roleService.get(id,_permSpaceId);
     }
     
-    @RequestMapping(value="/{roleId}/perms-grant",method=RequestMethod.POST)
+    @RequestMapping(value="{roleId}/perms-grant",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:perms-grant")
     public Integer grantPerms(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> permIdList){
@@ -71,7 +71,7 @@ public class RoleController {
         authorService.removeAllCache();
         return roleService.grantPerms(roleId,permIdList);
     }
-    @RequestMapping(value="/{roleId}/perms-revoke",method=RequestMethod.POST)
+    @RequestMapping(value="{roleId}/perms-revoke",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:perms-revoke")
     public Integer revokePerms(@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> permIdList){
@@ -83,7 +83,7 @@ public class RoleController {
         return roleService.revokePerms(roleId,permIdList);
     }
     
-    @RequestMapping(value="/{roleId}/menus-grant",method=RequestMethod.POST)
+    @RequestMapping(value="{roleId}/menus-grant",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:menus-grant")
     public Integer grantMenus(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> menuIdList){
@@ -93,7 +93,7 @@ public class RoleController {
         Assert.isTrue(authorService.hasAllMenus(currentUser,menuIdList),"当前用户必须拥有这些菜单");
         return menuService.grantMenus(roleId,menuIdList);
     }
-    @RequestMapping(value="/{roleId}/menus-revoke",method=RequestMethod.POST)
+    @RequestMapping(value="{roleId}/menus-revoke",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:menus-revoke")
     public Integer revokeMenus(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> menuIdList){

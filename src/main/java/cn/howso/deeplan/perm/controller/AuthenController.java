@@ -26,7 +26,7 @@ import cn.howso.deeplan.perm.service.UserService;
 import cn.howso.deeplan.util.WebUtils;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("")
 public class AuthenController {
 
     @Resource
@@ -34,7 +34,7 @@ public class AuthenController {
     @Resource
     private UserService userService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "login", method = RequestMethod.GET)
     public String login() {
         return "static/login";
     }
@@ -43,7 +43,7 @@ public class AuthenController {
         return "static/index";
     }*/
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "login", method = RequestMethod.POST)
     public Object login(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         UsernamePasswordToken token = new UsernamePasswordToken(user.getName(), user.getPassword());
         try {
@@ -74,7 +74,7 @@ public class AuthenController {
         return "登录成功";
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
     public Object logout(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         SecurityUtils.getSubject().logout();
