@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 
+import cn.howso.deeplan.log.annotation.LogAnno;
 import cn.howso.deeplan.perm.anno.CurrentUser;
 import cn.howso.deeplan.perm.constant.Const;
 import cn.howso.deeplan.perm.model.Role;
@@ -115,6 +116,7 @@ public class UserController {
     @RequestMapping(value="",method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("users:query")
+    @LogAnno
     public List<User> query(@CurrentUser User currentUser, User user,Integer _permSpaceId) {
         return userService.query(_permSpaceId);
     }

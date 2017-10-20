@@ -1,4 +1,4 @@
-package cn.howso.deeplan.perm.model;
+package cn.howso.deeplan.log.model;
 
 import java.util.Date;
 
@@ -18,6 +18,15 @@ public class Log {
     private Date reqTime;
 
     private String host;
+    private String errMsg;
+    
+    public String getErrMsg() {
+        return errMsg;
+    }
+    
+    public void setErrMsg(String errMsg) {
+        this.errMsg = errMsg;
+    }
 
     public Integer getId() {
         return id;

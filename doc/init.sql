@@ -8,6 +8,7 @@ CREATE TABLE sys_log
   req_params varchar,
   success boolean,
   req_time timestamp,
+  err_msg varchar,
   host varchar
 );
 create table sys_perm_space(
