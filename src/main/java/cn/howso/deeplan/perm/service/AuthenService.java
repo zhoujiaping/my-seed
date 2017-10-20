@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 import cn.howso.deeplan.perm.cache.RedisCache;
 import cn.howso.deeplan.perm.mapper.UserMapper;
 import cn.howso.deeplan.perm.model.User;
-import cn.howso.deeplan.util.Example;
+import cn.howso.mybatis.model.Example;
 /**
  * 用户服务
  * @ClassName UserService

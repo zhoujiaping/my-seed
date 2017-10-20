@@ -16,7 +16,7 @@ import cn.howso.deeplan.perm.mapper.UserRoleMapper;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.model.UserPerm;
 import cn.howso.deeplan.perm.model.UserRole;
-import cn.howso.deeplan.util.Example;
+import cn.howso.mybatis.model.Example;
 
 @Service
 public class UserService {

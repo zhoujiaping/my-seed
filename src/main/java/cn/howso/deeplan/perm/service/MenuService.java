@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import cn.howso.deeplan.perm.mapper.MenuMapper;
 import cn.howso.deeplan.perm.mapper.RoleMenuMapper;
 import cn.howso.deeplan.perm.model.RoleMenu;
-import cn.howso.deeplan.util.Example;
+import cn.howso.mybatis.model.Example;
 
 @Service
 public class MenuService {

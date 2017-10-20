@@ -1,9 +1,9 @@
 package cn.howso.deeplan.perm.mapper;
 
 import cn.howso.deeplan.perm.model.User;
-import cn.howso.deeplan.util.Example;
 import cn.howso.mybatis.anno.Table;
 import cn.howso.mybatis.mapper.BaseMapper;
+import cn.howso.mybatis.model.Example;
 @Table(name="sys_user")
 public interface UserMapper extends BaseMapper<User,Example,Integer>{
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.perm.mapper.PermMapper;
 import cn.howso.deeplan.perm.model.Perm;
-import cn.howso.deeplan.util.Example;
+import cn.howso.mybatis.model.Example;
 
 @Service
 public class PermService {

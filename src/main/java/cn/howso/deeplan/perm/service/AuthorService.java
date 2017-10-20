@@ -22,7 +22,7 @@ import cn.howso.deeplan.perm.model.Perm;
 import cn.howso.deeplan.perm.model.Role;
 import cn.howso.deeplan.perm.model.RoleMenu;
 import cn.howso.deeplan.perm.model.User;
-import cn.howso.deeplan.util.Example;
+import cn.howso.mybatis.model.Example;
 @Service
 public class AuthorService {
     @Resource
