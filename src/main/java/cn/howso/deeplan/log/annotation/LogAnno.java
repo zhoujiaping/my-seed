@@ -11,4 +11,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface LogAnno {
     //String desc();
+    String[] ignore() default {};
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.howso.deeplan.framework.exception.BusinessException;
+import cn.howso.deeplan.log.annotation.LogAnno;
 import cn.howso.deeplan.perm.constant.Const;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.service.UserService;
@@ -35,6 +36,7 @@ public class AuthenController {
     private UserService userService;
 
     @RequestMapping(value = "login", method = RequestMethod.GET)
+    @LogAnno
     public String login() {
         return "static/login";
     }
@@ -44,6 +46,7 @@ public class AuthenController {
     }*/
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
+    @LogAnno(ignore="password")
     public Object login(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         UsernamePasswordToken token = new UsernamePasswordToken(user.getName(), user.getPassword());
         try {
@@ -76,6 +79,7 @@ public class AuthenController {
 
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     @ResponseBody
+    @LogAnno
     public Object logout(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         SecurityUtils.getSubject().logout();
         WebUtils.sendRedirect(request, response, "/index");

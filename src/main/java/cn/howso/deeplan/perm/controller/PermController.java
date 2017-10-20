@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.howso.deeplan.log.annotation.LogAnno;
 import cn.howso.deeplan.perm.model.Perm;
 import cn.howso.deeplan.perm.service.PermService;
 
@@ -21,6 +22,7 @@ public class PermController {
     @RequestMapping(value="",method=RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("perms:query")
+    @LogAnno
     public List<Perm> query(Integer _permSpaceId){
         return permService.query(_permSpaceId);
     }

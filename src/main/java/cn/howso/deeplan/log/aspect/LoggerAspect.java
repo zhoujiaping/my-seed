@@ -79,9 +79,16 @@ public class LoggerAspect {
                     }
                     Map<String,Object> paramMap = new HashMap<>();
                     Enumeration<String> paramNames = request.getParameterNames();
+                    String[] ignore = info.ignore();
+                    Map<String,Object> ignoreMap = new HashMap<>();
+                    for(int i=0;i<ignore.length;i++){
+                        ignoreMap.put(ignore[i], "");
+                    }
                     while(paramNames.hasMoreElements()){
                         String paramName = paramNames.nextElement();
-                        paramMap.put(paramName, request.getParameter(paramName));
+                        if(ignoreMap.get(paramName)==null){
+                            paramMap.put(paramName, request.getParameter(paramName));
+                        }
                     }
                     log.setHost(WebUtils.getRemoteAddress(request));
                     String reqMethod = request.getMethod().toLowerCase();

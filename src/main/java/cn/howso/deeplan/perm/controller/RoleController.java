@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.howso.deeplan.log.annotation.LogAnno;
 import cn.howso.deeplan.perm.anno.CurrentUser;
 import cn.howso.deeplan.perm.model.Role;
 import cn.howso.deeplan.perm.model.User;
@@ -32,30 +33,35 @@ public class RoleController {
     @RequestMapping(value="",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:create")
+    @LogAnno
     public Integer add(Role role,Integer _permSpaceId){
         return roleService.add(role,_permSpaceId);
     }
     @RequestMapping(value="{id}",method=RequestMethod.DELETE)
     @ResponseBody
     @RequiresPermissions("roles:id:delete")
+    @LogAnno
     public Integer delete(@PathVariable Integer id,Integer _permSpaceId){
         return roleService.delete(id,_permSpaceId);
     }
     @RequestMapping(value="{id}",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:update")
+    @LogAnno
     public Integer update(@PathVariable String id,Role role,Integer _permSpaceId){
         return roleService.udpate(role,_permSpaceId);
     }
     @RequestMapping(value="",method=RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("roles:query")
+    @LogAnno
     public List<Role> query(Integer _permSpaceId){
         return roleService.query(_permSpaceId);
     }
     @RequestMapping(value="{id}",method=RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("roles:id:query")
+    @LogAnno
     public Role get(@PathVariable Integer id,Integer _permSpaceId){
         return roleService.get(id,_permSpaceId);
     }
@@ -63,6 +69,7 @@ public class RoleController {
     @RequestMapping(value="{roleId}/perms-grant",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:perms-grant")
+    @LogAnno
     public Integer grantPerms(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> permIdList){
         Role role = roleService.get(roleId,_permSpaceId);
         Assert.isTrue(role!=null,"角色不存在");
@@ -74,6 +81,7 @@ public class RoleController {
     @RequestMapping(value="{roleId}/perms-revoke",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:perms-revoke")
+    @LogAnno
     public Integer revokePerms(@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> permIdList){
         Role role = roleService.get(roleId,_permSpaceId);
         Assert.isTrue(role!=null,"角色不存在");
@@ -86,6 +94,7 @@ public class RoleController {
     @RequestMapping(value="{roleId}/menus-grant",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:menus-grant")
+    @LogAnno
     public Integer grantMenus(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> menuIdList){
         Role role = roleService.get(roleId,_permSpaceId);
         Assert.isTrue(role!=null,"角色不存在");
@@ -96,6 +105,7 @@ public class RoleController {
     @RequestMapping(value="{roleId}/menus-revoke",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:menus-revoke")
+    @LogAnno
     public Integer revokeMenus(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> menuIdList){
         Role role = roleService.get(roleId,_permSpaceId);
         Assert.isTrue(role!=null,"角色不存在");
