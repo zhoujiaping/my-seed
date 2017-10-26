@@ -11,6 +11,7 @@
 						 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 						 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
 	">
+	<!-- 使spring上下文扫描时排除Controller，让每个组件只创建一次 -->
 	<context:component-scan base-package="cn">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>

@@ -30,8 +30,13 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
-	<context:component-scan base-package="cn">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	<!-- 使springmvc上下文扫描时只扫描Controller，让每个组件只创建一次 -->
+	<!-- 要使include-filter和exlude-filter起作用，base-package就必须相对明确，不能直接写cn -->
+	<!-- 别试其他方式了，都不行。 -->
+	<context:component-scan base-package="cn.**.controller">
+		<!--这个或者下面正则方式都可以 
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/> -->
+		<context:include-filter type="regex" expression=".*Controller"/>
 	</context:component-scan>
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**"/> <bean 

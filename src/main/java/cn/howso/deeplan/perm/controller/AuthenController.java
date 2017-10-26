@@ -13,6 +13,7 @@ import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Assert;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,11 @@ import cn.howso.deeplan.util.WebUtils;
 @Controller
 @RequestMapping("")
 public class AuthenController {
-
+	private static int initCount;
+	public AuthenController() {
+		initCount++;
+		Assert.isTrue(initCount==1,"配置有问题，controller创建了多次");
+	}
     @Resource
     private DefaultWebSessionManager sessionManager;
     @Resource
