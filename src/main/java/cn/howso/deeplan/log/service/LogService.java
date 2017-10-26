@@ -30,11 +30,12 @@ public class LogService {
     public void init() {
         logCache = new ArrayList<>();
         new Thread(() -> {
+            Log log = null;
             while (true) {
                 try {
                     boolean needsleep = false;
                     for (int i = 0; i < 500; i++) {// 批量保存500条日志
-                        Log log = LogQueue.QUEUE.poll();
+                        log = LogQueue.QUEUE.poll();
                         if (log == null) {
                             needsleep = true;
                             break;
