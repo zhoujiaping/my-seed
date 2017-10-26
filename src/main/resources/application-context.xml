@@ -34,6 +34,11 @@
 		<property name="username" value="${db.username}" />
 		<property name="password" value="${db.password}" />
 		<property name="url" value="${db.url}"></property>
+		<property name="initialSize" value="10"></property>
+		<property name="minIdle" value="10" />
+		<property name="maxActive" value="20"></property>
+		<property name="maxWait" value="30000" />
+		<property name="filters" value="mergeStat" />
 	</bean>
 	<!-- 配置druid监控spring jdbc -->
 	<bean id="druid-stat-interceptor"

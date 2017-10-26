@@ -68,21 +68,12 @@ public class PermissionFilter extends AuthorizationFilter {
         if(perms==null){
             return false;
         }
-        if (!StringUtils.isEmpty(permSpaceId)) {
-            for (String perm : perms) {
-                if (subject.isPermitted(permSpaceId + ":" + perm)) {
-                    return true;
-                }
+        for (String perm : perms) {
+            if (subject.isPermitted(permSpaceId + ":" + perm)) {
+                return true;
             }
-            return false;
-        } else {
-            for (String perm : perms) {
-                if (subject.isPermitted(perm)) {
-                    return true;
-                }
-            }
-            return false;
         }
+        return false;
     }
 
     @Override

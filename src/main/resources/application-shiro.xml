@@ -41,6 +41,7 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/ = authc
+				/druid/** = anon<!-- druid相关资源不是我们自己写的，没法在url上带sessionid -->
 				/static/** = anon
 				/forward/** = anon
 				/** = authc,perms
