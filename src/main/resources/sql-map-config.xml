@@ -2,6 +2,10 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
 	"http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+	<settings>
+		<!-- 是否允许一个语句返回多个结果<setting name="multipleResultSetsEnabled" value="true" /> -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
 	<plugins>
 		<plugin interceptor="cn.howso.mybatis.plugin.ExecutorPlugin"></plugin>
 		<plugin interceptor="cn.howso.mybatis.plugin.PagePlugin">

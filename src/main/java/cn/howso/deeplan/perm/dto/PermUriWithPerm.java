@@ -1,18 +1,18 @@
 package cn.howso.deeplan.perm.dto;
 
-import java.util.Set;
+import java.util.List;
 
 import cn.howso.deeplan.perm.model.Perm;
 import cn.howso.deeplan.perm.model.PermUri;
 
 public class PermUriWithPerm extends PermUri{
-    private Set<Perm> perms;
+    private List<Perm> perms;
     
-    public void setPerms(Set<Perm> perms) {
+    public void setPerms(List<Perm> perms) {
         this.perms = perms;
     }
     
-    public Set<Perm> getPerms() {
+    public List<Perm> getPerms() {
         return perms;
     }
 }
