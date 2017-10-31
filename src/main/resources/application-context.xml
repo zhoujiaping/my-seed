@@ -16,7 +16,7 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	<!-- properties start -->
-	<bean id="configProperties"
+<!-- 	<bean id="configProperties"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="locations">
 			<list>
@@ -27,7 +27,17 @@
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="properties" ref="configProperties"></property>
-	</bean>
+	</bean> -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="locations">
+            <list>
+                
+                <value>classpath*:sys-config.properties</value>
+            </list>
+        </property>
+    </bean>
 	<!-- properties end -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName" value="${db.driver}" />
@@ -151,4 +161,5 @@
 	<!-- <bean id="exceptionHandler" class="cn.howso.specialmp.utils.MyExceptionHandler"/> -->
 	<import resource="application-shiro.xml" />
 	<import resource="application-mybatis.xml" />
+	<!-- <import resource="application-redis.xml" /> -->
 </beans>
