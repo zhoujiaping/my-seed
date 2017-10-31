@@ -9,7 +9,7 @@
   </resultMap>
   <resultMap type="cn.howso.deeplan.perm.dto.PermUriWithPerm" id="PermUriWithPerm" extends="BaseResultMap">
 	<collection property="perms" column="id" ofType="cn.howso.deeplan.perm.model.Perm" columnPrefix="perms$">
-		<id column="id" property="id" jdbcType="INTEGER" />
+  		<id column="id" property="id" jdbcType="INTEGER" />
 	    <result column="pattern" property="pattern" jdbcType="VARCHAR" />
 	    <result column="note" property="note" jdbcType="VARCHAR" />
 	    <result column="space_id" property="spaceId" jdbcType="INTEGER"/>
