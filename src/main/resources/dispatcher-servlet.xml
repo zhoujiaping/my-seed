@@ -34,9 +34,9 @@
 	<!-- 要使include-filter和exlude-filter起作用，base-package就必须相对明确，不能直接写cn -->
 	<!-- 别试其他方式了，都不行。 -->
 	<context:component-scan base-package="cn.**.controller">
-		<!--这个或者下面正则方式都可以 
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/> -->
-		<context:include-filter type="regex" expression=".*Controller"/>
+		<!--这个或者下面正则方式都可以  -->
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<!-- <context:include-filter type="regex" expression=".*Controller"/> -->
 	</context:component-scan>
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**"/> <bean 
@@ -62,12 +62,12 @@
 			</list>
 		</property>
 	</bean>
-	<!-- <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
-		<property name="maxUploadSize" value="20000000" /> </bean> -->
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<description>depends on:commons-fileupload</description>
-		<!-- one of the properties available; the maximum file size in bytes -->
-		<property name="maxUploadSize" value="204800" />
-	</bean>
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+         <!-- 请求编码格式 -->  
+         <property name="defaultEncoding" value="utf-8"></property>  
+         <!-- 上传文件大小(单位:字节) -->  
+         <property name="maxUploadSize" value="50000000"></property>  
+         <!-- 缓冲区大小(单位:KB) -->  
+         <property name="maxInMemorySize" value="1024"></property>  
+    </bean>  
 </beans>
