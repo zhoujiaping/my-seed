@@ -96,7 +96,7 @@
 		<dependency>
 			<groupId>cn.howso</groupId>
 			<artifactId>mybatis-mapper</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
+			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -118,11 +118,17 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.lucee</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>8.3-606.jdbc4</version>
-		</dependency>
+		</dependency> -->
+		<dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>9.1-901-1.jdbc4</version>
+      <scope>test</scope>
+    </dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
