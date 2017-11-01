@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -34,6 +35,7 @@ public class UserService {
         Assert.isTrue(!StringUtils.isEmpty(user.getPassword()),"密码不能为空");
         return userMapper.insertSelective(user);
     }
+    @Cacheable(value="userCache")
     public List<User> query(Integer spaceId) {
         Example example = new Example();
         example.createCriteria()

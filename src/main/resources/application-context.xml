@@ -15,19 +15,6 @@
 	<context:component-scan base-package="cn">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
-	<!-- properties start -->
-<!-- 	<bean id="configProperties"
-		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-		<property name="locations">
-			<list>
-				<value>classpath:sys-config.properties</value>
-			</list>
-		</property>
-	</bean>
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="properties" ref="configProperties"></property>
-	</bean> -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
         <property name="ignoreResourceNotFound" value="true" />
@@ -35,10 +22,10 @@
             <list>
                 
                 <value>classpath*:sys-config.properties</value>
+                <value>classpath*:redis.properties</value>
             </list>
         </property>
     </bean>
-	<!-- properties end -->
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
 		<property name="driverClassName" value="${db.driver}" />
 		<property name="username" value="${db.username}" />
@@ -58,7 +45,7 @@
 		scope="prototype">
 		<property name="patterns">
 			<list>
-				<value>cn.howso.crowd.*.service.*</value>
+				<value>cn.howso..*.service.*</value>
 			</list>
 		</property>
 	</bean>
@@ -137,14 +124,14 @@
 		</tx:attributes>
 	</tx:advice>
 	<!-- 配置ehcache的cachemanager begin -->
-	<bean id="ehcacheManager"
+<!-- 	<bean id="ehcacheManager"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
 		<property name="configLocation" value="classpath:ehcache.xml" />
-	</bean>
-	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+	</bean> -->
+	<!-- <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
 		<property name="cacheManager" ref="ehcacheManager"></property>
 	</bean>
-
+ -->
 	<!-- <aop:aspectj-autoproxy proxy-target-class="true" /> -->
 	<aop:config>
 		<aop:aspect id="dataSourceAspect" ref="dataSourceInterceptor"
@@ -159,7 +146,7 @@
 	</aop:config>
 	<!-- 统一异常处理exceptionHandler -->
 	<!-- <bean id="exceptionHandler" class="cn.howso.specialmp.utils.MyExceptionHandler"/> -->
-	<import resource="application-shiro.xml" />
-	<import resource="application-mybatis.xml" />
-	<!-- <import resource="application-redis.xml" /> -->
+ 	<import resource="application-shiro.xml" />
+ 	<import resource="application-mybatis.xml" />
+	<import resource="application-redis.xml" />
 </beans>

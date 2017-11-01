@@ -1,32 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"   
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
-xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd" default-autowire="byName">  
-    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">  
-        <!-- <property name="maxIdle" value="6"></property>  
-        <property name="minEvictableIdleTimeMillis" value="300000"></property>  
-        <property name="numTestsPerEvictionRun" value="3"></property>  
-        <property name="timeBetweenEvictionRunsMillis" value="60000"></property>   -->
-        
-        <property name="maxIdle" value="${redis.maxIdle}"></property>  
-        <property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}"></property>  
-        <property name="numTestsPerEvictionRun" value="${redis.numTestsPerEvictionRun}"></property>  
-        <property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}"></property>
-    </bean>  
-    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" destroy-method="destroy">  
-        <property name="poolConfig" ref="jedisPoolConfig"></property>  
-        <property name="hostName" value="${redis.hostName}"></property>  
-        <property name="port" value="${redis.port}"></property>  
-        <property name="timeout" value="${redis.timeout}"></property>  
-        <property name="usePool" value="${redis.usePool}"></property>  
-    </bean>  
-    <bean id="jedisTemplate" class="org.springframework.data.redis.core.RedisTemplate">  
-        <property name="connectionFactory" ref="jedisConnectionFactory"></property>  
-        <property name="keySerializer">  
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>  
-        </property>  
-        <property name="valueSerializer">  
-            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>  
-        </property>  
-    </bean>  
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+	default-autowire="byName">
+	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!-- <property name="maxIdle" value="6"></property>
+		<property name="minEvictableIdleTimeMillis" value="300000"></property> 
+		<property name="numTestsPerEvictionRun" value="3"></property> 
+		<property name="timeBetweenEvictionRunsMillis" value="60000"></property> -->
+		<property name="maxIdle" value="${rediscache.maxIdle}" />
+		<property name="maxTotal" value="${rediscache.maxActive}" />
+		<property name="maxWaitMillis" value="${rediscache.maxWait}" />
+		<property name="testOnBorrow" value="${rediscache.testOnBorrow}" />
+	</bean>
+	<bean id="connectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="usePool" value="true"></property>
+		<property name="hostName" value="${rediscache.host}" />
+		<property name="port" value="${rediscache.port}" />
+		<property name="password" value="${rediscache.pass}" />
+		<property name="timeout" value="${rediscache.timeout}" />
+		<property name="database" value="${rediscache.dbIndex}"></property>
+		<property name="poolConfig" ref="poolConfig"></property>
+	</bean>
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="keySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+ 			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+		</property>
+	</bean>
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+		<property name="caches">
+			<set>
+				<bean class="com.cuit.utils.RedisCache">
+					<property name="redisTemplate" ref="redisTemplate" />
+					<property name="name" value="common" />
+				</bean>
+			</set>
+		</property>
+	</bean>
 </beans>  
