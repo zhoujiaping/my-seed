@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
-	default-autowire="byName">
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:cache="http://www.springframework.org/schema/cache" 
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/cache 
+    http://www.springframework.org/schema/cache/spring-cache.xsd"
+ 	default-autowire="byName">
+	<cache:annotation-driven />
 	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
 		<!-- <property name="maxIdle" value="6"></property>
 		<property name="minEvictableIdleTimeMillis" value="300000"></property> 
@@ -32,14 +38,27 @@
  			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
 		</property>
 	</bean>
-	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
-		<property name="caches">
+	<!-- <bean id="ehcacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+	</bean> 
+	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+		<property name="cacheManager" ref="ehcacheManager"></property>
+	</bean> -->
+	<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+		<property name="cacheNames">
 			<set>
-				<bean class="com.cuit.utils.RedisCache">
-					<property name="redisTemplate" ref="redisTemplate" />
-					<property name="name" value="common" />
-				</bean>
+				<value>userCache</value>
 			</set>
 		</property>
+		<!-- <property name="caches">
+			<set>
+				<bean class="cn.howso.deeplan.cache.RedisCache">
+					<property name="redisTemplate" ref="redisTemplate" />
+					<property name="name" value="userCache" />
+				</bean>
+			</set>
+		</property> -->
+		<constructor-arg index="0" ref="redisTemplate"></constructor-arg>
 	</bean>
 </beans>  

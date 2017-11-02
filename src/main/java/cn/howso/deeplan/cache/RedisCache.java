@@ -15,15 +15,19 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-@Component
+//@Component
 public class RedisCache implements Cache{  
-	@Resource
+	//@Resource
     private RedisTemplate<String, Object> redisTemplate;    
     private String name="userCache";    
     public RedisTemplate<String, Object> getRedisTemplate() {  
         return redisTemplate;    
     }  
       
+    
+    public RedisCache() {
+        System.out.println("create rediscache...");
+    }
     public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {  
         this.redisTemplate = redisTemplate;    
     }  
@@ -147,6 +151,12 @@ public class RedisCache implements Cache{
         public <T> T get(Object key, Class<T> type) {  
             // TODO Auto-generated method stub  
             return null;  
+        }
+
+        @Override
+        public ValueWrapper putIfAbsent(Object arg0, Object arg1) {
+            // TODO Auto-generated method stub
+            return null;
         }  
         
 } 
