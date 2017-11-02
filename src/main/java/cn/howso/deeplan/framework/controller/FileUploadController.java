@@ -51,7 +51,7 @@ public class FileUploadController {
     /**
      * 流方式文件上传
      */
-    @RequestMapping(value = "upload-stream", method = RequestMethod.PUT)
+    @RequestMapping(value = "upload-stream", method = {RequestMethod.PUT,RequestMethod.POST})
     @ResponseBody
     public R uploadByStream(HttpServletRequest request) throws IOException {
         String filename = UUID.randomUUID().toString();
@@ -60,8 +60,9 @@ public class FileUploadController {
                 FileOutputStream fos = new FileOutputStream("/upload" + File.separator + filename);
                 BufferedOutputStream bos = new BufferedOutputStream(fos);) {
             StreamUtils.copy(bis, bos);
+            bos.flush();
         } catch (Exception e) {
-            logger.error("文件上传失败", e);
+            logger.error("upload failed", e);
         }
         return R.ok();
     }
