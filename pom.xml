@@ -6,10 +6,15 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<properties>
-		<spring-version>4.0.0.RELEASE</spring-version>
+		<spring-version>4.3.12.RELEASE</spring-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.8.8.RELEASE</version>
+		</dependency>
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
@@ -96,7 +101,7 @@
 		<dependency>
 			<groupId>cn.howso</groupId>
 			<artifactId>mybatis-mapper</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
+			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -118,10 +123,12 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<!-- <dependency> <groupId>org.lucee</groupId> <artifactId>postgresql</artifactId> 
+			<version>8.3-606.jdbc4</version> </dependency> -->
 		<dependency>
-			<groupId>org.lucee</groupId>
+			<groupId>postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>8.3-606.jdbc4</version>
+			<version>9.1-901-1.jdbc4</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
@@ -193,7 +200,7 @@
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
-			<version>2.7.3</version>
+			<version>2.9.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
