@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -29,13 +30,14 @@ public class UserService {
     private UserPermMapper userPermMapper;
     @Resource
     private AuthorService authorService;
+    
     public Integer add(User user, Integer spaceId) {
         user.setSpaceId(spaceId);
         Assert.isTrue(!StringUtils.isEmpty(user.getName()),"用户名不能为空");
         Assert.isTrue(!StringUtils.isEmpty(user.getPassword()),"密码不能为空");
         return userMapper.insertSelective(user);
     }
-    @Cacheable(value="userCache")
+    @Cacheable(value="userCache",key="")
     public List<User> query(Integer spaceId) {
         Example example = new Example();
         example.createCriteria()
@@ -44,6 +46,7 @@ public class UserService {
         List<User> users = userMapper.selectByExample(example);
         return users;
     }
+    @CacheEvict(value="accountCache",allEntries=true,beforeInvocation=true)
     public Integer delete(Integer id,Integer spaceId) {
         User user = new User();
         user.setId(id);
@@ -53,6 +56,8 @@ public class UserService {
         .and("space_id").equalTo(spaceId);
         return userMapper.updateByExampleSelective(user, example );
     }
+    @CacheEvict(value="accountCache",key="#account.getName()")
+    //@Cacheable(value="accountCache",key="#userName.concat(#password)") 
     public Integer update(User user,Integer spaceId) {
         Example example = new Example();
         example.createCriteria().and("id").equalTo(user.getId())

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:cache="http://www.springframework.org/schema/cache" 
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
 	http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/cache 
     http://www.springframework.org/schema/cache/spring-cache.xsd"
- 	default-autowire="byName">
+	default-autowire="byName">
 	<cache:annotation-driven />
 	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
-		<!-- <property name="maxIdle" value="6"></property>
-		<property name="minEvictableIdleTimeMillis" value="300000"></property> 
-		<property name="numTestsPerEvictionRun" value="3"></property> 
-		<property name="timeBetweenEvictionRunsMillis" value="60000"></property> -->
+		<!-- <property name="maxIdle" value="6"></property> <property name="minEvictableIdleTimeMillis" 
+			value="300000"></property> <property name="numTestsPerEvictionRun" value="3"></property> 
+			<property name="timeBetweenEvictionRunsMillis" value="60000"></property> -->
 		<property name="maxIdle" value="${rediscache.maxIdle}" />
 		<property name="maxTotal" value="${rediscache.maxActive}" />
 		<property name="maxWaitMillis" value="${rediscache.maxWait}" />
@@ -32,33 +31,58 @@
 	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
 		<property name="connectionFactory" ref="connectionFactory" />
 		<property name="keySerializer">
-			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+			<!-- <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" 
+				/> -->
+			<bean
+				class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
 		</property>
 		<property name="valueSerializer">
- 			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+			<bean
+				class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+			<!-- <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" 
+				/> -->
 		</property>
 	</bean>
-	<!-- <bean id="ehcacheManager"
-		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:ehcache.xml" />
-	</bean> 
-	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
-		<property name="cacheManager" ref="ehcacheManager"></property>
+	<!-- <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="keySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" 
+				/>
+			<bean
+				class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean
+				class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" 
+				/>
+		</property>
 	</bean> -->
-	<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+	<bean id="cacheManager" class="org.springframework.cache.support.CompositeCacheManager">
+		<property name="cacheManagers">
+			<list>
+				<ref bean="simpleCacheManager" />
+				<ref bean="shiroCacheManager"/>
+			</list>
+		</property>
+		<property name="fallbackToNoOpCache" value="true" />
+	</bean>
+	<bean id="simpleCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+		<constructor-arg name="redisOperations" ref="redisTemplate"></constructor-arg>
+		<property name="cacheNames">
+			<set>
+				<value>userCache2</value>
+			</set>
+		</property>
+		<property name="usePrefix" value="true"></property>
+	</bean>
+	<bean id="shiroCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+		<constructor-arg name="redisOperations" ref="redisTemplate"></constructor-arg>
 		<property name="cacheNames">
 			<set>
 				<value>userCache</value>
 			</set>
 		</property>
-		<!-- <property name="caches">
-			<set>
-				<bean class="cn.howso.deeplan.cache.RedisCache">
-					<property name="redisTemplate" ref="redisTemplate" />
-					<property name="name" value="userCache" />
-				</bean>
-			</set>
-		</property> -->
-		<constructor-arg index="0" ref="redisTemplate"></constructor-arg>
+		<property name="usePrefix" value="true"></property>
 	</bean>
 </beans>  

@@ -149,13 +149,13 @@ public class RedisCache implements Cache{
   
         @Override  
         public <T> T get(Object key, Class<T> type) {  
-            // TODO Auto-generated method stub  
+        	System.out.println("");
             return null;  
         }
 
         @Override
         public ValueWrapper putIfAbsent(Object arg0, Object arg1) {
-            // TODO Auto-generated method stub
+        	System.out.println("");
             return null;
         }  
         
