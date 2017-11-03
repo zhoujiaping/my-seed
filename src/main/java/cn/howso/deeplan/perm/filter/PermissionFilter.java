@@ -31,14 +31,15 @@ public class PermissionFilter extends AuthorizationFilter {
     }
 
     private Map<String, Set<String>> getUriPermMap() {
+    	return uriPermService.query();
         // 获取uri和权限的映射
-        Map<String, Set<String>> cachedMap = (Map<String, Set<String>>) dataCache.get("uriPermMap");
+       /* Map<String, Set<String>> cachedMap = (Map<String, Set<String>>) dataCache.get("uriPermMap");
         if (cachedMap == null) {
             Map<String, Set<String>> uriPermMap = uriPermService.query();
             dataCache.put("uriPermMap", uriPermMap);
             return uriPermMap;
         }
-        return cachedMap;
+        return cachedMap;*/
     }
 
     @Override

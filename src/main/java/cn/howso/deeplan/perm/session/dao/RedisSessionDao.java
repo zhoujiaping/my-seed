@@ -2,14 +2,12 @@ package cn.howso.deeplan.perm.session.dao;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RedisSessionDao extends AbstractSessionDAO {
     private RedisTemplate<String, Object> redisTemplate;
@@ -24,7 +22,6 @@ public class RedisSessionDao extends AbstractSessionDAO {
     @Override
     public void update(Session session) throws UnknownSessionException {
         redisTemplate.opsForValue().set(session.getId().toString(), session);
-        
     }
 
     @Override
@@ -34,10 +31,9 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
     @Override
     public Collection<Session> getActiveSessions() {
-        // TODO Auto-generated method stub
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        return null;
+    	Set<String> keys = redisTemplate.keys("*");
+    	Collection<?> sessions = redisTemplate.opsForValue().multiGet(keys);
+    	return (Collection<Session>)sessions;
     }
 
     @Override

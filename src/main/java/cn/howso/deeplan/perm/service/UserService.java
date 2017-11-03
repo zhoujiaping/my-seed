@@ -37,7 +37,7 @@ public class UserService {
         Assert.isTrue(!StringUtils.isEmpty(user.getPassword()),"密码不能为空");
         return userMapper.insertSelective(user);
     }
-    @Cacheable(value="userCache",key="")
+    //@Cacheable(value="userCache",key="")
     public List<User> query(Integer spaceId) {
         Example example = new Example();
         example.createCriteria()
@@ -46,7 +46,7 @@ public class UserService {
         List<User> users = userMapper.selectByExample(example);
         return users;
     }
-    @CacheEvict(value="accountCache",allEntries=true,beforeInvocation=true)
+    //@CacheEvict(value="accountCache",allEntries=true,beforeInvocation=true)
     public Integer delete(Integer id,Integer spaceId) {
         User user = new User();
         user.setId(id);
@@ -56,7 +56,7 @@ public class UserService {
         .and("space_id").equalTo(spaceId);
         return userMapper.updateByExampleSelective(user, example );
     }
-    @CacheEvict(value="accountCache",key="#account.getName()")
+    @CacheEvict(value="authenCache",key="#user.getName()",beforeInvocation=true)
     //@Cacheable(value="accountCache",key="#userName.concat(#password)") 
     public Integer update(User user,Integer spaceId) {
         Example example = new Example();
@@ -71,12 +71,13 @@ public class UserService {
         }
         return null;
     }
-    public Integer grantRoles(Integer userId, List<Integer> roleIdList) {
+    @CacheEvict(value="authorCache",key="#user.getName()",beforeInvocation=true)
+    public Integer grantRoles(User user, List<Integer> roleIdList) {
         //去重
-        revokeRoles(userId, roleIdList);
+        revokeRoles(user, roleIdList);
         List<UserRole> userRoleList = roleIdList.stream().map(rid->{
             UserRole mid = new UserRole();
-            mid.setUserId(userId);
+            mid.setUserId(user.getId());
             mid.setRoleId(rid);
             return mid;
         }).collect(Collectors.toList());
@@ -95,28 +96,31 @@ public class UserService {
             return users.get(0);
         }
     }
-    public Integer revokeRoles(Integer userId, List<Integer> roleIdList) {
+    @CacheEvict(value="authorCache",key="#user.getName()",beforeInvocation=true)
+    public Integer revokeRoles(User user, List<Integer> roleIdList) {
         Example example = new Example();
         example.createCriteria()
-        .and("user_id").equalTo(userId)
+        .and("user_id").equalTo(user.getId())
         .and("role_id").in(roleIdList);
         return userRoleMapper.deleteByExample(example);
     }
-    public Integer grantPerms(Integer userId, Integer spaceId, List<Integer> permIdList) {
+    @CacheEvict(value="authorCache",key="#user.getName()",beforeInvocation=true)
+    public Integer grantPerms(User user, Integer spaceId, List<Integer> permIdList) {
         //去重
-        revokePerms(userId,spaceId,permIdList);
+        revokePerms(user,spaceId,permIdList);
         List<UserPerm> recordList = permIdList.stream().map(permId->{
             UserPerm mid = new UserPerm();
-            mid.setUserId(userId);
+            mid.setUserId(user.getId());
             mid.setPermId(permId);
             return mid;
         }).collect(Collectors.toList());
         //插入
         return userPermMapper.batchInsertSelective(recordList);
     }
-    public Integer revokePerms(Integer userId, Integer _permSpaceId, List<Integer> permIdList) {
+    @CacheEvict(value="authorCache",key="#user.getName()",beforeInvocation=true)
+    public Integer revokePerms(User user, Integer _permSpaceId, List<Integer> permIdList) {
         Example example = new Example();
-        example.createCriteria().and("user_id").equalTo(userId).and("perm_id").in(permIdList);
+        example.createCriteria().and("user_id").equalTo(user.getId()).and("perm_id").in(permIdList);
         return userPermMapper.deleteByExample(example);
     }
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.apache.shiro.session.Session;
 
+@Deprecated
 public interface MyShiroSessionRespository {
 
 	void delete(Serializable id);

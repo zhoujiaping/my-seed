@@ -1,6 +1,5 @@
 package cn.howso.deeplan.perm.controller;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,8 +7,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -22,14 +21,13 @@ import com.alibaba.fastjson.JSONObject;
 
 import cn.howso.deeplan.log.annotation.LogAnno;
 import cn.howso.deeplan.perm.anno.CurrentUser;
-import cn.howso.deeplan.perm.constant.Const;
 import cn.howso.deeplan.perm.model.Role;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.realm.MyRealm;
 import cn.howso.deeplan.perm.service.AuthenService;
 import cn.howso.deeplan.perm.service.AuthorService;
 import cn.howso.deeplan.perm.service.UserService;
-import cn.howso.deeplan.perm.session.dao.MyShiroSessionRespository;
+import cn.howso.deeplan.perm.session.dao.RedisSessionDao;
 import cn.howso.deeplan.util.WebUtils;
 
 @Controller
@@ -40,8 +38,10 @@ public class UserController {
     private UserService userService;
     @Resource
     private AuthorService authorService;
+    /*@Resource
+    private MyShiroSessionRespository sessionResp;*/
     @Resource
-    private MyShiroSessionRespository sessionResp;
+    private RedisSessionDao sessionDao;
     @Resource
     private AuthenService authenService;
     @Resource
@@ -82,26 +82,17 @@ public class UserController {
         // 使authen缓存失效
         User record = userService.get(userId,_permSpaceId);
         Assert.isTrue(record!=null,"用户不存在");
-        authenService.removeCache(record.getName());
-        stopSessionByUsername(record.getName());
-        // 如果修改的是当前用户的密码，则让用户重新登录
+        //authenService.removeCache(record.getName());
+        // 如果修改的是当前用户的密码，则让session失效并且让用户重新登录
         Integer count = userService.update(user,_permSpaceId);
         boolean isUpdateCurrentUser = Objects.equals(currentUser.getId(), userId);
         if (isUpdateCurrentUser) {
+        	sessionDao.delete(SecurityUtils.getSubject().getSession());
          // 使session失效
             return "redirect:static/login";
         } else {
             WebUtils.sendResponse(response, JSONObject.toJSONString(count));
             return null;
-        }
-    }
-    private void stopSessionByUsername(String username) {
-        Collection<Session> sessions = sessionResp.getAllSessions();
-        for(Session s:sessions){
-            User user = (User) s.getAttribute(Const.SESSION_USER_KEY);
-            if(Objects.equals(user.getName(), username)){
-                s.stop();
-            }
         }
     }
     /**
@@ -142,9 +133,9 @@ public class UserController {
         Assert.isTrue(user!=null,"用户不存在");
         Assert.isTrue(authorService.hasAllRoles(roleIdList),"当前用户必须拥有这些角色");
         // 清除缓存的该用户的权限数据，使缓存失效
-        authorService.removeCache(user.getName());
+        //authorService.removeCache(user.getName());
         // 从数据库中查询该用户的权限数据,新的权限数据放入缓存,这个步骤可以不做，shiro会在需要的自动缓存
-        return userService.grantRoles(userId, roleIdList);
+        return userService.grantRoles(user, roleIdList);
     }
 
     @RequestMapping(value = "{userId}/roles-revoke", method = RequestMethod.POST)
@@ -156,8 +147,8 @@ public class UserController {
         Assert.isTrue(user!=null,"用户不存在");
         // 清除缓存的该用户的权限数据，使缓存失效
         Assert.isTrue(authorService.hasAllRoles(roleIdList),"当前用户必须拥有这些角色");
-        authorService.removeCache(user.getName());
-        return userService.revokeRoles(userId, roleIdList);
+        //authorService.removeCache(user.getName());
+        return userService.revokeRoles(user, roleIdList);
     }
 
     @RequestMapping(value = "{userId}/perms-grant", method = RequestMethod.POST)
@@ -168,8 +159,8 @@ public class UserController {
         User user = userService.get(userId, _permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
         Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
-        authorService.removeCache(user.getName());
-        return userService.grantPerms(userId,_permSpaceId,permIdList);
+        //authorService.removeCache(user.getName());
+        return userService.grantPerms(user,_permSpaceId,permIdList);
     }
 
     @RequestMapping(value = "{userId}/perms-revoke", method = RequestMethod.POST)
@@ -180,7 +171,7 @@ public class UserController {
         User user = userService.get(userId, _permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
         Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
-        authorService.removeCache(user.getName());
-        return userService.revokePerms(userId,_permSpaceId,permIdList);
+        //authorService.removeCache(user.getName());
+        return userService.revokePerms(user,_permSpaceId,permIdList);
     }
 }

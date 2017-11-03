@@ -13,6 +13,7 @@ import org.springframework.util.SerializationUtils;
 import cn.howso.deeplan.util.ArrayUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+@Deprecated
 public class RedisShiroSessionRespositoryImpl implements MyShiroSessionRespository {
 	private JedisPool jedisPool;
 	private String prefix;

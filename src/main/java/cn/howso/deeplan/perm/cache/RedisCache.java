@@ -14,6 +14,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 /**
  * */
+@Deprecated
 public class RedisCache implements Cache<Object,Object> {
 	private JedisPool jedisPool;
 	private String prefix;

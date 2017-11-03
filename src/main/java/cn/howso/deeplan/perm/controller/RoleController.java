@@ -75,7 +75,7 @@ public class RoleController {
         Assert.isTrue(role!=null,"角色不存在");
         Assert.isTrue(authorService.hasRole(roleId),"当前用户必须拥有该角色");
         Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
-        authorService.removeAllCache();
+        //authorService.removeAllCache();
         return roleService.grantPerms(roleId,permIdList);
     }
     @RequestMapping(value="{roleId}/perms-revoke",method=RequestMethod.POST)
@@ -87,7 +87,7 @@ public class RoleController {
         Assert.isTrue(role!=null,"角色不存在");
         Assert.isTrue(authorService.hasRole(roleId),"当前用户必须拥有该角色");
         Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
-        authorService.removeAllCache();
+        //authorService.removeAllCache();
         return roleService.revokePerms(roleId,permIdList);
     }
     

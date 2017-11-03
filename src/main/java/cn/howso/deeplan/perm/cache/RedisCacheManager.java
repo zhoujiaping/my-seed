@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
+
+@Deprecated
 public class RedisCacheManager implements CacheManager {
 	
 	

@@ -2,12 +2,12 @@ package cn.howso.deeplan.perm.session.dao;
 
 import java.io.Serializable;
 import java.util.Collection;
-
 import javax.annotation.Resource;
-
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
+
+@Deprecated
 public class MyShiroSessionDao extends AbstractSessionDAO {
     @Resource
 	private MyShiroSessionRespository shiroSessionRespository;

@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import cn.howso.deeplan.perm.mapper.RoleMapper;
@@ -45,6 +46,7 @@ public class RoleService {
         }
         return null;
     }
+    @CacheEvict(value="authorCache",allEntries=true,beforeInvocation=true)
     public Integer grantPerms(Integer roleId, List<Integer> permIdList) {
         //去重
         revokePerms(roleId,permIdList);
@@ -57,6 +59,7 @@ public class RoleService {
         //插入
         return rolePermMapper.batchInsertSelective(recordList);
     }
+    @CacheEvict(value="authorCache",allEntries=true,beforeInvocation=true)
     public Integer revokePerms(Integer roleId, List<Integer> permIdList) {
         Example example = new Example();
         example.createCriteria().and("role_id").equalTo(roleId).and("perm_id").in(permIdList);

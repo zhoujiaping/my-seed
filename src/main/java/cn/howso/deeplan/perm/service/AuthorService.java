@@ -8,10 +8,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.stereotype.Service;
 
-import cn.howso.deeplan.perm.cache.RedisCache;
 import cn.howso.deeplan.perm.dto.RoleWithPerms;
 import cn.howso.deeplan.perm.mapper.MenuMapper;
 import cn.howso.deeplan.perm.mapper.PermMapper;
@@ -31,8 +29,8 @@ public class AuthorService {
     private PermMapper permMapper;
     @Resource 
     private UserMapper userMapper;
-    @Resource(name="authorCache")
-    private RedisCache cache;
+    /*@Resource(name="authorCache")
+    private RedisCache cache;*/
     @Resource
     private MenuMapper menuMapper;
     @Resource
@@ -49,7 +47,7 @@ public class AuthorService {
     public List<Perm> queryUserPerms(String username){
         return permMapper.queryUserPerms(username);
     }
-    public void removeCache(String username){
+    /*public void removeCache(String username){
         // 清除缓存的该用户的权限数据，使缓存失效
         Set<Object> keys = cache.keys();
         for(Object key:keys){
@@ -59,13 +57,13 @@ public class AuthorService {
                 cache.remove(key);
             }
         }
-    }
-    public void removeAllCache() {
+    }*/
+    /*public void removeAllCache() {
         Set<Object> keys = cache.keys();
         for(Object key:keys){
             cache.remove(key);
         }
-    }
+    }*/
     public Set<String> queryRoleNames(String username) {
         List<RoleWithPerms> roles = roleMapper.queryByUserNameFetchPerms(username);
         Set<String> roleNames = roles.stream().map(r->{

@@ -1,14 +1,12 @@
 package cn.howso.deeplan.perm.service;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import cn.howso.deeplan.perm.cache.RedisCache;
 import cn.howso.deeplan.perm.mapper.UserMapper;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.mybatis.model.Example;
@@ -24,8 +22,8 @@ import cn.howso.mybatis.model.Example;
 public class AuthenService {
     @Resource 
     private UserMapper userMapper;
-    @Resource(name="authenCache")
-    private RedisCache cache;
+   /* @Resource(name="authenCache")
+    private RedisCache cache;*/
     public User authen(User user){
         Example example = new Example();
         example.createCriteria()
@@ -38,7 +36,7 @@ public class AuthenService {
         }
         return null;
     }
-    public void removeCache(String username) {
+    /*public void removeCache(String username) {
         Set<Object> keys = cache.keys();
         for(Object key:keys){
             String usernameInCache = (String) key;
@@ -46,5 +44,5 @@ public class AuthenService {
                 cache.remove(key);
             }
         }
-    }
+    }*/
 }
