@@ -6,20 +6,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.annotation.Resource;
-
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 //@Component
 public class RedisCache implements Cache{  
 	//@Resource
     private RedisTemplate<String, Object> redisTemplate;    
-    private String name="userCache";    
+    private String name;    
     public RedisTemplate<String, Object> getRedisTemplate() {  
         return redisTemplate;    
     }  

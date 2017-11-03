@@ -43,89 +43,11 @@ import redis.clients.jedis.JedisPool;
  * 3、三种方式结合，能够满足各种情况的需求。
  * 4、在将第三方库提供的类更改为自定义类时，需要将该bean的配置方式做改变。
  */
-@Configuration
+//@Configuration
 public class shiroConfig implements ApplicationContextAware {
 
     private ApplicationContext app;
 
-    @Bean
-    public LoginFilter loginFilter() {
-        return new LoginFilter();
-    }
-
-    @Bean
-    public PermissionFilter permFilter() {
-        PermissionFilter permFilter = new PermissionFilter();
-        permFilter.setUriPermService(app.getBean(UriPermService.class));
-        permFilter.setDataCache(dataCache());
-        return permFilter;
-    }
-    @Bean
-    public MyRealm myRealm(){
-        MyRealm realm = new MyRealm();
-        AuthenService authenService = app.getBean(AuthenService.class);//authenService();
-        realm.setAuthenService(authenService);
-        AuthorService authorService = app.getBean(AuthorService.class);
-        realm.setAuthorService(authorService);
-        realm.setAuthenticationCachingEnabled(true);
-        realm.setAuthorizationCachingEnabled(true);
-        realm.setAuthenticationCacheName("authenCache");
-        realm.setAuthorizationCacheName("authorCache");
-        return realm;
-    }
-    @Bean
-    public RedisCacheManager redisCacheManager() {
-        RedisCacheManager cm = new RedisCacheManager();
-        cm.setAuthenCache(authenCache());
-        cm.setAuthorCache(authorCache());
-        return cm;
-    }
-
-    @Bean
-    public RedisCache authenCache() {
-        RedisCache cache = new RedisCache();
-        cache.setPrefix("authen.");
-        cache.setJedisPool(app.getBean("jedisPool", JedisPool.class));
-        return cache;
-    }
-
-    @Bean
-    public RedisCache authorCache() {
-        RedisCache cache = new RedisCache();
-        cache.setPrefix("author.");
-        cache.setJedisPool(app.getBean("jedisPool", JedisPool.class));
-        return cache;
-    }
-    @Bean
-    public RedisCache dataCache(){
-        RedisCache cache = new RedisCache();
-        cache.setPrefix("data.");
-        cache.setJedisPool(app.getBean("jedisPool", JedisPool.class));
-        return cache;
-    }
-    @Bean
-    public MyShiroSessionRespository myShiroSessionRespository() {
-        RedisShiroSessionRespositoryImpl rep = new RedisShiroSessionRespositoryImpl();
-        rep.setPrefix("session.");
-        rep.setJedisPool(app.getBean("jedisPool", JedisPool.class));
-        return rep;
-    }
-
-    @Bean
-    public AbstractSessionDAO mySessionDao() {
-        MyShiroSessionDao dao = new MyShiroSessionDao();
-        dao.setShiroSessionRespository(myShiroSessionRespository());
-        return dao;
-    }
-
-    /*@Bean
-    public AuthenService authenService(){
-        return new AuthenService();
-    }
-    @Bean
-    public AuthorService authorService(){
-        return new AuthorService();
-    }*/
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         app = applicationContext;

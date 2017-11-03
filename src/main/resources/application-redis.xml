@@ -58,25 +58,15 @@
 				/>
 		</property>
 	</bean> -->
-	<bean id="cacheManager" class="org.springframework.cache.support.CompositeCacheManager">
+	<!-- <bean id="cacheManager" class="org.springframework.cache.support.CompositeCacheManager">
 		<property name="cacheManagers">
 			<list>
 				<ref bean="simpleCacheManager" />
-				<ref bean="shiroCacheManager"/>
 			</list>
 		</property>
 		<property name="fallbackToNoOpCache" value="true" />
-	</bean>
-	<bean id="simpleCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
-		<constructor-arg name="redisOperations" ref="redisTemplate"></constructor-arg>
-		<property name="cacheNames">
-			<set>
-				<value>userCache2</value>
-			</set>
-		</property>
-		<property name="usePrefix" value="true"></property>
-	</bean>
-	<bean id="shiroCacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
+	</bean> -->
+	<bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
 		<constructor-arg name="redisOperations" ref="redisTemplate"></constructor-arg>
 		<property name="cacheNames">
 			<set>

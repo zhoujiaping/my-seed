@@ -20,7 +20,6 @@
         <property name="ignoreResourceNotFound" value="true" />
         <property name="locations">
             <list>
-                
                 <value>classpath*:sys-config.properties</value>
                 <value>classpath*:redis.properties</value>
             </list>
@@ -139,5 +138,5 @@
 	<!-- <bean id="exceptionHandler" class="cn.howso.specialmp.utils.MyExceptionHandler"/> -->
  	<import resource="application-shiro.xml" />
  	<import resource="application-mybatis.xml" />
-	<import resource="application-redis.xml" />
+ 	<import resource="application-redis.xml" />
 </beans>

@@ -6,7 +6,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import cn.howso.deeplan.framework.exception.ExceptionResolver;
 
-@Configuration
+//@Configuration
 public class mvcConfig {
 	@Bean
 	public HandlerExceptionResolver handlerExceptionResolver() {
