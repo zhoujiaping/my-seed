@@ -44,3 +44,7 @@
 	xxx用复数形式，并且对city之类的单词，后面加s即可，不需要变成cities。
 	uri不要以/结尾
 	
+#日志
+	所有的异常、日志，都通过slf4j记录。不通过e.printStackTrace。
+	捕获的异常，要么向上抛，要么用logger记录。不要既记录到logger又向上抛。
+	

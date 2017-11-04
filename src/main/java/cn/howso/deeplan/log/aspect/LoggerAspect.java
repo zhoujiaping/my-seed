@@ -126,7 +126,6 @@ public class LoggerAspect {
                     LogQueue.QUEUE.offer(log);
                 }
             } catch (Exception e2) {
-                //e2.printStackTrace();
                 logger.error(e2.getMessage(),e2);
             }
 

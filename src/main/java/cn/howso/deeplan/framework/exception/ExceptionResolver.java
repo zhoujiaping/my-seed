@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.UnauthorizedException;
+import org.slf4j.Logger;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,12 +16,14 @@ import com.alibaba.fastjson.JSONObject;
 
 import cn.howso.deeplan.framework.model.R;
 import cn.howso.deeplan.framework.model.ReturnCode;
+import cn.howso.deeplan.util.LogUtil;
 import cn.howso.deeplan.util.WebUtils;
 public class ExceptionResolver implements HandlerExceptionResolver {
 	
+	private final Logger logger = LogUtil.getLogger();
 	@Override
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object obj, Exception ex) {
-		ex.printStackTrace();
+		logger.error(ex.getMessage(),ex);
 		Map<String, Object> model = new HashMap<String, Object>();  
         model.put("ex", ex);  
         boolean isAjax = WebUtils.isAjax(request);
@@ -40,7 +43,7 @@ public class ExceptionResolver implements HandlerExceptionResolver {
 		try {
             response.getWriter().print(JSONObject.toJSON(r));
         } catch (IOException e) {
-            e.printStackTrace();
+        	logger.error(e.getMessage(),e);
         }
 		return null;
 	}

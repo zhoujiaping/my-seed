@@ -5,7 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5Utils {
-
     public static final String toMD5(String content) {
         MessageDigest md;
         try {
@@ -14,10 +13,8 @@ public class MD5Utils {
             byte[] buf = md.digest();
             return byte2hex(buf);
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
