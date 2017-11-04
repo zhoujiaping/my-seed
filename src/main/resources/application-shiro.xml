@@ -115,12 +115,11 @@
  -->			</property>
 				<property name="valueSerializer">
 					<!-- 
-					SimpleSession反序列化json有问题。
-					<bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer">
-					</bean> -->
+					SimpleSession反序列化json有问题。总之一个原则，要转json，先遵循javabean规范。
+					为了避免未预期的问题，session的序列化还是用jdk吧。
+					 -->
  					<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>				 
 				</property>
-				
 			</bean>
 		</property>
 	</bean>
@@ -185,6 +184,7 @@
 			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
   			</property>
 		<property name="valueSerializer">
+			<!-- 带类型信息的json -->
 			<bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer">
 			</bean> 
 		</property>
