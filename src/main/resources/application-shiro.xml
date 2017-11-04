@@ -185,8 +185,10 @@
   			</property>
 		<property name="valueSerializer">
 			<!-- 带类型信息的json -->
-			<bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer">
-			</bean> 
+			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>				 
+			
+			<!-- <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"> </bean>-->
+			 
 		</property>
 	</bean>
 	<bean id="authorCache" class="cn.howso.deeplan.perm.cache.ShiroRedisCache">
