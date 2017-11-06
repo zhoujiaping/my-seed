@@ -18,13 +18,21 @@ public class WebSocketConfig extends WebMvcConfigurerAdapter implements WebSocke
         String[] allowsOrigins = {"*"};
         
        //WebIM WebSocket通道
-        registry.addHandler(helloWebSocketHandler(),"/ws/hello").setAllowedOrigins(allowsOrigins).
-        addInterceptors(myInterceptor());
-        registry.addHandler(helloWebSocketHandler(), "/sockjs/hello").setAllowedOrigins(allowsOrigins).addInterceptors(myInterceptor()).withSockJS();
+        registry.addHandler(helloWebSocketHandler(),"/ws/hello")
+        .addHandler(hiWebSocketHandler(),"/ws/hi")
+        .setAllowedOrigins(allowsOrigins)
+        .addInterceptors(myInterceptor());
+        registry.addHandler(helloWebSocketHandler(), "/sockjs/hello")
+        .setAllowedOrigins(allowsOrigins)
+        .addInterceptors(myInterceptor()).withSockJS();
     }
     @Bean
     public HelloWebSocketHandler helloWebSocketHandler() {
         return new HelloWebSocketHandler();
+    }
+    @Bean
+    public HiWebSocketHandler hiWebSocketHandler(){
+        return new HiWebSocketHandler();
     }
     @Bean
     public HandshakeInterceptor[] myInterceptor(){

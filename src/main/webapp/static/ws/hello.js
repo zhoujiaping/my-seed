@@ -43,5 +43,6 @@ function initWebSocket(wcUrl) {
 
 	}
 };
-
-initWebSocket('ws://localhost:8080/seed/ws/hello');
+const host = window.location.host;
+initWebSocket(`ws://${host}/seed/ws/hello`);
+initWebSocket(`ws://${host}/seed/ws/hi`);

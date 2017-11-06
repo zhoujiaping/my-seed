@@ -52,6 +52,7 @@ public class AuthenController {
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     @LogAnno(ignore="password")
+    @ResponseBody
     public Object login(User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         UsernamePasswordToken token = new UsernamePasswordToken(user.getName(), user.getPassword());
         try {
