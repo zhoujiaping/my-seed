@@ -29,9 +29,11 @@
 		<property name="filterChainDefinitions">
 			<value>
 				/ = authc
-				/ws/**=anon
+				<!-- websocket连接不过滤 -->				
+				/ws=anon
 				/files/** = anon
-				/druid/** = anon<!-- druid相关资源不是我们自己写的，没法在url上带sessionid -->
+				/druid/** = anon
+				<!-- druid相关资源不是我们自己写的，没法在url上带sessionid -->
 				/static/** = anon
 				/forward/** = anon
 				/** = authc,perms
@@ -95,6 +97,15 @@
 	<!-- <bean id="mySessionDao" class="cn.howso.deeplan.perm.session.dao.MyShiroSessionDao">
 		<property name="shiroSessionRespository" ref="redisSessionResp" />
 	</bean> -->
+	<bean id="shiroRedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!-- <property name="maxIdle" value="6"></property> <property name="minEvictableIdleTimeMillis" 
+			value="300000"></property> <property name="numTestsPerEvictionRun" value="3"></property> 
+			<property name="timeBetweenEvictionRunsMillis" value="60000"></property> -->
+		<property name="maxIdle" value="${rediscache.maxIdle}" />
+		<property name="maxTotal" value="${rediscache.maxActive}" />
+		<property name="maxWaitMillis" value="${rediscache.maxWait}" />
+		<property name="testOnBorrow" value="${rediscache.testOnBorrow}" />
+	</bean>
 	<bean id="sessionRedisConnectionFactory"
 		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
 		<property name="usePool" value="true"></property>
@@ -103,7 +114,7 @@
 		<property name="password" value="${rediscache.pass}" />
 		<property name="timeout" value="${rediscache.timeout}" />
 		<property name="database" value="1"></property>
-		<property name="poolConfig" ref="poolConfig"></property>
+		<property name="poolConfig" ref="shiroRedisPoolConfig"></property>
 	</bean>
 	<bean id="redisSessionDao" class="cn.howso.deeplan.perm.session.dao.RedisSessionDao">
 		<property name="redisTemplate">
@@ -130,7 +141,7 @@
 	</bean> -->
 	<!-- 缓存实现 -->
 	<!-- 如果不使用redis存储session的话，把 defaultWebSessionManager中的sessionDAO那一段注释了 -->
-	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig" />
+	<!-- <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig" /> -->
 
 	<!-- <bean id="redisSessionResp"
 		class="cn.howso.deeplan.perm.session.dao.RedisShiroSessionRespositoryImpl">
@@ -172,7 +183,7 @@
 		<property name="password" value="${rediscache.pass}" />
 		<property name="timeout" value="${rediscache.timeout}" />
 		<property name="database" value="2"></property>
-		<property name="poolConfig" ref="poolConfig"></property>
+		<property name="poolConfig" ref="shiroRedisPoolConfig"></property>
 	</bean>
 	<bean id="authenCache" class="cn.howso.deeplan.perm.cache.ShiroRedisCache">
 		<constructor-arg name="name" value="authenCache"></constructor-arg>

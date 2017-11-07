@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+						 http://www.springframework.org/schema/websocket  http://www.springframework.org/schema/websocket/spring-websocket.xsd
+						 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+						 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	">
+	<!-- websocket连接之后，请求的前缀，客户端发请求时，由于不再是http请求，所以请求不用再带项目请求，取代的是带这里配置的前缀 -->
+	<websocket:message-broker application-destination-prefix="/app">  
+        <websocket:stomp-endpoint path="/ws">  
+            <!-- <websocket:sockjs/> -->  
+        </websocket:stomp-endpoint>  
+        <!-- stomp处理请求后，发送给客户端，这里配置客户端的前缀。 -->
+        <websocket:simple-broker prefix="/topic,/queue"/>  
+    </websocket:message-broker> 
+	
+</beans>

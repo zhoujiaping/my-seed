@@ -47,4 +47,8 @@
 #日志
 	所有的异常、日志，都通过slf4j记录。不通过e.printStackTrace。
 	捕获的异常，要么向上抛，要么用logger记录。不要既记录到logger又向上抛。
-	
+#spring-ioc创建对象多于一次
+	一种情况是两次分别由ApplicationContext创建和由WebApplicationContext创建。
+	这种情况，配置好dispatcher-servlet.xml,并且遵循所有控制器都放在cn.**.controller包中即可。
+	另一种情况，是项目名称和context root不一致，导致有两个类加载器分别加载了类，分别创建了bean。改下项目名即可。
+	还有一种情况，使用@Configuration，spring和mvc也会分别创建一次。（建议不要用@Configuration）

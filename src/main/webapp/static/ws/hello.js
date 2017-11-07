@@ -46,3 +46,4 @@ function initWebSocket(wcUrl) {
 const host = window.location.host;
 initWebSocket(`ws://${host}/seed/ws/hello`);
 initWebSocket(`ws://${host}/seed/ws/hi`);
+	initWebSocket(`ws://${host}/seed/ws/greeting`);
