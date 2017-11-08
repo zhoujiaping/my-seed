@@ -1,7 +1,7 @@
 var stompClient = null;
 const host = window.location.host;
 function connect() {
-	var socket = new WebSocket(`ws://${host}/seed/ws`);
+	var socket = new WebSocket(`ws://${host}/seed/ws;JSESSIONID=80425ac8-3673-4d6a-9100-51ee6fbbbb7c`);
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function(frame) {
 		console.log('连接了: ' + frame);

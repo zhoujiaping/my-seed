@@ -82,6 +82,8 @@ public class ListArgResolver implements HandlerMethodArgumentResolver {
             return Byte.parseByte(value);
         }else if(typename=="java.lang.Character"){
             return value.charAt(0);
+        }else if(typename=="java.lang.String"){
+            return value;
         }else{
             throw new RuntimeException("do not support the type:"+typename);
         }
