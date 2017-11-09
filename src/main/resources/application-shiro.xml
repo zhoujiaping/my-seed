@@ -30,7 +30,7 @@
 			<value>
 				/ = authc
 				<!-- websocket连接不过滤 -->				
-				/ws=authc
+				/ws=anon
 				/files/** = anon
 				/druid/** = anon
 				<!-- druid相关资源不是我们自己写的，没法在url上带sessionid -->
