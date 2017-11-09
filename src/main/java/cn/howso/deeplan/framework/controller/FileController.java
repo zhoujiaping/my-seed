@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,16 +24,16 @@ import cn.howso.deeplan.util.LogUtil;
 
 @Controller
 @RequestMapping("files")
-public class FileUploadController {
+public class FileController {
 
     private final Logger logger = LogUtil.getLogger();
 
     /**
      * 表单方式文件上传
      */
-    @RequestMapping(value = "upload-form", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
-    public R upload(MultipartFile file, HttpServletRequest request) throws IOException {
+    public R upload(@RequestParam MultipartFile file, HttpServletRequest request) throws IOException {
         if(file==null){
             return R.error("file should not be null");
         }
@@ -51,7 +52,7 @@ public class FileUploadController {
     /**
      * 流方式文件上传
      */
-    @RequestMapping(value = "upload-stream", method = {RequestMethod.PUT,RequestMethod.POST})
+    @RequestMapping(value = "", method = {RequestMethod.PUT})
     @ResponseBody
     public R uploadByStream(HttpServletRequest request) throws IOException {
         String filename = UUID.randomUUID().toString();

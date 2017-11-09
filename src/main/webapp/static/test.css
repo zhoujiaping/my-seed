@@ -5,3 +5,8 @@ div.params{
 div{
 	margin-top:3px;
 }
+div#sid,
+div#url,
+div#params{
+	border:1px solid orange;
+}

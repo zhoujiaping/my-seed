@@ -9,4 +9,10 @@ public class Conf{
 	private String appname;
 	@Value("${app.author}")
 	private String appauthor;
+	@Value("${upload.dir}")
+	private String uploadDir;
+	
+    public String getUploadDir() {
+        return uploadDir;
+    }
 }
