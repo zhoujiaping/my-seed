@@ -41,7 +41,8 @@ public class LoggerAspect {
     /**
      * 控制层切入点
      */
-    @Pointcut("execution(* cn.howso..*.controller.*.*(..)) and args(..)")
+    //@Pointcut("execution(* cn.howso..*.controller.*.*(..)) and args(..)")
+    @Pointcut("@annotation(cn.howso.deeplan.log.annotation.LogAnno)")
     public void controllerPointCut() {
     };
 
