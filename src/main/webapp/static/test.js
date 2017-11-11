@@ -18,9 +18,9 @@ $(function(){
 		var str = $('#params').text()||'{}';
 		str = str.split(/\s/igm).join('');
 		var formData = new FormData();
-		var files = $('#attachments')[0].files;
+		var files = $('#file')[0].files;
 		for(let i=0;i<files.length;i++){
-			formData.append('attachments', files[i]);
+			formData.append('file', files[i]);
 		}
 		var data = howso.toAjaxParam(JSON.parse(str));
 		for(let k in  data){
