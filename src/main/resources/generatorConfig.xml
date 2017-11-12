@@ -16,22 +16,22 @@
 			userId="postgres" password="123456" />
 
 		<javaModelGenerator targetPackage="cn.howso.deeplan.perm.model"
-			targetProject="d:\mybatis">
+			targetProject="E:\mybatis">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 
 		<sqlMapGenerator targetPackage="mybatis/perm"
-			targetProject="d:\mybatis">
+			targetProject="E:\mybatis">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
 
 		<javaClientGenerator targetPackage="cn.howso.deeplan.perm.mapper"
-			targetProject="d:\mybatis"
+			targetProject="E:\mybatis"
 			type="XMLMAPPER">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
-		<table tableName="sys_user" domainObjectName="User"
+		<!-- <table tableName="sys_user" domainObjectName="User"
 			enableCountByExample="true" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
@@ -45,13 +45,14 @@
 			enableCountByExample="true" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="true">
-		</table>
+		</table> -->
 		<table tableName="sys_perm_space" domainObjectName="PermSpace"
-			enableCountByExample="true" enableUpdateByExample="true"
-			enableDeleteByExample="true" enableSelectByExample="true"
-			selectByExampleQueryId="false">
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false" enableDeleteByPrimaryKey="true"
+			enableInsert="false" enableSelectByPrimaryKey="false" enableUpdateByPrimaryKey="false">
 		</table>
-		<table tableName="sys_menu" domainObjectName="Menu"
+		<!-- <table tableName="sys_menu" domainObjectName="Menu"
 			enableCountByExample="true" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
@@ -70,6 +71,6 @@
 			enableCountByExample="true" enableUpdateByExample="true"
 			enableDeleteByExample="true" enableSelectByExample="true"
 			selectByExampleQueryId="false">
-		</table>
+		</table> -->
 	</context>
 </generatorConfiguration>
