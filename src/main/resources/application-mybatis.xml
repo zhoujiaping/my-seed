@@ -11,7 +11,7 @@
 						 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 						 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
 	">
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<bean id="sqlSessionFactory" class="cn.howso.mybatis.builder.MySqlSessionFactoryBean">
 		<property name="dataSource" ref="dynamicDataSource" />
 		<property name="configLocation" value="classpath:sql-map-config.xml" 
 			/>
@@ -23,7 +23,7 @@
 		</property>
 	</bean>
 	<!-- 扫描 basePackage下所有的接口，根据对应的mapper.xml为其生成代理类 -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<bean class="cn.howso.mybatis.builder.MyMapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 		<property name="basePackage" value="cn.howso.deeplan.**.mapper" />
 		<property name="annotationClass" value="cn.howso.mybatis.anno.Table"></property>

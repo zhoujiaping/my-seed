@@ -7,7 +7,7 @@ $(function(){
 		var str = $('#params').text()||'{}';
 		str = str.split(/\s/igm).join('');
 		var data = howso.toAjaxParam(JSON.parse(str));
-		http[method](url,data,null,'text').done(res=>{
+		http[method](howso.addSid(url),data,null,'text').done(res=>{
 			$('#res').text(res);
 		});
 	});
@@ -27,7 +27,7 @@ $(function(){
 			formData.append(k,data[k]);
 		}
 		$.ajax({
-		    url: url,
+		    url: howso.addSid(url),
 		    type: method,
 		    cache: false,
 		    data: formData,
