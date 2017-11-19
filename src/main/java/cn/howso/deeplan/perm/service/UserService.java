@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import cn.howso.deeplan.perm.dao.UserDao;
 import cn.howso.deeplan.perm.mapper.UserMapper;
 import cn.howso.deeplan.perm.mapper.UserPermMapper;
 import cn.howso.deeplan.perm.mapper.UserRoleMapper;
@@ -29,6 +30,8 @@ public class UserService {
     private UserPermMapper userPermMapper;
     @Resource
     private AuthorService authorService;
+    @Resource
+    private UserDao userDao;
     
     public Integer add(User user, Integer spaceId) {
         user.setSpaceId(spaceId);
@@ -43,6 +46,8 @@ public class UserService {
         .and("valid").equalTo(true)
         .and("space_id").equalTo(spaceId);
         List<User> users = userMapper.selectByExample(example);
+        User user = userDao.getById(-1L);
+        System.out.println(user);
         return users;
     }
     //@CacheEvict(value="accountCache",allEntries=true,beforeInvocation=true)
