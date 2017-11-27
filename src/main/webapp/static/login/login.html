@@ -21,7 +21,8 @@
 				</div>
 			</div>
 			<link type="text/css" rel="stylesheet" href="./layout/login.css">
-			<link type="text/css" rel="stylesheet" v-bind:href="style">
+			<link type="text/css" rel="stylesheet" v-bind:href="'./'+selectedStyle+'/login.css'">
+<!-- 			<link type="text/css" rel="stylesheet" v-bind:href="style"> -->
 		</div>
 		<script type="text/javascript" src="../lib/vue/vue.js"></script>
 		<script type="text/javascript" src="../lib/jquery-2.1.0.js"></script>

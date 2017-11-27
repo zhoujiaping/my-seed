@@ -12,11 +12,11 @@ var app = new Vue({
 			app.bgIndex = (app.bgIndex+1)%5;
 		},2000);*/
 	},
-	computed: {
+	/*computed: {
 	    style: function () {
 	      return './'+this.selectedStyle+'/login.css';
 	    }
-	},
+	},*/
 	methods:{
 		login:function(){
 			$.post(cxt+'/login',{
