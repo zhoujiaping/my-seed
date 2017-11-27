@@ -40,7 +40,7 @@ public class AuthenController{
     @RequestMapping(value = "login", method = RequestMethod.GET)
     @LogAnno
     public String login() {
-        return "static/login";
+        return "redirect:static/login/login.html";
     }
     /*@RequestMapping(value = "/forward/index", method = RequestMethod.GET)
     public String index() {

@@ -89,7 +89,7 @@ public class UserController {
         if (isUpdateCurrentUser) {
         	sessionDao.delete(SecurityUtils.getSubject().getSession());
          // 使session失效
-            return "redirect:static/login";
+            return "redirect:static/login/login.html";
         } else {
             WebUtils.sendResponse(response, JSONObject.toJSONString(count));
             return null;

@@ -26,5 +26,9 @@
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile"></AppenderRef>
 		</Logger>
+		<Logger name="org.springframework.jdbc.core.JdbcTemplate" level="debug" additivity="false">
+			<AppenderRef ref="Console"></AppenderRef>
+			<AppenderRef ref="RollingFile"></AppenderRef>
+		</Logger>
 	</Loggers>
 </Configuration>
