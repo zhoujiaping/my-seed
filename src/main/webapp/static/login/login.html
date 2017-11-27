@@ -2,21 +2,30 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app" class="app">
+			<select v-model="selectedStyle" class="style-selector">
+				<option v-for="item in styles">{{item}}</option>
+			</select>
+			<div class="container">
+				<div class="row">
+					<input id="name" type="text" v-model="name" placeholder="username"/>
+				</div>
+				<div class="row">
+					<input id="password" type="password" v-model="password" placeholder="password"/>
+				</div>
+				<div class="row">
+					<button v-on:click="login" class="btn">login</button>
+				</div>
+			</div>
+			<link type="text/css" rel="stylesheet" href="./layout/login.css">
+			<link type="text/css" rel="stylesheet" v-bind:href="style">
+		</div>
+		<script type="text/javascript" src="../lib/vue/vue.js"></script>
 		<script type="text/javascript" src="../lib/jquery-2.1.0.js"></script>
 		<script type="text/javascript" src="../lib/howso.js"></script>
 		<script type="text/javascript" src="./login.js"></script>
-		<title>Insert title here</title>
-	</head>
-	<body>
-		<div>
-		<input id="name" type="text" name="name"/>
-		<input id="password" type="password" name="password"/>
-		<button id="submit">submit</button>
-		</div>
-		<div>
-			<input type="text" id="p1" name="name">
-			<input type="file" id="file" name="file">
-			<button id="multi-submit">submit</button>
-		</div>
 	</body>
 </html>

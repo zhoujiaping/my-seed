@@ -1,0 +1,9 @@
+.app{
+	background-image:url('./img/girl.jpg');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
+.container{
+	border:1px solid orange;
+	border-radius:5px;
+}

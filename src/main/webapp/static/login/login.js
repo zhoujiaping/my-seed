@@ -1,3 +1,31 @@
+var cxt = howso.contextPath();
+var app = new Vue({
+	el:'#app',
+	data:{
+		styles:['my-style','default-style','none'],
+		selectedStyle:'my-style',
+		name:'',
+		password:''
+	},
+	created:function(){
+		/*setInterval(function(){
+			app.bgIndex = (app.bgIndex+1)%5;
+		},2000);*/
+	},
+	computed: {
+	    style: function () {
+	      return './'+this.selectedStyle+'/login.css';
+	    }
+	},
+	methods:{
+		login:function(){
+			$.post(cxt+'/login',{
+				name:this.name,
+				password:this.password
+			},null,'json');
+		}
+	}
+});
 $(()=>{
 	const rootpath = howso.contextPath();
 	$('#submit').on('click',event=>{
