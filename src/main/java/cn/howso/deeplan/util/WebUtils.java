@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
+
 public class WebUtils{
 	
 	public static void sendResponse(HttpServletResponse response, String content) {
@@ -78,8 +80,8 @@ public class WebUtils{
         resp.addHeader("X-Redirect-Url", url);
     }
     private static String addJsessionid(HttpServletRequest request,String url){
-        String sessionid = request.getRequestedSessionId();
-        return addJsessionid(request, url, sessionid);
+        String sid = SecurityUtils.getSubject().getSession(true).getId().toString();
+        return addJsessionid(request, url, sid);
     }
     public static void main(String[] args) {
         String uri = "/fuck;JSESSIONID=12345;SESSIONID=6789?v=1";

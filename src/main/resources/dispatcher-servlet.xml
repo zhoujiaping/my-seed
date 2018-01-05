@@ -73,5 +73,5 @@
          <!-- 缓冲区大小(单位:KB) -->  
          <property name="maxInMemorySize" value="1024"></property>  
     </bean>  
-    <import resource="application-websocket.xml"/>
-</beans>
+<!--     <import resource="application-websocket.xml"/>
+ --></beans>
