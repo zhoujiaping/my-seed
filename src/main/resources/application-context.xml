@@ -14,6 +14,7 @@
 	<!-- 使spring上下文扫描时排除Controller，让每个组件只创建一次 -->
 	<context:component-scan base-package="cn">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="regex" expression=".*\.ws.*"/>
 	</context:component-scan>
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />

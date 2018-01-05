@@ -38,6 +38,9 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<!-- <context:include-filter type="regex" expression=".*Controller"/> -->
 	</context:component-scan>
+	<context:component-scan base-package="cn.**.ws">
+		<context:include-filter type="regex" expression=".*\.ws\..*"/>
+	</context:component-scan>
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**"/> <bean 
 		class="cn.howso.specialmp.system.interceptor.SessionInterceptor"/> </mvc:interceptor> 
