@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 
+import cn.howso.deeplan.framework.model.R;
 import cn.howso.deeplan.log.annotation.LogAnno;
 import cn.howso.deeplan.perm.anno.CurrentUser;
 import cn.howso.deeplan.perm.model.Role;
@@ -51,16 +52,16 @@ public class UserController {
     @ResponseBody
     @RequiresPermissions(value={"users:create"})
     @LogAnno(ignore="password")
-    public Integer add(User user,Integer _permSpaceId) {
-        return userService.add(user,_permSpaceId);
+    public R add(User user,Integer _permSpaceId) {
+        return R.ok().set("count",userService.add(user,_permSpaceId));
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     @ResponseBody
     @RequiresPermissions("users:id:delete")
     @LogAnno
-    public Integer delete(@PathVariable Integer id,Integer _permSpaceId) {
-        return userService.delete(id,_permSpaceId);
+    public R delete(@PathVariable Integer id,Integer _permSpaceId) {
+        return R.ok().set("count",userService.delete(id,_permSpaceId));
     }
     /**
      * 修改用户名密码
@@ -68,7 +69,8 @@ public class UserController {
     @RequestMapping(value = "{userId}/authen", method = RequestMethod.PUT)
     @RequiresPermissions("users:id:authen-update")
     @LogAnno(ignore="password")
-    public String updateAuthen(@CurrentUser User currentUser, @PathVariable Integer userId, String name, String password,
+    @ResponseBody
+    public R updateAuthen(@CurrentUser User currentUser, @PathVariable Integer userId, String name, String password,
             Integer _permSpaceId,
             HttpServletRequest request, HttpServletResponse response) {
         User user = new User();
@@ -86,14 +88,16 @@ public class UserController {
         // 如果修改的是当前用户的密码，则让session失效并且让用户重新登录
         Integer count = userService.update(user,_permSpaceId);
         boolean isUpdateCurrentUser = Objects.equals(currentUser.getId(), userId);
-        if (isUpdateCurrentUser) {
+        R r = R.ok("修改认证信息成功");
+        return r;
+        /*if (isUpdateCurrentUser) {
         	sessionDao.delete(SecurityUtils.getSubject().getSession());
          // 使session失效
             return "redirect:static/login/login.html";
         } else {
             WebUtils.sendResponse(response, JSONObject.toJSONString(count));
             return null;
-        }
+        }*/
     }
     /**
      * 修改其他字段
@@ -102,76 +106,76 @@ public class UserController {
     @ResponseBody
     @RequiresPermissions("users:id:update")
     @LogAnno
-    public Integer update(@PathVariable Integer id, User user,Integer _permSpaceId) {
+    public R update(@PathVariable Integer id, User user,Integer _permSpaceId) {
         user.setName(null);
         user.setPassword(null);
-        return userService.update(user,_permSpaceId);
+        return R.ok().set("count",userService.update(user,_permSpaceId));
     }
 
     @RequestMapping(value="",method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("users:query")
     @LogAnno
-    public List<User> query(@CurrentUser User currentUser, User user,Integer _permSpaceId) {
-        return userService.query(_permSpaceId);
+    public R query(@CurrentUser User currentUser, User user,Integer _permSpaceId) {
+        return R.ok().set("users", userService.query(_permSpaceId));
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("users:id:query")
     @LogAnno
-    public User get(@PathVariable Integer id,Integer _permSpaceId,List<Role> roleList) {
-        return userService.get(id,_permSpaceId);
+    public R get(@PathVariable Integer id,Integer _permSpaceId,List<Role> roleList) {
+        return R.ok().set("user", userService.get(id,_permSpaceId));
     }
 
     @RequestMapping(value = "{userId}/roles-grant", method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("users:id:roles-grant")
     @LogAnno
-    public Integer grantRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
+    public R grantRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
         User user = userService.get(userId,_permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
         Assert.isTrue(authorService.hasAllRoles(roleIdList),"当前用户必须拥有这些角色");
         // 清除缓存的该用户的权限数据，使缓存失效
         //authorService.removeCache(user.getName());
         // 从数据库中查询该用户的权限数据,新的权限数据放入缓存,这个步骤可以不做，shiro会在需要的自动缓存
-        return userService.grantRoles(user, roleIdList);
+        return R.ok().set("count", userService.grantRoles(user, roleIdList));
     }
 
     @RequestMapping(value = "{userId}/roles-revoke", method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("users:id:roles-revoke")
     @LogAnno
-    public Integer revokeRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
+    public R revokeRoles(@CurrentUser User currentUser,Integer _permSpaceId,@PathVariable Integer userId, List<Integer> roleIdList) {
         User user = userService.get(userId,_permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
         // 清除缓存的该用户的权限数据，使缓存失效
         Assert.isTrue(authorService.hasAllRoles(roleIdList),"当前用户必须拥有这些角色");
         //authorService.removeCache(user.getName());
-        return userService.revokeRoles(user, roleIdList);
+        return R.ok().set("count", userService.revokeRoles(user, roleIdList));
     }
 
     @RequestMapping(value = "{userId}/perms-grant", method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("users:id:prems-grant")
     @LogAnno
-    public Integer grantPerms(@PathVariable Integer userId,Integer _permSpaceId, List<Integer> permIdList) {
+    public R grantPerms(@PathVariable Integer userId,Integer _permSpaceId, List<Integer> permIdList) {
         User user = userService.get(userId, _permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
         Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
         //authorService.removeCache(user.getName());
-        return userService.grantPerms(user,_permSpaceId,permIdList);
+        return R.ok().set("count",userService.grantPerms(user,_permSpaceId,permIdList));
     }
 
     @RequestMapping(value = "{userId}/perms-revoke", method = RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("users:id:perms-revoke")
     @LogAnno
-    public Integer revokePerms(@PathVariable Integer userId,Integer _permSpaceId, List<Integer> permIdList) {
+    public R revokePerms(@PathVariable Integer userId,Integer _permSpaceId, List<Integer> permIdList) {
         User user = userService.get(userId, _permSpaceId);
         Assert.isTrue(user!=null,"用户不存在");
         Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
         //authorService.removeCache(user.getName());
-        return userService.revokePerms(user,_permSpaceId,permIdList);
+        return R.ok().set("count", userService.revokePerms(user,_permSpaceId,permIdList));
     }
 }

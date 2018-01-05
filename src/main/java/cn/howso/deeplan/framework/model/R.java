@@ -6,7 +6,9 @@ public class R extends HashMap<String,Object>{
     private static String CODE = "code";
     private static String MSG = "msg";
     private static final long serialVersionUID = 1L;
-    
+    private R(){
+        
+    }
     public static R ok(){
         R r = new R();
         r.put(CODE, ReturnCode.SUCCESS);
@@ -36,6 +38,10 @@ public class R extends HashMap<String,Object>{
         r.put(CODE, code);
         r.put(MSG, msg);
         return r;
+    }
+    public R set(String key,Object value){
+        this.put(key, value);
+        return this;
     }
     
 }

@@ -1,7 +1,5 @@
 .app{
-	background-image:url('./img/avril-1.jpg');
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
+	background-color:lightblue;
 }
 .container{
 	border:1px solid orange;

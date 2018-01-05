@@ -5,6 +5,11 @@
 #常量管理
 #http返回值设计
 	正常响应不对结果作包装，有错误时才对结果作包装。业务代码中对预期的错误要抛出BusinessException。
+	但是，如果查询结果是null，则它不被认为是标准的json格式，即使http响应码为200，对于jquery也会走onFail而不是onSuccess。
+	并且，有时候只返回一个数值，语义不明确。
+	所以，还是统一用一个包装器包装一下结果再返回。
+#前后端彻底分离
+	后端只返回数据，不进行重定向处理（可以转发），需要重定向到登录页面时，返回json数据，让前端自己去做路由。
 #无cookie的session
 	tomcat的context.xml的context标签中添加cookies="false"，设置禁用cookie
 	将jsessionid写在url上。servlet中获取sessionid通过getRequestedSessionId。（shiro中是JSESSIONID）

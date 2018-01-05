@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.howso.deeplan.framework.model.R;
 import cn.howso.deeplan.log.annotation.LogAnno;
 import cn.howso.deeplan.perm.anno.CurrentUser;
 import cn.howso.deeplan.perm.model.Role;
@@ -34,83 +35,83 @@ public class RoleController {
     @ResponseBody
     @RequiresPermissions("roles:create")
     @LogAnno
-    public Integer add(Role role,Integer _permSpaceId){
-        return roleService.add(role,_permSpaceId);
+    public R add(Role role,Integer _permSpaceId){
+        return R.ok("添加成功").set("count", roleService.add(role,_permSpaceId));
     }
     @RequestMapping(value="{id}",method=RequestMethod.DELETE)
     @ResponseBody
     @RequiresPermissions("roles:id:delete")
     @LogAnno
-    public Integer delete(@PathVariable Integer id,Integer _permSpaceId){
-        return roleService.delete(id,_permSpaceId);
+    public R delete(@PathVariable Integer id,Integer _permSpaceId){
+        return R.ok("删除成功").set("count", roleService.delete(id,_permSpaceId));
     }
     @RequestMapping(value="{id}",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:update")
     @LogAnno
-    public Integer update(@PathVariable String id,Role role,Integer _permSpaceId){
-        return roleService.udpate(role,_permSpaceId);
+    public R update(@PathVariable String id,Role role,Integer _permSpaceId){
+        return R.ok("更新成功").set("count", roleService.udpate(role,_permSpaceId));
     }
     @RequestMapping(value="",method=RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("roles:query")
     @LogAnno
-    public List<Role> query(Integer _permSpaceId){
-        return roleService.query(_permSpaceId);
+    public R query(Integer _permSpaceId){
+        return R.ok().set("roles",roleService.query(_permSpaceId));
     }
     @RequestMapping(value="{id}",method=RequestMethod.GET)
     @ResponseBody
     @RequiresPermissions("roles:id:query")
     @LogAnno
-    public Role get(@PathVariable Integer id,Integer _permSpaceId){
-        return roleService.get(id,_permSpaceId);
+    public R get(@PathVariable Integer id,Integer _permSpaceId){
+        return R.ok().set("role", roleService.get(id,_permSpaceId));
     }
     
     @RequestMapping(value="{roleId}/perms-grant",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:perms-grant")
     @LogAnno
-    public Integer grantPerms(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> permIdList){
+    public R grantPerms(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> permIdList){
         Role role = roleService.get(roleId,_permSpaceId);
         Assert.isTrue(role!=null,"角色不存在");
         Assert.isTrue(authorService.hasRole(roleId),"当前用户必须拥有该角色");
         Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
         //authorService.removeAllCache();
-        return roleService.grantPerms(roleId,permIdList);
+        return R.ok("授权成功").set("count",roleService.grantPerms(roleId,permIdList));
     }
     @RequestMapping(value="{roleId}/perms-revoke",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:perms-revoke")
     @LogAnno
-    public Integer revokePerms(@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> permIdList){
+    public R revokePerms(@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> permIdList){
         Role role = roleService.get(roleId,_permSpaceId);
         Assert.isTrue(role!=null,"角色不存在");
         Assert.isTrue(authorService.hasRole(roleId),"当前用户必须拥有该角色");
         Assert.isTrue(authorService.hasAllPerms(permIdList),"当前用户必须拥有这些权限");
         //authorService.removeAllCache();
-        return roleService.revokePerms(roleId,permIdList);
+        return R.ok().set("count", roleService.revokePerms(roleId,permIdList));
     }
     
     @RequestMapping(value="{roleId}/menus-grant",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:menus-grant")
     @LogAnno
-    public Integer grantMenus(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> menuIdList){
+    public R grantMenus(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> menuIdList){
         Role role = roleService.get(roleId,_permSpaceId);
         Assert.isTrue(role!=null,"角色不存在");
         Assert.isTrue(authorService.hasRole(roleId),"当前用户必须拥有该角色");
         Assert.isTrue(authorService.hasAllMenus(currentUser,menuIdList),"当前用户必须拥有这些菜单");
-        return menuService.grantMenus(roleId,menuIdList);
+        return R.ok().set("count",menuService.grantMenus(roleId,menuIdList));
     }
     @RequestMapping(value="{roleId}/menus-revoke",method=RequestMethod.POST)
     @ResponseBody
     @RequiresPermissions("roles:id:menus-revoke")
     @LogAnno
-    public Integer revokeMenus(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> menuIdList){
+    public R revokeMenus(@CurrentUser User currentUser,@PathVariable Integer roleId,Integer _permSpaceId,List<Integer> menuIdList){
         Role role = roleService.get(roleId,_permSpaceId);
         Assert.isTrue(role!=null,"角色不存在");
         Assert.isTrue(authorService.hasRole(roleId),"当前用户必须拥有该角色");
         Assert.isTrue(authorService.hasAllMenus(currentUser,menuIdList),"当前用户必须拥有这些菜单");
-        return menuService.revokeMenus(roleId,menuIdList);
+        return R.ok().set("count", menuService.revokeMenus(roleId,menuIdList));
     }
 }

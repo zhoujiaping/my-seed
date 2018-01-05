@@ -1,7 +1,5 @@
 .app{
-	background-image:url('./img/girl.jpg');
-	background-repeat: no-repeat;
-	background-size: 100% 100%;
+	background-color:yellow;
 }
 .container{
 	border:1px solid orange;

@@ -9,10 +9,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.springframework.util.StringUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.howso.deeplan.framework.model.R;
@@ -82,10 +85,14 @@ public class PermissionFilter extends AuthorizationFilter {
         HttpServletRequest request = (HttpServletRequest) req;
         Subject subject = getSubject(req, resp);
         if (subject.getPrincipal() == null) {
+            R r = R.error(ReturnCode.UNAUTHENED, ReturnCode.UNAUTHENED_MSG);
+            WebUtils.sendResponse(response, JSON.toJSONString(r));
             saveRequestAndRedirectToLogin(req, resp);
         } else {
-            if (WebUtils.isAjax(request)) {
-                R r = R.error(ReturnCode.NO_PERMISSION, ReturnCode.NO_PERMISSION_MSG);
+            R r = R.error(ReturnCode.UNAUTHORED, ReturnCode.UNAUTHORED_MSG);
+            WebUtils.sendResponse(response, JSON.toJSONString(r));
+            /*if (WebUtils.isAjax(request)) {
+                R r = R.error(ReturnCode.UNAUTHORED, ReturnCode.UNAUTHORED_MSG);
                 response.getWriter().print(JSONObject.toJSON(r));
             } else {
                 String unauthorizedUrl = getUnauthorizedUrl();
@@ -94,7 +101,7 @@ public class PermissionFilter extends AuthorizationFilter {
                 } else {
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 }
-            }
+            }*/
         }
         return false;
     }
