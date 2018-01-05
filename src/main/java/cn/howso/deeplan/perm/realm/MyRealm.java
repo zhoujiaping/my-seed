@@ -8,11 +8,14 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import cn.howso.deeplan.framework.shiro.MyWildcardPermissionResolver;
 import cn.howso.deeplan.perm.model.User;
 import cn.howso.deeplan.perm.service.AuthenService;
 import cn.howso.deeplan.perm.service.AuthorService;
@@ -22,7 +25,23 @@ public class MyRealm extends AuthorizingRealm {
     private AuthenService authenService;
     private AuthorService authorService;
     
-    
+    public MyRealm() {
+        this(null, null);
+    }
+
+    public MyRealm(CacheManager cacheManager) {
+        this(cacheManager, null);
+    }
+
+    public MyRealm(CredentialsMatcher matcher) {
+        this(null, matcher);
+    }
+
+    public MyRealm(CacheManager cacheManager, CredentialsMatcher matcher) {
+        super(cacheManager,matcher);
+        //shiro默认的权限字符串匹配方式是通过WildcardPermissionResolver和WildcardPermission方式
+        setPermissionResolver(new MyWildcardPermissionResolver());
+    }
     public AuthenService getAuthenService() {
         return authenService;
     }
