@@ -43,5 +43,12 @@ public class R extends HashMap<String,Object>{
         this.put(key, value);
         return this;
     }
-    
+    public R setCount(Number count){
+        this.put("count", count);
+        return this;
+    }
+    public R setData(Object data){
+        this.put("data", data);
+        return this;
+    }
 }
