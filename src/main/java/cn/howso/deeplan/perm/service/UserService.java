@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -39,7 +40,7 @@ public class UserService {
         Assert.isTrue(!StringUtils.isEmpty(user.getPassword()),"密码不能为空");
         return userMapper.insertSelective(user);
     }
-    //@Cacheable(value="userCache",key="")
+    @Cacheable(value="userCache",key="")
     public List<User> query(Integer spaceId) {
         Example example = new Example();
         example.createCriteria()
@@ -50,7 +51,7 @@ public class UserService {
         System.out.println(user);
         return users;
     }
-    //@CacheEvict(value="accountCache",allEntries=true,beforeInvocation=true)
+    @CacheEvict(value="accountCache",allEntries=true,beforeInvocation=true)
     public Integer delete(Integer id,Integer spaceId) {
         User user = new User();
         user.setId(id);

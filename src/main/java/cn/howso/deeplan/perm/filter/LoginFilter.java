@@ -5,19 +5,19 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.web.filter.AccessControlFilter;
+import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSON;
 
 import cn.howso.deeplan.framework.model.R;
 import cn.howso.deeplan.framework.model.ReturnCode;
+import cn.howso.deeplan.util.LogUtil;
 import cn.howso.deeplan.util.WebUtils;
 
 public class LoginFilter extends AccessControlFilter {
-    private static final Logger logger = Logger.getRootLogger();
+    private static final Logger logger = LogUtil.getLogger();
     @Override
     protected boolean isAccessAllowed(ServletRequest req, ServletResponse resp, Object arg2) throws Exception {
         // 已登录或者是登录请求则允许访问
