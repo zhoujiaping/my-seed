@@ -51,6 +51,6 @@ public class ExceptionResolver implements HandlerExceptionResolver {
         } catch (IOException e) {
         	logger.error(e.getMessage(),e);
         }
-		return null;
+		return new ModelAndView();  
 	}
 }
